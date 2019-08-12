@@ -126,3 +126,20 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'categorias'  --tabla
 );
 --- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 18
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2789', --objeto
+	'18001124', --col_id
+	'codigo', --columna
+	'X', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'categorias'  --tabla
+);
+--- FIN Grupo de desarrollo 18

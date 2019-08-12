@@ -44,11 +44,47 @@ create table feriados(
 	constraint pk_feriados primary key(id)
 );
 
-
-create table palabras_reservadas(
+create table test.reservadas(
 	id serial not null,
 	nombre text not null,
-	descripcion text not null,	
+	descripcion text not null,
+	descripcion_larga text,	
 	query text,
-	valor text
+	valor text,
+	constraint pk_reservadas primary key(id)
 );
+insert into test.reservadas(id,nombre,descripcion,descripcion_larga,query)
+values(1,'BASICO','Sueldo Basico','Trae el sueldo basico de la categoria correspondiente del empleado',
+'SELECT sueldo_basico FROM categorias WHERE id=(SELECT id_categoria FROM datos_laborales WHERE id_persona={ID_PERSONA})');
+
+insert into test.reservadas(id,nombre,descripcion,descripcion_larga,query)
+values(2,'ANTIGUEDAD','ANTIGUEDAD','Trae la antiguedad en años del empleado',
+'SELECT edad(fecha_ingreso) FROM datos_laborales WHERE id_persona={ID_PERSONA}');
+
+
+
+
+--horarios de trabajo real
+create table fichajes(
+	id serial not null,
+	fecha date not null,
+	hora_entrada timestamp without time zone,
+	hora_salida timestamp without time zone,
+	horas_trabajadas numeric(10,2),
+	horas_extras numeric(10,2),
+	id_persona integer not null,
+	constraint pk_fichajes primary key (id),
+	constraint fk_fichajes__personas foreign key(id_persona) references personas(id)
+);
+
+
+--horarios de trabajo normales
+create table personas_jornadas(
+	id serial not null,
+	hora_desde time not null,
+	hora_hasta time not null,
+	id_persona integer not null,
+	constraint pk_personas_jornadas primary key(id),
+	constraint fk_personas_jornadas__personas foreign key(id_persona) references personas(id)
+);
+

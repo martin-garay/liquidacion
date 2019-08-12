@@ -50,3 +50,15 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	'16'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 18
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'asociacion', --proyecto
+	'18000024', --consulta_php
+	'reservadas', --clase
+	'reservadas', --archivo_clase
+	'lib/reservadas.php', --archivo
+	'Palabras Reservadas del Sistema', --descripcion
+	'16'  --punto_montaje
+);
+--- FIN Grupo de desarrollo 18

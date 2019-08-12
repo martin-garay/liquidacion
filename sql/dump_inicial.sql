@@ -190,12 +190,12 @@ CREATE TABLE public.persona_tareas
 /* Datos */ 
 
 
-INSERT INTO public.categorias VALUES (1, '1RA.SUPERV', NULL, NULL);
-INSERT INTO public.categorias VALUES (2, '2DA.SUPERV', NULL, NULL);
-INSERT INTO public.categorias VALUES (3, '1RA.ADM', NULL, NULL);
-INSERT INTO public.categorias VALUES (4, '2DA.ADM', NULL, NULL);
-INSERT INTO public.categorias VALUES (5, 'Maestranza', NULL, NULL);
-SELECT pg_catalog.setval('public.categorias_id_seq', 1, false);
+INSERT INTO public.categorias(id,codigo,descripcion,sueldo_basico,valor_hora) VALUES (1, 1, '1RA.SUPERV', 50000, NULL);
+INSERT INTO public.categorias(id,codigo,descripcion,sueldo_basico,valor_hora) VALUES (2, 2, '2DA.SUPERV', 40000, NULL);
+INSERT INTO public.categorias(id,codigo,descripcion,sueldo_basico,valor_hora) VALUES (3, 3, '1RA.ADM', 60000, NULL);
+INSERT INTO public.categorias(id,codigo,descripcion,sueldo_basico,valor_hora) VALUES (4, 4, '2DA.ADM', 50000, NULL);
+INSERT INTO public.categorias(id,codigo,descripcion,sueldo_basico,valor_hora) VALUES (5, 5, 'Maestranza', 35000, NULL);
+SELECT pg_catalog.setval('public.categorias_id_seq', 5, false);
 
 INSERT INTO public.establecimientos VALUES (1, 'Asociación Médica de Luján', 'Mariano Moreno 1460', 1);
 SELECT pg_catalog.setval('public.establecimientos_id_seq', 1, false);
@@ -333,3 +333,6 @@ create table vacaciones(
   constraint pk_vacaciones primary key(id),
   constraint fk_vacaciones__personas foreign key(id_persona) references personas(id)
 );
+
+alter table datos_laborales add column fecha_ingreso date;
+ alter table datos_laborales add column fecha_egreso date;

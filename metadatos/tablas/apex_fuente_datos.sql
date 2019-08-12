@@ -9,11 +9,11 @@ INSERT INTO apex_fuente_datos (proyecto, fuente_datos, descripcion, descripcion_
 	'asociacion', --descripcion_corta
 	'postgres7', --fuente_datos_motor
 	NULL, --host
-	NULL, --punto_montaje
+	'16', --punto_montaje
 	NULL, --subclase_archivo
 	NULL, --subclase_nombre
 	NULL, --orden
-	NULL, --schema
+	'public', --schema
 	'asociacion', --instancia_id
 	NULL, --administrador
 	'1', --link_instancia
