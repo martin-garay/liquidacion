@@ -88,3 +88,130 @@ create table personas_jornadas(
 	constraint fk_personas_jornadas__personas foreign key(id_persona) references personas(id)
 );
 
+
+
+
+/*-----------------------------------------------------------------------------------*/
+create table bancos(
+	id serial not null,
+	descripcion not null,
+	constraint pk_bancos primary key (id)
+);
+
+create table tipos_liquidaciones(
+	id serial not null,
+	descripcion not null,
+	constraint pk_liquidaciones primary key (id)
+);
+
+create table liquidaciones (
+	id serial not null,
+	descripcion not null,	
+	periodo date not null,
+	fecha_desde timestamp without time zone,
+	fecha_desde timestamp without time zone,
+	id_tipo_liquidacion integer not null,
+	id_establecimiento integer not null default 1,
+	id_banco integer not null,	
+	id_localidad_pago integer not null, --lugar de pago
+	tipo_liquidacion text not null,
+	establecimiento text not null,
+	direccion_establecimiento text not null,
+	cuit_establecimiento text not null,
+	actividad_establecimiento not null,	
+	banco text not null,	
+	localidad_pago text not null,
+	fecha_pago date not null,
+	mes caracter varying(10) not null,	
+	constraint pk_liquidaciones primary key (id),
+	constraint fk_liquidaciones__bancos foreign key (id_banco) references bancos(id)
+	constraint fk_liquidaciones__tipos foreign key(id_tipo_liquidacion) references tipos_liquidaciones(id),
+	constraint fk_liquidaciones__localidades foreign key(id_localidad_pago) references localidades(id)	
+);
+
+create table recibos(
+	id serial not null,
+	nro_recibo integer not null,
+	legajo integer not null,
+	nombre text not null,
+	apellido text not null,
+	cuil text not null,	
+	domicilio text not null,
+	fecha_ingreso date not null,
+	categoria text not null,
+	tarea text not null,
+	obra_social text not null,	
+	neto_palabras text not null,
+	tipo_contratacion text not null,
+	id_persona integer not null,		
+	total_remunerativos numeric(10,2) not null,
+	total_no_remunerativos numeric(10,2) not null,
+	total_deducciones numeric(10,2) not null,
+	total_neto numeric(10,2) not null,
+	total_basico numeric(10,2) not null,
+	constraint pk_recibos primary key (id),
+	constraint fk_recibos__personas foreign key(id_persona) references personas(id),	
+);
+
+create table recibos_conceptos(
+	id serial not null,
+	id_concepto integer not null,
+	id_tipo_concepto integer not null,
+	codigo_concepto text not null,
+	concepto text not null,
+	tipo_concepto text not null,	
+	importe numeric(10,2) not null,
+	mostrar_recibo boolean,
+	constraint pk_recibos_conceptos primary key (id),
+);
+
+/* temporales */
+
+create table liquidaciones_temp (
+	id serial not null,
+	descripcion not null,	
+	periodo date not null,
+	fecha_desde timestamp without time zone,
+	fecha_desde timestamp without time zone,
+	id_tipo_liquidacion integer not null,
+	id_establecimiento integer not null default 1,
+	id_banco integer not null,	
+	id_localidad_pago integer not null, --lugar de pago	
+	fecha_pago date not null,
+	mes caracter varying(10) not null,	
+	constraint pk_liquidaciones_temp primary key (id),
+	constraint fk_liquidaciones_temp__bancos foreign key (id_banco) references bancos(id)
+	constraint fk_liquidaciones_temp__tipos foreign key(id_tipo_liquidacion) references tipos_liquidaciones(id),
+	constraint fk_liquidaciones_temp__localidades foreign key(id_localidad_pago) references localidades(id)	
+);
+
+create table recibos_temp(
+	id serial not null,
+	nro_recibo integer not null,
+
+	tarea text not null,
+	obra_social text not null,	
+	neto_palabras text not null,
+	tipo_contratacion text not null,
+	id_persona integer not null,		
+	total_remunerativos numeric(10,2) not null,
+	total_no_remunerativos numeric(10,2) not null,
+	total_deducciones numeric(10,2) not null,
+	total_neto numeric(10,2) not null,
+	total_basico numeric(10,2) not null,
+	constraint pk_recibos_temp primary key (id),
+	constraint fk_recibos_temp__personas foreign key(id_persona) references personas(id),	
+);
+
+create table recibos_conceptos_temp(
+	id serial not null,
+	id_concepto integer not null,
+	id_tipo_concepto integer not null,
+	codigo_concepto text not null,
+	concepto text not null,
+	tipo_concepto text not null,	
+	importe numeric(10,2) not null,
+	mostrar_recibo boolean,
+	constraint pk_recibos_conceptos_temp primary key (id),
+);
+

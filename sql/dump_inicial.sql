@@ -303,7 +303,7 @@ left join tipos_contratos tc ON tc.id=dl.id_tipo_contrato;
 
 alter table conceptos add column formula text;
 
-create table v_conceptos as 
+create view v_conceptos as 
 select c.*,tc.descripcion as tipo_concepto 
 from conceptos c
 inner join tipos_conceptos tc ON tc.id=c.id_tipo_concepto;

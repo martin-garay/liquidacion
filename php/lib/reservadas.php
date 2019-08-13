@@ -3,6 +3,12 @@ include_once 'comunes.php';
 
 class reservadas extends comunes
 {
+	function get_reservadas($where=null, $order_by=null){
+		$sql = "SELECT *, nombre as codigo, nombre||'-'||descripcion as descripcion FROM test.reservadas";
+		return $this->get_generico_sql($sql,$where,$order_by);
+		//return $this->get_generico('test.reservadas',$where,$order_by);
+	}
+
 	function get_reservadas_empleado($id_persona){
 		
 		$sql = "SELECT * FROM test.reservadas";
@@ -15,5 +21,9 @@ class reservadas extends comunes
 			$calculadas[ $value['nombre'] ] = $datos[0]['resultado'];
 		}
 		return $calculadas;       
-	}	
+	}
+	function get_conceptos($where=null, $order_by=null){
+		$sql = "SELECT '['||codigo||']' as codigo, codigo||'-'||descripcion as descripcion FROM conceptos";
+		return $this->get_generico_sql($sql,$where,$order_by);
+	}
 }

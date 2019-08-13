@@ -16,6 +16,13 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: test; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA test;
+
+
+--
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -27,6 +34,59 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: edad(date, date); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.edad(date, date DEFAULT NULL::date) RETURNS integer
+    LANGUAGE plpgsql
+    AS $_$
+/* Calcula la edad exacta a la fecha ingresada a partir de la fecha nacimiento. Devuelve un entero. Evita el redondeo.  
+$1 fecha de nacimiento 
+$2 fecha a la cual se desea calcular la edad
+*/
+
+DECLARE
+    fechanac alias for $1;
+    fecha date;
+    nacd integer;
+    nacy integer;
+    nacm integer;
+    hoyd integer;
+    hoym integer;
+    hoyy integer;
+    edad integer;
+BEGIN
+    IF($2 is null) THEN
+  fecha:=now()::date;
+    ELSE
+  fecha:=$2;
+    END IF;
+    
+    nacy:=date_part('year',fechanac); 
+    nacm:=date_part('month',fechanac);
+    nacd:=date_part('day',fechanac);
+   
+    hoyy:=date_part('year',fecha);
+    hoym:=date_part('month',fecha);
+    hoyd:=date_part('day',fecha);
+    /* resta año actual con año nacimiento */
+    edad:=hoyy-nacy;
+    IF (nacm > hoym) THEN   
+  edad:=edad-1;  /* ajusta edad (años no cumplidos) */
+  RETURN edad;
+    END IF;
+    IF (nacm = hoym)THEN
+        IF (nacd > hoyd)THEN
+            edad:=edad-1; /* ajusta edad (años no cumplidos) */
+      RETURN edad;
+        END IF;
+    END IF;
+    RETURN edad;
+END;
+$_$;
 
 
 SET default_with_oids = false;
@@ -141,7 +201,11 @@ CREATE TABLE public.datos_laborales (
     email_laboral character varying(255),
     id_persona integer NOT NULL,
     legajo integer NOT NULL,
-    id_tipo_contrato integer NOT NULL
+    id_tipo_contrato integer NOT NULL,
+    fecha_ingreso date,
+    fecha_egreso date,
+    hora_entrada time without time zone,
+    hora_salida time without time zone
 );
 
 
@@ -256,6 +320,40 @@ CREATE SEQUENCE public.estados_civiles_id_seq
 --
 
 ALTER SEQUENCE public.estados_civiles_id_seq OWNED BY public.estados_civiles.id;
+
+
+--
+-- Name: fichajes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.fichajes (
+    id integer NOT NULL,
+    fecha date NOT NULL,
+    hora_entrada timestamp without time zone,
+    hora_salida timestamp without time zone,
+    horas_trabajadas numeric(10,2),
+    horas_extras numeric(10,2),
+    id_persona integer NOT NULL
+);
+
+
+--
+-- Name: fichajes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.fichajes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: fichajes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.fichajes_id_seq OWNED BY public.fichajes.id;
 
 
 --
@@ -474,6 +572,37 @@ ALTER SEQUENCE public.personas_id_seq OWNED BY public.personas.id;
 
 
 --
+-- Name: personas_jornadas; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.personas_jornadas (
+    id integer NOT NULL,
+    hora_desde time without time zone NOT NULL,
+    hora_hasta time without time zone NOT NULL,
+    id_persona integer NOT NULL
+);
+
+
+--
+-- Name: personas_jornadas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.personas_jornadas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: personas_jornadas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.personas_jornadas_id_seq OWNED BY public.personas_jornadas.id;
+
+
+--
 -- Name: provincias; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -678,17 +807,18 @@ ALTER SEQUENCE public.tipos_empleadores_id_seq OWNED BY public.tipos_empleadores
 
 
 --
--- Name: v_conceptos; Type: TABLE; Schema: public; Owner: -
+-- Name: v_conceptos; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE TABLE public.v_conceptos (
-    id integer,
-    descripcion text,
-    codigo text,
-    id_tipo_concepto integer,
-    formula text,
-    tipo_concepto text
-);
+CREATE VIEW public.v_conceptos AS
+ SELECT c.id,
+    c.descripcion,
+    c.codigo,
+    c.id_tipo_concepto,
+    c.formula,
+    tc.descripcion AS tipo_concepto
+   FROM (public.conceptos c
+     JOIN public.tipos_conceptos tc ON ((tc.id = c.id_tipo_concepto)));
 
 
 --
@@ -814,6 +944,39 @@ ALTER SEQUENCE public.vacaciones_id_seq OWNED BY public.vacaciones.id;
 
 
 --
+-- Name: reservadas; Type: TABLE; Schema: test; Owner: -
+--
+
+CREATE TABLE test.reservadas (
+    id integer NOT NULL,
+    nombre text NOT NULL,
+    descripcion text NOT NULL,
+    descripcion_larga text,
+    query text,
+    valor text
+);
+
+
+--
+-- Name: reservadas_id_seq; Type: SEQUENCE; Schema: test; Owner: -
+--
+
+CREATE SEQUENCE test.reservadas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reservadas_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: -
+--
+
+ALTER SEQUENCE test.reservadas_id_seq OWNED BY test.reservadas.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -866,6 +1029,13 @@ ALTER TABLE ONLY public.estados_civiles ALTER COLUMN id SET DEFAULT nextval('pub
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.fichajes ALTER COLUMN id SET DEFAULT nextval('public.fichajes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.generos ALTER COLUMN id SET DEFAULT nextval('public.generos_id_seq'::regclass);
 
 
@@ -909,6 +1079,13 @@ ALTER TABLE ONLY public.persona_tareas ALTER COLUMN id SET DEFAULT nextval('publ
 --
 
 ALTER TABLE ONLY public.personas ALTER COLUMN id SET DEFAULT nextval('public.personas_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.personas_jornadas ALTER COLUMN id SET DEFAULT nextval('public.personas_jornadas_id_seq'::regclass);
 
 
 --
@@ -968,76 +1145,84 @@ ALTER TABLE ONLY public.vacaciones ALTER COLUMN id SET DEFAULT nextval('public.v
 
 
 --
+-- Name: id; Type: DEFAULT; Schema: test; Owner: -
+--
+
+ALTER TABLE ONLY test.reservadas ALTER COLUMN id SET DEFAULT nextval('test.reservadas_id_seq'::regclass);
+
+
+--
 -- Data for Name: categorias; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.categorias VALUES (1, '1RA.SUPERV', NULL, NULL, '1');
-INSERT INTO public.categorias VALUES (2, '2DA.SUPERV', NULL, NULL, '2');
-INSERT INTO public.categorias VALUES (3, '1RA.ADM', NULL, NULL, '3');
-INSERT INTO public.categorias VALUES (4, '2DA.ADM', NULL, NULL, '4');
-INSERT INTO public.categorias VALUES (5, 'Maestranza', NULL, NULL, '5');
+INSERT INTO public.categorias VALUES (1, '1RA.SUPERV', 50000.00, NULL, '1');
+INSERT INTO public.categorias VALUES (2, '2DA.SUPERV', 40000.00, NULL, '2');
+INSERT INTO public.categorias VALUES (3, '1RA.ADM', 60000.00, NULL, '3');
+INSERT INTO public.categorias VALUES (4, '2DA.ADM', 50000.00, NULL, '4');
+INSERT INTO public.categorias VALUES (5, 'Maestranza', 35000.00, NULL, '5');
 
 
 --
 -- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.categorias_id_seq', 1, false);
+SELECT pg_catalog.setval('public.categorias_id_seq', 5, false);
 
 
 --
 -- Data for Name: conceptos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.conceptos VALUES (1, 'Sueldo Básico', '100', 1, 'BASICO');
 
 
 --
 -- Name: conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.conceptos_id_seq', 1, false);
+SELECT pg_catalog.setval('public.conceptos_id_seq', 1, true);
 
 
 --
 -- Data for Name: datos_actuales; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.datos_actuales VALUES (5, 'San Vicente 1351', 1, NULL, NULL, NULL, 1, 6);
+INSERT INTO public.datos_actuales VALUES (1, 'San Vicente 1351', 1, NULL, NULL, NULL, 1, 1);
 
 
 --
 -- Name: datos_actuales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.datos_actuales_id_seq', 5, true);
+SELECT pg_catalog.setval('public.datos_actuales_id_seq', 1, true);
 
 
 --
 -- Data for Name: datos_laborales; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.datos_laborales VALUES (3, 1, 1, NULL, 6, 4611, 1);
+INSERT INTO public.datos_laborales VALUES (1, 1, 1, NULL, 1, 4611, 1, '2018-07-01', NULL, '08:00:00', '15:00:00');
 
 
 --
 -- Name: datos_laborales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.datos_laborales_id_seq', 3, true);
+SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
 
 
 --
 -- Data for Name: datos_salud; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.datos_salud VALUES (2, 1, NULL, 6);
+INSERT INTO public.datos_salud VALUES (1, 1, NULL, 1);
 
 
 --
 -- Name: datos_salud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.datos_salud_id_seq', 2, true);
+SELECT pg_catalog.setval('public.datos_salud_id_seq', 1, true);
 
 
 --
@@ -1058,9 +1243,9 @@ SELECT pg_catalog.setval('public.establecimientos_id_seq', 1, false);
 -- Data for Name: estados_civiles; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.estados_civiles VALUES (1, 'Soltero/a');
 INSERT INTO public.estados_civiles VALUES (2, 'Casado/a');
 INSERT INTO public.estados_civiles VALUES (3, 'Divorciado/a');
-INSERT INTO public.estados_civiles VALUES (1, 'Soltero/a');
 
 
 --
@@ -1068,6 +1253,20 @@ INSERT INTO public.estados_civiles VALUES (1, 'Soltero/a');
 --
 
 SELECT pg_catalog.setval('public.estados_civiles_id_seq', 1, false);
+
+
+--
+-- Data for Name: fichajes; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.fichajes VALUES (2, '2019-08-12', '2019-08-12 07:50:48.527084', '2019-08-12 15:07:48.527084', NULL, NULL, 1);
+
+
+--
+-- Name: fichajes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.fichajes_id_seq', 2, true);
 
 
 --
@@ -1152,28 +1351,41 @@ SELECT pg_catalog.setval('public.paises_id_seq', 1, true);
 -- Data for Name: persona_tareas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.persona_tareas VALUES (2, 6, 2);
+INSERT INTO public.persona_tareas VALUES (1, 1, 1);
 
 
 --
 -- Name: persona_tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.persona_tareas_id_seq', 2, true);
+SELECT pg_catalog.setval('public.persona_tareas_id_seq', 1, true);
 
 
 --
 -- Data for Name: personas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.personas VALUES (6, 'Martin', 'Garay', '1989-05-11', 1, '34555008', 1, 1, true);
+INSERT INTO public.personas VALUES (1, 'Martin', 'Garay', '1989-05-11', 1, '34555008', 1, 1, true);
 
 
 --
 -- Name: personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.personas_id_seq', 6, true);
+SELECT pg_catalog.setval('public.personas_id_seq', 1, true);
+
+
+--
+-- Data for Name: personas_jornadas; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Name: personas_jornadas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.personas_jornadas_id_seq', 1, false);
 
 
 --
@@ -1306,20 +1518,13 @@ SELECT pg_catalog.setval('public.tipos_documentos_id_seq', 1, false);
 -- Data for Name: tipos_empleadores; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.tipos_empleadores VALUES (1, 'Dec 814/01, art. 2, inc. B');
 
 
 --
 -- Name: tipos_empleadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, true);
-
-
---
--- Data for Name: v_conceptos; Type: TABLE DATA; Schema: public; Owner: -
---
-
+SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, false);
 
 
 --
@@ -1333,6 +1538,22 @@ SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, true);
 --
 
 SELECT pg_catalog.setval('public.vacaciones_id_seq', 1, false);
+
+
+--
+-- Data for Name: reservadas; Type: TABLE DATA; Schema: test; Owner: -
+--
+
+INSERT INTO test.reservadas VALUES (1, 'BASICO', 'Sueldo Basico', 'Trae el sueldo basico de la categoria correspondiente del empleado', 'SELECT sueldo_basico as resultado FROM categorias WHERE id=(SELECT id_categoria FROM datos_laborales WHERE id_persona={ID_PERSONA})', NULL);
+INSERT INTO test.reservadas VALUES (2, 'ANTIGUEDAD', 'ANTIGUEDAD', 'Trae la antiguedad en años del empleado', 'SELECT edad(fecha_ingreso)  as resultado FROM datos_laborales WHERE id_persona={ID_PERSONA}', NULL);
+INSERT INTO test.reservadas VALUES (3, 'HSTRAB', 'Total Horas Trabajadas', 'Realiza el calculo de las horas trabajadas', 'select EXTRACT(EPOCH FROM hora_salida-hora_entrada)/3600 as resultado from fichajes WHERE id_persona={ID_PERSONA}', NULL);
+
+
+--
+-- Name: reservadas_id_seq; Type: SEQUENCE SET; Schema: test; Owner: -
+--
+
+SELECT pg_catalog.setval('test.reservadas_id_seq', 1, false);
 
 
 --
@@ -1400,6 +1621,14 @@ ALTER TABLE ONLY public.estados_civiles
 
 
 --
+-- Name: pk_fichajes; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fichajes
+    ADD CONSTRAINT pk_fichajes PRIMARY KEY (id);
+
+
+--
 -- Name: pk_generos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1453,6 +1682,14 @@ ALTER TABLE ONLY public.persona_tareas
 
 ALTER TABLE ONLY public.personas
     ADD CONSTRAINT pk_personas PRIMARY KEY (id);
+
+
+--
+-- Name: pk_personas_jornadas; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.personas_jornadas
+    ADD CONSTRAINT pk_personas_jornadas PRIMARY KEY (id);
 
 
 --
@@ -1525,6 +1762,14 @@ ALTER TABLE ONLY public.tipos_contratos
 
 ALTER TABLE ONLY public.personas
     ADD CONSTRAINT uk_personas_dni UNIQUE (id_tipo_documento, nro_documento);
+
+
+--
+-- Name: pk_reservadas; Type: CONSTRAINT; Schema: test; Owner: -
+--
+
+ALTER TABLE ONLY test.reservadas
+    ADD CONSTRAINT pk_reservadas PRIMARY KEY (id);
 
 
 --
@@ -1624,6 +1869,14 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
+-- Name: fk_fichajes__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fichajes
+    ADD CONSTRAINT fk_fichajes__personas FOREIGN KEY (id_persona) REFERENCES public.personas(id);
+
+
+--
 -- Name: fk_localidad_provincia; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1645,6 +1898,14 @@ ALTER TABLE ONLY public.personas
 
 ALTER TABLE ONLY public.personas
     ADD CONSTRAINT fk_personas__generos FOREIGN KEY (id_genero) REFERENCES public.generos(id);
+
+
+--
+-- Name: fk_personas_jornadas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.personas_jornadas
+    ADD CONSTRAINT fk_personas_jornadas__personas FOREIGN KEY (id_persona) REFERENCES public.personas(id);
 
 
 --
