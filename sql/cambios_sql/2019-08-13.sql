@@ -51,3 +51,16 @@ create table recibos_conceptos(
 	constraint pk_recibos_conceptos primary key (id),
 	constraint fk_recibos_conceptos__conceptos foreign key(id_concepto) references conceptos(id)		
 );
+
+insert into test.reservadas(id,nombre,descripcion,descripcion_larga,query,valor) 
+values(4,'DIASMES','Cantidad del mes','Cantidad del mes a liquidar. Tabla: liquidacion.periodo','select dias_mes(periodo) as resultado from liquidaciones where id={ID_LIQUIDACION}',null);
+
+alter table test.reservadas add column id_tipo_reservada integer not null default 2;
+create table tipos_reservadas(
+	id serial not null,
+	descripcion text not null,
+	constraint pk_tipos_reservadas primary key (id)
+);
+insert into tipos_reservadas(id,descripcion) values(1,'LIQUIDACION');
+insert into tipos_reservadas(id,descripcion) values(2,'PERSONA');
+alter table test.reservadas add constraint fk_tipos_reservadas__reservadas foreign key (id_tipo_reservada) references tipos_reservadas(id);
