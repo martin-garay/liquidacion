@@ -198,7 +198,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001126', --objeto_cuadro_col
 	'fecha_desde', --clave
 	'3', --orden
-	NULL, --titulo
+	'Fecha Desde', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'7', --estilo
 	NULL, --ancho
@@ -229,7 +229,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001127', --objeto_cuadro_col
 	'fecha_hasta', --clave
 	'4', --orden
-	NULL, --titulo
+	'Fecha Hasta', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'7', --estilo
 	NULL, --ancho
@@ -260,7 +260,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001128', --objeto_cuadro_col
 	'tipo_liquidacion', --clave
 	'5', --orden
-	NULL, --titulo
+	'Tipo Liquidacion', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho
@@ -291,7 +291,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001129', --objeto_cuadro_col
 	'establecimiento', --clave
 	'6', --orden
-	NULL, --titulo
+	'Establecimiento', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho
@@ -322,7 +322,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001130', --objeto_cuadro_col
 	'banco', --clave
 	'7', --orden
-	NULL, --titulo
+	'Banco', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho
@@ -351,9 +351,9 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'asociacion', --objeto_cuadro_proyecto
 	'18000781', --objeto_cuadro
 	'18001131', --objeto_cuadro_col
-	'localidad_pago', --clave
+	'lugar_pago', --clave
 	'8', --orden
-	NULL, --titulo
+	'Lugar de Pago', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho
@@ -384,7 +384,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001132', --objeto_cuadro_col
 	'fecha_pago', --clave
 	'9', --orden
-	NULL, --titulo
+	'Fecha de Pago', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'7', --estilo
 	NULL, --ancho
@@ -415,7 +415,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'18001133', --objeto_cuadro_col
 	'mes', --clave
 	'10', --orden
-	NULL, --titulo
+	'Mes', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
 	NULL, --ancho

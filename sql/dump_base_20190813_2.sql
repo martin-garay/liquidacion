@@ -109,7 +109,7 @@ CREATE TABLE public.bancos (
 --
 
 CREATE SEQUENCE public.bancos_id_seq
-    AS integer
+    
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -443,7 +443,7 @@ CREATE TABLE public.liquidaciones (
 --
 
 CREATE SEQUENCE public.liquidaciones_id_seq
-    AS integer
+    
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -738,7 +738,7 @@ CREATE TABLE public.recibos_conceptos (
 --
 
 CREATE SEQUENCE public.recibos_conceptos_id_seq
-    AS integer
+    
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -758,7 +758,7 @@ ALTER SEQUENCE public.recibos_conceptos_id_seq OWNED BY public.recibos_conceptos
 --
 
 CREATE SEQUENCE public.recibos_id_seq
-    AS integer
+    
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -962,7 +962,7 @@ CREATE TABLE public.tipos_liquidaciones (
 --
 
 CREATE SEQUENCE public.tipos_liquidaciones_id_seq
-    AS integer
+    
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -992,7 +992,7 @@ CREATE TABLE public.tipos_reservadas (
 --
 
 CREATE SEQUENCE public.tipos_reservadas_id_seq
-    AS integer
+    
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
