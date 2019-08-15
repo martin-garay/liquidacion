@@ -37,6 +37,7 @@ class asociacion_autoload
 		'asociacion_ei_grafico' => 'extension_toba/componentes/asociacion_ei_grafico.php',
 		'asociacion_ei_mapa' => 'extension_toba/componentes/asociacion_ei_mapa.php',
 		'asociacion_servicio_web' => 'extension_toba/componentes/asociacion_servicio_web.php',
+		'Evaluator' => '3ros/Matex/Evaluator.php',
 	);
 }
 ?>

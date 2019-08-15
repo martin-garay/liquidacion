@@ -1,15 +1,15 @@
 ------------------------------------------------------------
---[2858]--  DT - recibos 
+--[18000788]--  DT - reservadas 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
 -- apex_objeto
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 0
+--- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'asociacion', --proyecto
-	'2858', --objeto
+	'18000788', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - recibos', --nombre
+	'DT - reservadas', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,31 +36,31 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2019-08-13 23:19:34', --creacion
+	'2019-08-14 08:59:10', --creacion
 	NULL  --posicion_botonera
 );
---- FIN Grupo de desarrollo 0
+--- FIN Grupo de desarrollo 18
 
 ------------------------------------------------------------
 -- apex_objeto_db_registros
 ------------------------------------------------------------
 INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, min_registros, punto_montaje, ap, ap_clase, ap_archivo, tabla, tabla_ext, alias, modificar_claves, fuente_datos_proyecto, fuente_datos, permite_actualizacion_automatica, esquema, esquema_ext) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
+	'18000788', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
 	'16', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'recibos', --tabla
+	'reservadas', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
 	'asociacion', --fuente_datos_proyecto
 	'asociacion', --fuente_datos
 	'1', --permite_actualizacion_automatica
-	NULL, --esquema
+	'sistema', --esquema
 	'public'  --esquema_ext
 );
 
@@ -68,131 +68,103 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 -- apex_objeto_db_registros_col
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 0
+--- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1483', --col_id
+	'18000788', --objeto
+	'18001129', --col_id
 	'id', --columna
 	'E', --tipo
 	'1', --pk
-	'recibos_id_seq', --secuencia
+	'reservadas_id_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
+	NULL, --externa
+	'reservadas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1484', --col_id
-	'nro_recibo', --columna
-	'E', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1485', --col_id
-	'id_persona', --columna
-	'E', --tipo
+	'18000788', --objeto
+	'18001130', --col_id
+	'nombre', --columna
+	'X', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
+	NULL, --externa
+	'reservadas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1486', --col_id
-	'total_remunerativos', --columna
-	'N', --tipo
+	'18000788', --objeto
+	'18001131', --col_id
+	'descripcion', --columna
+	'X', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	NULL, --externa
+	'reservadas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'18000788', --objeto
+	'18001132', --col_id
+	'descripcion_larga', --columna
+	'X', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
+	NULL, --externa
+	'reservadas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1487', --col_id
-	'total_no_remunerativos', --columna
-	'N', --tipo
+	'18000788', --objeto
+	'18001133', --col_id
+	'query', --columna
+	'X', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
+	NULL, --externa
+	'reservadas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1488', --col_id
-	'total_deducciones', --columna
-	'N', --tipo
+	'18000788', --objeto
+	'18001134', --col_id
+	'valor', --columna
+	'X', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
+	NULL, --externa
+	'reservadas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1489', --col_id
-	'total_neto', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1490', --col_id
-	'total_basico', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'0', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2858', --objeto
-	'1491', --col_id
-	'id_liquidacion', --columna
+	'18000788', --objeto
+	'18001135', --col_id
+	'id_tipo_reservada', --columna
 	'E', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'recibos'  --tabla
+	NULL, --externa
+	'reservadas'  --tabla
 );
---- FIN Grupo de desarrollo 0
+--- FIN Grupo de desarrollo 18

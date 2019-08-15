@@ -132,6 +132,24 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --inicializar
 	NULL  --orden
 );
+--- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 18
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'18000837', --dep_id
+	'2848', --objeto_consumidor
+	'18000799', --objeto_proveedor
+	'form_funciones', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+--- FIN Grupo de desarrollo 18
+
+--- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
 	'1714', --dep_id
@@ -178,7 +196,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 		</tr>
 		<tr>
 			<td style="vertical-align: top;">
-				[dep id=form_reservadas][dep id=form_conceptos]</td>
+				[dep id=form_reservadas][dep id=form_conceptos][dep id=form_funciones]</td>
 			<td style="vertical-align: top;">
 				[dep id=form]</td>
 		</tr>
@@ -227,4 +245,11 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'2848', --objeto_ci
 	'4', --orden
 	'1714'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'asociacion', --proyecto
+	'1356', --pantalla
+	'2848', --objeto_ci
+	'5', --orden
+	'18000837'  --dep_id
 );

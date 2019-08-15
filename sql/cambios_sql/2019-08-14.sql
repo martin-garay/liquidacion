@@ -58,3 +58,75 @@ left join bancos b ON b.id=l.id_banco;
 
 alter table liquidaciones add column fecha_deposito date;
 
+/* ---------------------------------------------------
+		Tabajado a la mañana 
+------------------------------------------------------*/
+INSERT INTO tipo_liquidacion_conceptos ( id_concepto, id_tipo_liquidacion ) VALUES ('1', '1');
+
+alter SCHEMA test RENAME TO sistema;
+
+/* ------------------------------------------------------------------------ */
+/* Cambio tipos_reservadas por sistema.tipos_reservadas */
+/* ------------------------------------------------------------------------ */
+--dropeo foreign key y columna
+ALTER TABLE sistema.reservadas DROP CONSTRAINT fk_tipos_reservadas__reservadas;
+alter table sistema.reservadas drop column id_tipo_reservada;
+
+--creo la tabla en el esquema sistemas
+drop table tipos_reservadas;
+create table sistema.tipos_reservadas(
+	id serial not null,
+	descripcion text not null,
+	constraint pk_tipos_reservadas primary key (id)
+);
+
+--agrego la columna apuntando a la tabla de tipos en el esquema sistema
+alter table sistema.reservadas add column id_tipo_reservada integer;
+--agrego la clave foranea
+ALTER TABLE sistema.reservadas
+  ADD CONSTRAINT fk_tipos_reservadas__reservadas FOREIGN KEY (id_tipo_reservada)
+      REFERENCES sistema.tipos_reservadas (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;
+
+insert into sistema.tipos_reservadas(id,descripcion) values(1,'LIQUIDACION');
+insert into sistema.tipos_reservadas(id,descripcion) values(2,'PERSONA');
+
+update sistema.reservadas set id_tipo_reservada =1;
+alter table sistema.reservadas alter column id_tipo_reservada SET NOT NULL;
+/* ------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------ */
+
+
+
+/* ------------------------------------------------------------------------ */
+/* Agrego el tipo de dato de la palabra reservada 		*/
+/* ------------------------------------------------------------------------ */
+alter table sistema.reservadas add column id_tipo_dato integer;
+
+create table sistema.tipos_datos(
+	id serial not null,
+	descripcion text not null,
+	constraint pk_tipos_datos primary key(id)
+);
+insert into sistema.tipos_datos(id,descripcion) values(1,'INTEGER');
+insert into sistema.tipos_datos(id,descripcion) values(2,'BOOLEAN');
+insert into sistema.tipos_datos(id,descripcion) values(3,'TEXT');
+insert into sistema.tipos_datos(id,descripcion) values(4,'NUMERIC');
+alter table sistema.reservadas add constraint fk_reservadas__tipos_datos foreign key (id_tipo_dato) references sistema.tipos_datos(id);
+/* ------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------ */
+
+create view sistema.v_reservadas as 
+select r.*,tr.descripcion as tipo_reservada,td.descripcion as tipo_dato 
+from sistema.reservadas r
+left join sistema.tipos_reservadas tr ON tr.id=r.id_tipo_reservada
+left join sistema.tipos_datos td ON td.id=r.id_tipo_dato;
+
+--cambio la secuencia
+SELECT pg_catalog.setval('public.tipos_conceptos_id_seq', 4, false);
+
+INSERT INTO sistema.reservadas ( id, nombre, descripcion, descripcion_larga, query, valor, id_tipo_reservada ) 
+ VALUES (5,'TIEMPOCOMP', 'Trabaja a tiempo completo', 'Devuelve verdadero si el trabajador tiene contrato a tiempo completo', 'SELECT (id_tipo_contrato=1) as resultado FROM datos_laborales WHERE id_persona={ID_PERSONA}', DEFAULT, '1');
+
+INSERT INTO sistema.reservadas ( id, nombre, descripcion, descripcion_larga, query, valor, id_tipo_reservada ) 
+ VALUES (6,'TIEMPOPARC', 'Trabaja a tiempo parcial', 'Devuelve verdadero si el trabajador tiene contrato a tiempo parcial', 'SELECT (id_tipo_contrato<>1) as resultado FROM datos_laborales WHERE id_persona={ID_PERSONA}', DEFAULT, '1');
