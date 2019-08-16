@@ -184,16 +184,30 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --eventos
 	NULL, --subclase
 	NULL, --subclase_archivo
+	NULL, --template
+	NULL, --template_impresion
+	'16'  --punto_montaje
+);
+--- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 18
+INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
+	'asociacion', --objeto_ci_proyecto
+	'2848', --objeto_ci
+	'18000266', --pantalla
+	'pant_edicion', --identificador
+	'2', --orden
+	'Pantalla Edicion', --etiqueta
+	NULL, --descripcion
+	NULL, --tip
+	'apex', --imagen_recurso_origen
+	NULL, --imagen
+	NULL, --objetos
+	NULL, --eventos
+	NULL, --subclase
+	NULL, --subclase_archivo
 	'<table>
 	<tbody>
-		<tr>
-			<td colspan="2">
-				[dep id=filtro]</td>
-		</tr>
-		<tr>
-			<td colspan="2">
-				[dep id=cuadro]</td>
-		</tr>
 		<tr>
 			<td style="vertical-align: top;">
 				[dep id=form_reservadas][dep id=form_conceptos][dep id=form_funciones]</td>
@@ -204,9 +218,9 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 </table>
 <p>&nbsp;</p>', --template
 	NULL, --template_impresion
-	'16'  --punto_montaje
+	NULL  --punto_montaje
 );
---- FIN Grupo de desarrollo 0
+--- FIN Grupo de desarrollo 18
 
 ------------------------------------------------------------
 -- apex_objetos_pantalla
