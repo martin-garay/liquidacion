@@ -112,9 +112,61 @@ create table feriados(
 	constraint pk_feriados primary key (id)
 );
 
+alter table personas add column horas_jornada numeric(10,2) not null default 8;
+alter table personas alter column horas_jornada DROP DEFAULT ;
+
 --crear las siguientes palabras reservadas:
 --dias_laborables
 --dias_no_laborables
 --dias_trabajados
 --dias_justificados
 --inasistencias
+
+CREATE OR REPLACE VIEW public.v_personas AS 
+	 SELECT a.legajo,
+		a.id,
+		a.nombre,
+		a.apellido,
+		a.fecha_nacimiento,
+		a.id_tipo_documento,
+		a.nro_documento,
+		a.cuil,
+		a.id_genero,
+		a.id_nacionalidad,
+		a.activo,
+		a.domicilio,
+		g.descripcion AS genero,
+		td.descripcion AS tipo_documento,
+		a.id_localidad,
+		loc.nombre AS localidad,
+		loc.cp,
+		loc.provincia,
+		loc.pais,
+		n.descripcion AS nacionalidad,
+		a.telefono_particular,
+		a.telefono_celular,
+		a.email,
+		a.id_estado_civil,
+		ec.descripcion AS estado_civil,
+		a.id_categoria,
+		c.descripcion AS categoria,
+		a.id_establecimiento,
+		es.descripcion AS establecimiento,
+		a.id_obra_social,
+		os.descripcion AS obra_social,
+		os.codigo AS codigo_obra_social,
+		c.sueldo_basico,
+		c.valor_hora,
+		a.id_tipo_contrato,
+		tc.descripcion AS tipo_contrato,
+		a.horas_jornada
+	FROM personas a
+	LEFT JOIN estados_civiles ec ON ec.id = a.id_estado_civil
+	LEFT JOIN categorias c ON c.id = a.id_categoria
+	LEFT JOIN establecimientos es ON es.id = a.id_establecimiento
+	LEFT JOIN obras_sociales os ON os.id = a.id_obra_social
+	LEFT JOIN v_localidades loc ON loc.id = a.id_localidad
+	LEFT JOIN nacionalidades n ON n.id = a.id_nacionalidad
+	LEFT JOIN tipos_documentos td ON td.id = a.id_tipo_documento
+	LEFT JOIN generos g ON g.id = a.id_genero
+	LEFT JOIN tipos_contratos tc ON tc.id = a.id_tipo_contrato;
