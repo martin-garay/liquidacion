@@ -53,5 +53,11 @@ class ci_datos_liquidacion extends asociacion_ci
 		$this->tabla('recibos')->procesar_filas($datos);
 	}
 
+	function cantidad_empleados(){
+		return $this->tabla('recibos')->get_cantidad_filas();
+	}
+	function cantidad_conceptos(){
+		return $this->tabla('liquidacion_conceptos')->get_cantidad_filas();	
+	}
 }
 ?>

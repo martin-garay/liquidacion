@@ -65,6 +65,7 @@ class reservadas extends comunes
 			['codigo' => 'fuera(  ,  ,  ,)'		, 'descripcion' => 'fuera'],
 			['codigo' => 'max(  ,  )'			, 'descripcion' => 'max'],
 			['codigo' => 'min(  ,  )'			, 'descripcion' => 'min'],
+			['codigo' => 'redondear(  )'		, 'descripcion' => 'redondear'],
 		];
 		return $funciones;
 	}

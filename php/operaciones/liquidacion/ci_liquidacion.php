@@ -9,6 +9,9 @@ class ci_liquidacion extends asociacion_ci
 	function tabla($nombre){
 		return $this->relacion()->tabla($nombre);
 	}
+	function hijo(){
+		return $this->dep('datos_liquidacion');
+	}
 
 	//-----------------------------------------------------------------------------------
 	//---- Eventos ----------------------------------------------------------------------
@@ -17,7 +20,13 @@ class ci_liquidacion extends asociacion_ci
 	function evt__procesar()
 	{
 		try {
-			$this->relacion()->sincronizar();
+			if( $this->hijo()->cantidad_empleados()>0 && $this->hijo()->cantidad_conceptos()>0 ){				
+				$this->relacion()->sincronizar();
+			}
+			else{
+								
+				throw new toba_error_usuario("No se seleccionaron personas o conceptos");				
+			}
 		} catch (toba_error_db $e) {
 			toba::notificacion()->error('Error al grabar <br>'.$e->get_mensaje_motor());
 		}

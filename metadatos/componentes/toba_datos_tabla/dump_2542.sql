@@ -181,4 +181,270 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'0', --externa
 	'personas'  --tabla
 );
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1508', --col_id
+	'activo', --columna
+	'L', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1509', --col_id
+	'legajo', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1510', --col_id
+	'id_estado_civil', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1511', --col_id
+	'id_categoria', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1512', --col_id
+	'id_tipo_contrato', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1513', --col_id
+	'id_establecimiento', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1514', --col_id
+	'email', --columna
+	'X', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1515', --col_id
+	'fecha_ingreso', --columna
+	'F', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1516', --col_id
+	'fecha_egreso', --columna
+	'F', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1517', --col_id
+	'hora_entrada', --columna
+	'T', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1518', --col_id
+	'hora_salida', --columna
+	'T', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1519', --col_id
+	'id_localidad', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1520', --col_id
+	'domicilio', --columna
+	'X', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1521', --col_id
+	'piso', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'2', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1522', --col_id
+	'departamento', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'10', --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1523', --col_id
+	'telefono_particular', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'30', --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1524', --col_id
+	'telefono_celular', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'30', --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1525', --col_id
+	'id_obra_social', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2542', --objeto
+	'1526', --col_id
+	'cuil', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'15', --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'personas'  --tabla
+);
 --- FIN Grupo de desarrollo 0

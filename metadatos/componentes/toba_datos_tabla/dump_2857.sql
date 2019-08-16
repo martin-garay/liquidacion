@@ -199,7 +199,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'asociacion', --objeto_proyecto
 	'2857', --objeto
 	'1482', --col_id
-	'mes', --columna
+	'periodo_depositado', --columna
 	'C', --tipo
 	'0', --pk
 	'', --secuencia

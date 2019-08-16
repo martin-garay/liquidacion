@@ -20,20 +20,7 @@ class ci_datos_persona extends asociacion_ci
 	{        
 		$this->relacion()->tabla("personas")->set($datos);        
 	}
-
-	//-----------------------------------------------------------------------------------
-	//---- form_laboral -----------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	function conf__form_laboral(asociacion_ei_formulario $form)
-	{                
-		return $this->relacion()->tabla("datos_laborales")->get();        
-	}
-	function evt__form_laboral__modificacion($datos)
-	{        
-		$this->relacion()->tabla("datos_laborales")->set($datos);
-	}
-
+	
 	//-----------------------------------------------------------------------------------
 	//---- form_ml_tareas ---------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -47,31 +34,6 @@ class ci_datos_persona extends asociacion_ci
 	function evt__form_ml_tareas__modificacion($datos)
 	{
 		$this->relacion()->tabla("personas_tareas")->procesar_filas($datos);	
-	}
-
-	//-----------------------------------------------------------------------------------
-	//---- form_salud -------------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-	function conf__form_salud(asociacion_ei_formulario $form)
-	{                
-		return $this->relacion()->tabla("datos_salud")->get();
-	}
-	function evt__form_salud__modificacion($datos)
-	{        
-		$this->relacion()->tabla("datos_salud")->set($datos);
-	}
-
-	//-----------------------------------------------------------------------------------
-	//---- form_datos_actuales ----------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-	function conf__form_datos_actuales(asociacion_ei_formulario $form)
-	{                
-		return $this->relacion()->tabla("datos_actuales")->get();        
-	}
-
-	function evt__form_datos_actuales__modificacion($datos)
-	{        
-		$this->relacion()->tabla("datos_actuales")->set($datos);
 	}
 
 /* --------------------------------------------------------------------------- */

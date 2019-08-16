@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[18000158]--  sistema 
+--[18000158]--  Sistema 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -13,7 +13,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	'18000158', --item
 	NULL, --padre_id
 	'asociacion', --padre_proyecto
-	'3581', --padre
+	'1', --padre
 	'1', --carpeta
 	'0', --nivel_acceso
 	NULL, --solicitud_tipo
@@ -23,12 +23,12 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'sistema', --nombre
+	'Sistema', --nombre
 	'Estas opciones son administradas por sistemas', --descripcion
 	NULL, --punto_montaje
 	NULL, --actividad_accion
 	'1', --menu
-	'2', --orden
+	'10', --orden
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obs_tipo_proyecto
 	NULL, --solicitud_obs_tipo

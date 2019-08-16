@@ -65,42 +65,6 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
-	'1413', --dep_id
-	'2548', --objeto_consumidor
-	'2544', --objeto_proveedor
-	'datos_actuales', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'2'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'1414', --dep_id
-	'2548', --objeto_consumidor
-	'2545', --objeto_proveedor
-	'datos_laborales', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'3'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'1415', --dep_id
-	'2548', --objeto_consumidor
-	'2546', --objeto_proveedor
-	'datos_salud', --identificador
-	NULL, --parametros_a
-	'1', --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	'4'  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
 	'1411', --dep_id
 	'2548', --objeto_consumidor
 	'2542', --objeto_proveedor
@@ -121,7 +85,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
-	'5'  --orden
+	'2'  --orden
 );
 --- FIN Grupo de desarrollo 0
 
@@ -130,54 +94,6 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 ------------------------------------------------------------
 
 --- INICIO Grupo de desarrollo 0
-INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
-	'asociacion', --proyecto
-	'2548', --objeto
-	'70', --asoc_id
-	NULL, --identificador
-	'asociacion', --padre_proyecto
-	'2542', --padre_objeto
-	'personas', --padre_id
-	NULL, --padre_clave
-	'asociacion', --hijo_proyecto
-	'2544', --hijo_objeto
-	'datos_actuales', --hijo_id
-	NULL, --hijo_clave
-	NULL, --cascada
-	'1'  --orden
-);
-INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
-	'asociacion', --proyecto
-	'2548', --objeto
-	'71', --asoc_id
-	NULL, --identificador
-	'asociacion', --padre_proyecto
-	'2542', --padre_objeto
-	'personas', --padre_id
-	NULL, --padre_clave
-	'asociacion', --hijo_proyecto
-	'2545', --hijo_objeto
-	'datos_laborales', --hijo_id
-	NULL, --hijo_clave
-	NULL, --cascada
-	'2'  --orden
-);
-INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
-	'asociacion', --proyecto
-	'2548', --objeto
-	'72', --asoc_id
-	NULL, --identificador
-	'asociacion', --padre_proyecto
-	'2542', --padre_objeto
-	'personas', --padre_id
-	NULL, --padre_clave
-	'asociacion', --hijo_proyecto
-	'2546', --hijo_objeto
-	'datos_salud', --hijo_id
-	NULL, --hijo_clave
-	NULL, --cascada
-	'3'  --orden
-);
 INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
 	'asociacion', --proyecto
 	'2548', --objeto
@@ -192,40 +108,13 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 	'personas_tareas', --hijo_id
 	NULL, --hijo_clave
 	NULL, --cascada
-	'4'  --orden
+	'1'  --orden
 );
 --- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
 -- apex_objeto_rel_columnas_asoc
 ------------------------------------------------------------
-INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
-	'asociacion', --proyecto
-	'2548', --objeto
-	'70', --asoc_id
-	'2542', --padre_objeto
-	'1404', --padre_clave
-	'2544', --hijo_objeto
-	'1419'  --hijo_clave
-);
-INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
-	'asociacion', --proyecto
-	'2548', --objeto
-	'71', --asoc_id
-	'2542', --padre_objeto
-	'1404', --padre_clave
-	'2545', --hijo_objeto
-	'1424'  --hijo_clave
-);
-INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
-	'asociacion', --proyecto
-	'2548', --objeto
-	'72', --asoc_id
-	'2542', --padre_objeto
-	'1404', --padre_clave
-	'2546', --hijo_objeto
-	'1429'  --hijo_clave
-);
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'asociacion', --proyecto
 	'2548', --objeto

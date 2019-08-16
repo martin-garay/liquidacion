@@ -147,30 +147,6 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
-	'1407', --dep_id
-	'2536', --objeto_consumidor
-	'2538', --objeto_proveedor
-	'form_datos_actuales', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'1410', --dep_id
-	'2536', --objeto_consumidor
-	'2541', --objeto_proveedor
-	'form_laboral', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
 	'1662', --dep_id
 	'2536', --objeto_consumidor
 	'2784', --objeto_proveedor
@@ -187,18 +163,6 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2536', --objeto_consumidor
 	'2537', --objeto_proveedor
 	'form_persona', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'1408', --dep_id
-	'2536', --objeto_consumidor
-	'2539', --objeto_proveedor
-	'form_salud', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -246,48 +210,10 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
 	'asociacion', --objeto_ci_proyecto
 	'2536', --objeto_ci
-	'1264', --pantalla
-	'pant_salud', --identificador
-	'3', --orden
-	'Datos Salud', --etiqueta
-	NULL, --descripcion
-	NULL, --tip
-	'apex', --imagen_recurso_origen
-	NULL, --imagen
-	NULL, --objetos
-	NULL, --eventos
-	NULL, --subclase
-	NULL, --subclase_archivo
-	NULL, --template
-	NULL, --template_impresion
-	NULL  --punto_montaje
-);
-INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
-	'asociacion', --objeto_ci_proyecto
-	'2536', --objeto_ci
 	'1265', --pantalla
 	'pant_laboral', --identificador
-	'4', --orden
-	'Datos Laborales', --etiqueta
-	NULL, --descripcion
-	NULL, --tip
-	'apex', --imagen_recurso_origen
-	NULL, --imagen
-	NULL, --objetos
-	NULL, --eventos
-	NULL, --subclase
-	NULL, --subclase_archivo
-	NULL, --template
-	NULL, --template_impresion
-	NULL  --punto_montaje
-);
-INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
-	'asociacion', --objeto_ci_proyecto
-	'2536', --objeto_ci
-	'1267', --pantalla
-	'pant_datos_actuales', --identificador
 	'2', --orden
-	'Datos Actuales', --etiqueta
+	'Datos Laborales', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
@@ -314,31 +240,10 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto
-	'1264', --pantalla
-	'2536', --objeto_ci
-	'0', --orden
-	'1408'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'asociacion', --proyecto
-	'1265', --pantalla
-	'2536', --objeto_ci
-	'0', --orden
-	'1410'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'asociacion', --proyecto
 	'1265', --pantalla
 	'2536', --objeto_ci
 	'1', --orden
 	'1662'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'asociacion', --proyecto
-	'1267', --pantalla
-	'2536', --objeto_ci
-	'0', --orden
-	'1407'  --dep_id
 );
 
 ------------------------------------------------------------
@@ -357,18 +262,6 @@ INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VAL
 	'asociacion'  --proyecto
 );
 INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1264', --pantalla
-	'2536', --objeto_ci
-	'1394', --evento_id
-	'asociacion'  --proyecto
-);
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1264', --pantalla
-	'2536', --objeto_ci
-	'1395', --evento_id
-	'asociacion'  --proyecto
-);
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
 	'1265', --pantalla
 	'2536', --objeto_ci
 	'1394', --evento_id
@@ -376,18 +269,6 @@ INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VAL
 );
 INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
 	'1265', --pantalla
-	'2536', --objeto_ci
-	'1395', --evento_id
-	'asociacion'  --proyecto
-);
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1267', --pantalla
-	'2536', --objeto_ci
-	'1394', --evento_id
-	'asociacion'  --proyecto
-);
-INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
-	'1267', --pantalla
 	'2536', --objeto_ci
 	'1395', --evento_id
 	'asociacion'  --proyecto

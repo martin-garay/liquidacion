@@ -34,6 +34,9 @@ function entre($valor1, $valor_desde, $valor_hasta){
 function fuera($valor1, $valor_desde, $valor_hasta){
 	return (int)($valor1>=$valor_desde && $valor1<=$valor_hasta);
 }
+function redondear($numero, $decimales=0){
+	return round($numero,$$decimales);
+}
 
 $funciones = [
 	/* Logicas */
@@ -50,6 +53,7 @@ $funciones = [
 	'fuera'			=>	['ref' => 'fuera'		, 'arc' => null],
 	'max'			=>	['ref' => 'max'			, 'arc' => null],		//usa la function max de php
 	'min'			=>	['ref' => 'min'			, 'arc' => null],		//usa la function min de php	
+	'redondear'		=>	['ref' => 'redondear'	, 'arc' => null],		//usa la function min de php	
 ];
 
 $conceptos = toba::consulta_php('reservadas')->get_conceptos(null,'codigo asc');
@@ -59,7 +63,7 @@ ei_arbol($conceptos);
 $evaluator = new Evaluator();
 $evaluator->functions = $funciones;
 
-$calculadas = toba::consulta_php('reservadas')->generar_reservadas(1,3);
+$calculadas = toba::consulta_php('reservadas')->generar_reservadas(1,9);
 $evaluator->variables = $calculadas; //cargo todas las palabras reservadas
 
 $recibos = array( 1=>'');
