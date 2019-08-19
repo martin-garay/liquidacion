@@ -71,6 +71,21 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 -- apex_objeto_dependencias
 ------------------------------------------------------------
 
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1747', --dep_id
+	'18000782', --objeto_consumidor
+	'2884', --objeto_proveedor
+	'cuadro_recibos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+--- FIN Grupo de desarrollo 0
+
 --- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
@@ -93,6 +108,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'18000782', --objeto_consumidor
 	'2861', --objeto_proveedor
 	'form_ml_conceptos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1746', --dep_id
+	'18000782', --objeto_consumidor
+	'2886', --objeto_proveedor
+	'form_ml_conceptos_recibo', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
@@ -135,7 +162,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'18000782', --objeto_ci
 	'1358', --pantalla
 	'pant_conceptos', --identificador
-	'3', --orden
+	'2', --orden
 	'Conceptos a Liquidar', --etiqueta
 	'Los conceptos son cargados por el sistema según el Tipo de liquidación seleccionada en la pestaña Datos Liquidación.', --descripcion
 	NULL, --tip
@@ -146,6 +173,34 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --subclase
 	NULL, --subclase_archivo
 	NULL, --template
+	NULL, --template_impresion
+	'16'  --punto_montaje
+);
+INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
+	'asociacion', --objeto_ci_proyecto
+	'18000782', --objeto_ci
+	'1366', --pantalla
+	'pant_recibos', --identificador
+	'4', --orden
+	'Recibos', --etiqueta
+	NULL, --descripcion
+	NULL, --tip
+	'apex', --imagen_recurso_origen
+	NULL, --imagen
+	NULL, --objetos
+	NULL, --eventos
+	NULL, --subclase
+	NULL, --subclase_archivo
+	'<table>
+	<tbody>
+		<tr>
+			<td style="vertical-align: top;">
+ 				[dep id=cuadro_recibos]</td>
+			<td style="vertical-align: top;">
+				[dep id=form_ml_conceptos_recibo]</td>
+		</tr>
+	</tbody>
+</table>', --template
 	NULL, --template_impresion
 	'16'  --punto_montaje
 );
@@ -176,7 +231,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'18000782', --objeto_ci
 	'18000262', --pantalla
 	'pant_empleados', --identificador
-	'2', --orden
+	'3', --orden
 	'Empleados a Liquidar', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
@@ -201,6 +256,20 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'18000782', --objeto_ci
 	'0', --orden
 	'1719'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'asociacion', --proyecto
+	'1366', --pantalla
+	'18000782', --objeto_ci
+	'1', --orden
+	'1746'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'asociacion', --proyecto
+	'1366', --pantalla
+	'18000782', --objeto_ci
+	'0', --orden
+	'1747'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto

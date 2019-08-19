@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'16', --punto_montaje
 	'ci_generico_una_pantalla', --subclase
-	'operaciones/parametrizacion//ci_generico_una_pantalla.php', --subclase_archivo
+	'operaciones/ci_generico_una_pantalla.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'2ABM Generico', --nombre

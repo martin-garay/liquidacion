@@ -168,3 +168,16 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'conceptos'  --tabla
 );
 --- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_db_registros_uniq
+------------------------------------------------------------
+
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_db_registros_uniq (objeto_proyecto, objeto, uniq_id, columnas) VALUES (
+	'asociacion', --objeto_proyecto
+	'2790', --objeto
+	'13', --uniq_id
+	'codigo'  --columnas
+);
+--- FIN Grupo de desarrollo 0

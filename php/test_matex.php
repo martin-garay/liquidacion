@@ -52,8 +52,8 @@ $funciones = [
 	'entre'			=>	['ref' => 'entre'		, 'arc' => null],
 	'fuera'			=>	['ref' => 'fuera'		, 'arc' => null],
 	'max'			=>	['ref' => 'max'			, 'arc' => null],		//usa la function max de php
-	'min'			=>	['ref' => 'min'			, 'arc' => null],		//usa la function min de php	
-	'redondear'		=>	['ref' => 'redondear'	, 'arc' => null],		//usa la function min de php	
+	'min'			=>	['ref' => 'min'			, 'arc' => null],		//usa la function min de php
+	'redondear'		=>	['ref' => 'redondear'	, 'arc' => null],
 ];
 
 $conceptos = toba::consulta_php('reservadas')->get_conceptos(null,'codigo asc');
@@ -87,8 +87,6 @@ foreach ($recibos as $key => $recibo) {
 }
 
 ei_arbol($conceptos_calculados);
-
-
 
 
 

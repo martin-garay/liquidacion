@@ -9,7 +9,7 @@ class ci_liquidacion extends asociacion_ci
 	function tabla($nombre){
 		return $this->relacion()->tabla($nombre);
 	}
-	function hijo(){
+	function ci_hijo(){
 		return $this->dep('datos_liquidacion');
 	}
 
@@ -17,30 +17,26 @@ class ci_liquidacion extends asociacion_ci
 	//---- Eventos ----------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
 
+	//pasa una liquidacion de estado PENDIENTE LIQUIDACON a LIQUIDADA
+	function evt__liquidar(){
+		$this->ci_hijo()->liquidar();
+	}
+
 	function evt__procesar()
 	{
-		try {
-			if( $this->hijo()->cantidad_empleados()>0 && $this->hijo()->cantidad_conceptos()>0 ){				
-				$this->relacion()->sincronizar();
-			}
-			else{
-								
-				throw new toba_error_usuario("No se seleccionaron personas o conceptos");				
-			}
-		} catch (toba_error_db $e) {
-			toba::notificacion()->error('Error al grabar <br>'.$e->get_mensaje_motor());
-		}
+		$this->ci_hijo()->crear();
+		$this->set_pantalla('pant_inicial');	
 	}
 
 	function evt__cancelar()
 	{
-		//$this->relacion()->resetear();
+		$this->ci_hijo()->resetear();
 		$this->set_pantalla('pant_inicial');
 	}
 
 	function evt__nueva()
 	{
-		//$this->relacion()->resetear();
+		$this->ci_hijo()->relacion()->resetear();
 		$this->set_pantalla('pant_edicion');
 	}
 

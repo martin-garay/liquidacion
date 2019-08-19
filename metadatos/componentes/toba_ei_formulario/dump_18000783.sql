@@ -122,7 +122,56 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --analisis_cambios
 	'0', --no_imprimir_efs_sin_estado
 	'0', --resaltar_efs_con_estado
-	NULL, --template
+	'<table>
+	<tbody>
+		<tr>
+			<td>
+				[ef id=id_tipo_liquidacion]</td>
+			<td>
+				[ef id=fecha_pago]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=descripcion]</td>
+			<td>
+				[ef id=lugar_pago]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=mes_periodo]</td>
+			<td>
+				[ef id=fecha_desde]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=anio_periodo]</td>
+			<td>
+				[ef id=fecha_hasta]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=id_establecimiento]</td>
+			<td>
+				&nbsp;</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				[ef id=deposito_bancario]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=fecha_deposito]</td>
+			<td>
+				[ef id=id_banco]</td>
+		</tr>
+		<tr>
+			<td>
+				[ef id=periodo_depositado]</td>
+			<td>
+				&nbsp;</td>
+		</tr>
+	</tbody>
+</table>', --template
 	NULL  --template_impresion
 );
 

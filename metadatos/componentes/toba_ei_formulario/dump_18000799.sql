@@ -61,7 +61,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase_proyecto
 	NULL, --clase
 	NULL, --auto_reset
-	'400px', --ancho
+	'280px', --ancho
 	'0px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
@@ -114,11 +114,11 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --estado_defecto
 	'0', --solo_lectura
 	'0', --solo_lectura_modificacion
-	'get_funciones_liquidador', --carga_metodo
+	'get_lista_funciones', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
-	'18000024', --carga_consulta_php
+	NULL, --carga_consulta_php
 	NULL, --carga_sql
 	'asociacion', --carga_fuente
 	NULL, --carga_lista
@@ -163,8 +163,8 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --selec_cant_minima
 	NULL, --selec_cant_maxima
 	'0', --selec_utilidades
-	NULL, --selec_tamano
-	'380px', --selec_ancho
+	'10', --selec_tamano
+	'270px', --selec_ancho
 	'0', --selec_serializar
 	NULL, --selec_cant_columnas
 	NULL, --upload_extensiones

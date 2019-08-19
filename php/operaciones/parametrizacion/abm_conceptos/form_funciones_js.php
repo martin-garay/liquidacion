@@ -17,6 +17,8 @@ class form_funciones_js extends asociacion_ei_formulario
 			    $('#ef_form_2845_formformula').val(textBefore + reservada + textAfter);
 
 		});
+
+		
 		";
 	}
 }

@@ -3,46 +3,45 @@ include_once 'comunes.php';
 
 class reservadas extends comunes
 {
+
 	function get_reservadas($where=null, $order_by=null){
 		$sql = "SELECT *, nombre as codigo, nombre||' - '||descripcion as descripcion FROM sistema.reservadas";
 		return $this->get_generico_sql($sql,$where,$order_by);
 		//return $this->get_generico('sistema.reservadas',$where,$order_by);
 	}
-	function get_reservadas_liquidacion(){
 
+	function get_ids_reservadas($where){
+		$sql = "SELECT id FROM sistema.reservadas";
+		$reservadas = $this->get_generico_sql($sql,$where);
+		return array_column($reservadas, 'id');
+	}
+	function generar_reservadas_empleados($id_liquidacion,$id_persona){
+		return $this->generar_reservadas($id_liquidacion,$id_persona,'id_tipo_reservada=2');
 	}
 
-	
-	function generar_reservadas($id_persona,$id_liquidacion){
-		//verifico que exista la liquidacion
-		
-		//$sql = "SELECT *,lower(nombre) as clave FROM test.reservadas";
-		$sql = "SELECT *,lower(nombre) as clave FROM sistema.reservadas";
-		$reservadas = toba::db()->consultar($sql);
+	function generar_reservadas_liquidacion($id_liquidacion){
+		return $this->generar_reservadas($id_liquidacion,null,'id_tipo_reservada=1');
+	}
+	function generar_reservadas($id_liquidacion,$id_persona=null,$where=null){		
+		$ids_reservadas = $this->get_ids_reservadas($where);
 		$calculadas = array();
 
-		foreach ($reservadas as $key => $value) {
-			$query = str_replace("{ID_PERSONA}", $id_persona, $value['query']);
-			$query = str_replace("{ID_LIQUIDACION}", $id_liquidacion, $query);			
-			$datos = toba::db()->consultar($query);			
-			if(isset($datos[0]['resultado'])){
-				$clave = strtolower($value['nombre']);
-				$calculadas[ $clave ] = $datos[0]['resultado'];				
-			}else{
-				$err = '<br>No se pudo crear '.$value['nombre'];
-				throw new Exception("Error al cargar palabras reservadas".$err, 1);				
-			}			
-		}	
+		foreach ($ids_reservadas as $key => $id) {			
+			$reservada = new Reservada($id);
+			$reservada->setIdLiquidacion($id_liquidacion);
+			$reservada->setIdPersona($id_persona);
+			
+			$valor = $reservada->calcular_valor();	
+			$nombre = $reservada->nombre;
+			$calculadas[$nombre] = $valor;
+		}			
 		return $calculadas;       
 	}
+	
 	function get_conceptos($where=null, $order_by=null){	
 		return $this->get_generico('conceptos',$where,$order_by);
 	}
-	function get_conceptos_lista($where=null, $order_by=null){
-		$sql = "SELECT ' c'||codigo||' ' as codigo,descripcion FROM conceptos";
-		return $this->get_generico_sql($sql,$where,$order_by);
-		//return $this->get_generico('conceptos',$where,$order_by);
-	}
+	
 	function get_tipos_reservadas($where=null, $order_by=null){
 		return $this->get_generico('sistema.tipos_reservadas',$where,$order_by);
 	}
@@ -68,5 +67,25 @@ class reservadas extends comunes
 			['codigo' => 'redondear(  )'		, 'descripcion' => 'redondear'],
 		];
 		return $funciones;
+	}
+
+	/*----------------------------------------------------------------------------*/
+	function generar_reservadas_liquidacion_back($id_liquidacion){
+		//traigo solo las de la liquidacion(no del empleado)
+		$sql = "SELECT *,lower(nombre) as clave FROM sistema.reservadas WHERE id_tipo_reservada=1";	
+		$reservadas = toba::db()->consultar($sql);
+		$calculadas = array();
+		foreach ($reservadas as $key => $value) {			
+			$query = str_replace("{ID_LIQUIDACION}", $id_liquidacion, $value['query']);
+			$datos = toba::db()->consultar($query);			
+			if(isset($datos[0]['resultado'])){				
+				$calculadas[ $value['nombre'] ] = $datos[0]['resultado'];				
+			}else{
+				$err = '<br>No se pudo crear '.$value['nombre'];
+				throw new Exception("Error al cargar palabras reservadas".$err, 1);				
+			}			
+		}	
+
+		return $calculadas;       	
 	}
 }

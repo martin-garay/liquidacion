@@ -3,6 +3,7 @@
 	echo toba_recurso::imagen_proyecto('logo_grande.gif', true);
 	echo '</div>';
 
-	$calculadas = toba::consulta_php('reservadas')->generar_reservadas(1,1);
-	ei_arbol($calculadas);
+	$liquidacion = new Liquidacion(16);
+	$liquidacion->liquidar();
+	$liquidacion->grabar();
 ?>

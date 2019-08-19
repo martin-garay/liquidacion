@@ -335,4 +335,8 @@ create table vacaciones(
 );
 
 alter table datos_laborales add column fecha_ingreso date;
- alter table datos_laborales add column fecha_egreso date;
+alter table datos_laborales add column fecha_egreso date;
+
+
+alter table conceptos add column mostrar_en_recibo boolean default false;
+alter table conceptos add column totaliza boolean default false;    --si se suma en la columna tipo_concepto(REMUNERATIVO, DEDUCCIONES, etc)
