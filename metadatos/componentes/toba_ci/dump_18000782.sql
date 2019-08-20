@@ -17,7 +17,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba_ci', --clase
 	'16', --punto_montaje
 	'ci_datos_liquidacion', --subclase
-	'operaciones/liquidacion/liquidacion/ci_datos_liquidacion.php', --subclase_archivo
+	'operaciones/liquidacion/datos_liquidacion/ci_datos_liquidacion.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'Datos Liquidacion', --nombre

@@ -69,7 +69,7 @@ class parametrizacion extends comunes
 		return $this->get_generico('tipos_conceptos',$where,$order_by);
 	}
 	function get_conceptos($where=null, $order_by=null){
-		return $this->get_generico('conceptos',$where,$order_by);
+		return $this->get_generico('v_conceptos',$where,$order_by);
 	}
 	function get_tipos_empleadores($where=null, $order_by=null){
 		return $this->get_generico('tipos_empleadores',$where,$order_by);

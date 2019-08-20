@@ -16,8 +16,8 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'toba', --clase_proyecto
 	'toba_datos_tabla', --clase
 	'16', --punto_montaje
-	NULL, --subclase
-	NULL, --subclase_archivo
+	'dt_recibos_conceptos', --subclase
+	'clases/datos_tabla/dt_recibos_conceptos.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
 	'DT - recibos_conceptos', --nombre
@@ -125,4 +125,102 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'0', --externa
 	'recibos_conceptos'  --tabla
 );
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'1544', --col_id
+	'codigo', --columna
+	'E', --tipo
+	'0', --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'1', --externa
+	NULL  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'1545', --col_id
+	'formula', --columna
+	'X', --tipo
+	'0', --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'1', --externa
+	NULL  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'1546', --col_id
+	'concepto', --columna
+	'X', --tipo
+	'0', --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'1', --externa
+	NULL  --tabla
+);
 --- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_db_registros_ext
+------------------------------------------------------------
+
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_db_registros_ext (objeto_proyecto, objeto, externa_id, tipo, sincro_continua, metodo, clase, include, punto_montaje, sql, dato_estricto, carga_dt, carga_consulta_php, permite_carga_masiva, metodo_masivo) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'17', --externa_id
+	'dao', --tipo
+	'1', --sincro_continua
+	'get_descripcion_concepto', --metodo
+	NULL, --clase
+	NULL, --include
+	'16', --punto_montaje
+	NULL, --sql
+	'0', --dato_estricto
+	'2859', --carga_dt
+	NULL, --carga_consulta_php
+	'0', --permite_carga_masiva
+	NULL  --metodo_masivo
+);
+--- FIN Grupo de desarrollo 0
+
+------------------------------------------------------------
+-- apex_objeto_db_registros_ext_col
+------------------------------------------------------------
+INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_id, col_id, es_resultado) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'17', --externa_id
+	'1493', --col_id
+	'0'  --es_resultado
+);
+INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_id, col_id, es_resultado) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'17', --externa_id
+	'1544', --col_id
+	'1'  --es_resultado
+);
+INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_id, col_id, es_resultado) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'17', --externa_id
+	'1545', --col_id
+	'1'  --es_resultado
+);
+INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_id, col_id, es_resultado) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'17', --externa_id
+	'1546', --col_id
+	'1'  --es_resultado
+);
