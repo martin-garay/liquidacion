@@ -1,4 +1,5 @@
 alter table sistema.reservadas add column defecto text;
+drop view sistema.v_reservadas ;
 CREATE OR REPLACE VIEW sistema.v_reservadas AS 
 	SELECT r.id,
 	r.nombre,
@@ -32,6 +33,7 @@ JOIN tipos_conceptos tc ON tc.id = c.id_tipo_concepto;
 
 
 --tuve que sacar la obligatoriedad para cargar
+alter table personas alter column telefono_celular drop not null;
 alter table personas alter column domicilio drop not null;
 alter table personas alter column telefono_particular drop not null;
 alter table personas alter column id_obra_social drop not null;

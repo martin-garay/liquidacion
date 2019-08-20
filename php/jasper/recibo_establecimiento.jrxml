@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo_establecimiento" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<queryString language="SQL">
+		<![CDATA[SELECT * FROM liquidaciones]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="descripcion" class="java.lang.String"/>
+	<field name="periodo" class="java.sql.Date"/>
+	<field name="fecha_desde" class="java.sql.Timestamp"/>
+	<field name="fecha_hasta" class="java.sql.Timestamp"/>
+	<field name="id_tipo_liquidacion" class="java.lang.Integer"/>
+	<field name="id_establecimiento" class="java.lang.Integer"/>
+	<field name="id_banco" class="java.lang.Integer"/>
+	<field name="fecha_pago" class="java.sql.Date"/>
+	<field name="periodo_depositado" class="java.lang.String"/>
+	<field name="lugar_pago" class="java.lang.String"/>
+	<field name="fecha_deposito" class="java.sql.Date"/>
+	<field name="id_estado" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

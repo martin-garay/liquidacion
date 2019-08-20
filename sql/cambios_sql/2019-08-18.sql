@@ -35,7 +35,9 @@ JOIN tipos_liquidaciones tl ON tl.id = l.id_tipo_liquidacion
 JOIN establecimientos e ON e.id = l.id_establecimiento
 LEFT JOIN bancos b ON b.id = l.id_banco;
 
-
+--faltaban 2 campos antes de poder crear la vista: agregados el 20-08-2019
+alter table conceptos add column mostrar_en_recibo boolean not null default false;
+alter table conceptos add column totaliza boolean not null default false;
 
 create or replace view v_recibos_conceptos as
 select rc.*,
