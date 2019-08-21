@@ -211,9 +211,9 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'asociacion', --objeto_ci_proyecto
 	'2536', --objeto_ci
 	'1265', --pantalla
-	'pant_laboral', --identificador
+	'pant_tareas', --identificador
 	'2', --orden
-	'Datos Laborales', --etiqueta
+	'Tareas', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
@@ -224,7 +224,7 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --subclase_archivo
 	NULL, --template
 	NULL, --template_impresion
-	NULL  --punto_montaje
+	'16'  --punto_montaje
 );
 --- FIN Grupo de desarrollo 0
 
@@ -242,7 +242,7 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'asociacion', --proyecto
 	'1265', --pantalla
 	'2536', --objeto_ci
-	'1', --orden
+	'0', --orden
 	'1662'  --dep_id
 );
 

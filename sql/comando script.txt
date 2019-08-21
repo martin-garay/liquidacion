@@ -1,0 +1,1 @@
+psql -U postgres -W -a -f /home/martin/programas/toba_2.7.6/proyectos/asociacion/sql/dump_base_20190821.sql

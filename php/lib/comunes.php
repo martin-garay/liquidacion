@@ -25,5 +25,12 @@ class comunes
 		$mensaje .= '<br><br><strong> Codigo Error: </strong>'.$e->get_codigo_motor();
 		return $mensaje;
 	}
+	function navegador_es_IE(){
+		return (isset($_SERVER['HTTP_USER_AGENT']) && (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false));	        
+	}
+
+	function es_peticion_ajax(){
+		return (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+	}	
 }
 ?>

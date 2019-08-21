@@ -175,7 +175,13 @@ class ci_datos_liquidacion extends asociacion_ci
 					$concepto = $this->tabla('recibos_conceptos')->get();
 
 					//si el usuario le puso un valor al concepto le dejo ese, sino lo calcula el liquidador
-					if( !isset($concepto['importe']) ){						
+					if( !isset($concepto['importe']) ){
+
+						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para 
+						que valla acumulando en las variables que corresponda.
+						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza
+						*/
+
 						$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula']);
 						$this->tabla('recibos_conceptos')->set($concepto);					
 					}

@@ -164,7 +164,8 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'pant_conceptos', --identificador
 	'2', --orden
 	'Conceptos a Liquidar', --etiqueta
-	'Los conceptos son cargados por el sistema según el Tipo de liquidación seleccionada en la pestaña Datos Liquidación.', --descripcion
+	'Los conceptos son cargados por el sistema según el Tipo de liquidación seleccionada en la pestaña Datos Liquidación.
+Estos conceptos se agregarán a todos los recibos. Si el concepto esta definido solo para algunos empleados, se agregan solo en los recibos de esos empleados', --descripcion
 	NULL, --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen

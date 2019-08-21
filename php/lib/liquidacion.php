@@ -14,7 +14,7 @@ class liquidacion extends comunes
 		return $this->get_generico_sql($sql,$where,$order_by);
 	}
 	function get_conceptos_nueva_liquidacion($where=null, $order_by=null){
-		$sql = "SELECT id_concepto,'A' as apex_ei_analisis_fila FROM v_tipo_liquidacion_conceptos";
+		$sql = "SELECT id_concepto,valor_fijo,'A' as apex_ei_analisis_fila FROM v_tipo_liquidacion_conceptos";
 		return $this->get_generico_sql($sql,$where,$order_by);
 	}
 }

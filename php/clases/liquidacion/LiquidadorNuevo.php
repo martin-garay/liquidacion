@@ -24,7 +24,6 @@ class LiquidadorNuevo extends Evaluator
 		$resultado = $this->ejecutar($formula);
 		$nombre_variable = 'c'.$codigo;
 		$this->agregar_variable($nombre_variable, $resultado);	//agrego el concepto a las variables del liquidador
-		//Logger::grabar("Calculo Concepto $nombre_variable=$resultado",Logger::INFO);
 		return $resultado;
 	}
 	function agregar_variable($variable, $valor){

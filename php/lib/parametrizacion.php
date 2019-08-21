@@ -80,4 +80,7 @@ class parametrizacion extends comunes
 	function get_tipos_liquidaciones($where=null, $order_by=null){
 		return $this->get_generico('tipos_liquidaciones',$where,$order_by);
 	}
+	function get_tipos_liquidaciones_activas($where=null, $order_by=null){
+		return $this->get_tipos_liquidaciones('activo');
+	}
 }
