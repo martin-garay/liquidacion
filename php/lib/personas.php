@@ -15,6 +15,9 @@ class personas extends comunes
 	function get_profesiones($where=null, $order_by=null){
 		return $this->get_generico("profesiones",$where,$order_by);
 	}
-	
+	function get_personas_nueva_planilla_periodo($where=null, $order_by=null){
+		$sql = "SELECT *,id as id_persona,'A' as apex_ei_analisis_fila FROM v_personas";
+		return $this->get_generico_sql($sql,$where,$order_by);
+	}
 }
 ?>

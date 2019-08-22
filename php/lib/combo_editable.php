@@ -14,13 +14,13 @@ class combo_editable extends comunes
         return $datos[0]['descripcion'];
 	}
 	function get_personas($filtro){
-		$sql = "SELECT id, tipo_documento||' '||nro_documento||' '||apellido||' '||nombre||' (Legajo '||legajo||')' as descripcion
+		$sql = "SELECT id, legajo||'. '||tipo_documento||' '||nro_documento||' '||apellido||' '||nombre as descripcion
 				FROM v_personas WHERE nro_documento||' '||apellido||' '||nombre||' '||legajo ILIKE '%$filtro%' 
 				ORDER BY apellido,nombre";
 		return toba::db()->consultar($sql);
 	}
 	function get_personas_descripcion($id){
-		$sql = "SELECT tipo_documento||' '||nro_documento||' '||apellido||' '||nombre||' (Legajo '||legajo||')' as descripcion FROM v_personas WHERE id=$id";
+		$sql = "SELECT legajo||'. '||tipo_documento||' '||nro_documento||' '||apellido||' '||nombre as descripcion FROM v_personas WHERE id=$id";
         $datos = toba::db()->consultar($sql);
         return $datos[0]['descripcion'];
 	}	

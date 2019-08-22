@@ -17,4 +17,7 @@ class liquidacion extends comunes
 		$sql = "SELECT id_concepto,valor_fijo,'A' as apex_ei_analisis_fila FROM v_tipo_liquidacion_conceptos";
 		return $this->get_generico_sql($sql,$where,$order_by);
 	}
+	function get_periodos($where=null, $order_by=null){
+		return $this->get_generico('periodos',$where,$order_by);
+	}
 }

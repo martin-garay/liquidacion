@@ -1,3 +1,7 @@
 /**
 	Incluir aquí las reglas css propias de este proyecto 
 */
+.importe-resaltado{
+	color: red !important;
+	font-weight: bold;	
+}

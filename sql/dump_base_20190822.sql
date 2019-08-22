@@ -56,6 +56,38 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: antiguedad(integer, date); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.antiguedad(id_persona integer, _fecha date DEFAULT now()) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	resultado integer;
+BEGIN
+    SELECT edad(fecha_ingreso, _fecha) INTO resultado FROM personas WHERE id=id_persona;
+    return resultado;
+END;
+$$;
+
+
+--
+-- Name: antiguedad_dias(integer, date); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.antiguedad_dias(_id_persona integer, _fecha date DEFAULT now()) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+	resultado integer;
+BEGIN    
+    SELECT (EXTRACT(epoch from age(fecha_ingreso, _fecha)) / 86400)::int INTO resultado FROM personas WHERE id=_id_persona;
+    return abs(resultado);
+END;
+$$;
+
+
+--
 -- Name: dias_mes(date); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -125,6 +157,22 @@ $_$;
 
 
 --
+-- Name: fecha_hasta_liquidacion(integer); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.fecha_hasta_liquidacion(id_liquidacion integer) RETURNS date
+    LANGUAGE plpgsql
+    AS $$
+DECLARE 
+	_fecha_hasta date;
+BEGIN
+	SELECT fecha_hasta INTO _fecha_hasta FROM liquidaciones WHERE id=id_liquidacion;
+	return _fecha_hasta;
+END;
+$$;
+
+
+--
 -- Name: sp_trg_ai_recibos(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -146,6 +194,34 @@ BEGIN
 	END IF;
     
 RETURN NEW;
+END;
+$$;
+
+
+--
+-- Name: total_vacaciones(integer, date); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.total_vacaciones(_id_persona integer, _fecha date DEFAULT now()) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    _cant_dias integer;
+    _antiguedad integer;
+    _antiguedad_dias integer;
+BEGIN
+	SELECT antiguedad(_id_persona, _fecha) INTO _antiguedad;
+
+	IF _antiguedad >= 1 THEN --busco en la tabla rangos por años
+	
+		SELECT dias into _cant_dias FROM tabla_vacaciones WHERE _antiguedad BETWEEN desde and hasta;
+		
+	ELSE			 --busco en la tabla rangos por dias
+	
+		SELECT antiguedad_dias(_id_persona,_fecha) INTO _antiguedad_dias;
+		SELECT dias into _cant_dias FROM tabla_vacaciones_dias WHERE _antiguedad_dias BETWEEN desde and hasta;
+	END IF;	
+	return _cant_dias;
 END;
 $$;
 
@@ -513,46 +589,6 @@ ALTER SEQUENCE public.fichajes_id_seq OWNED BY public.fichajes.id;
 
 
 --
--- Name: fichajes_resumen; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.fichajes_resumen (
-    id integer NOT NULL,
-    id_persona integer NOT NULL,
-    fecha_desde date NOT NULL,
-    fecha_hasta date NOT NULL,
-    anio integer,
-    mes integer,
-    dias_trabajados numeric(10,2),
-    horas_comunes numeric(10,2),
-    horas_extras numeric(10,2),
-    inasistencias_justificadas numeric(10,2),
-    inasistencias_injustificadas numeric(10,2),
-    periodo date,
-    dias_vacaciones integer DEFAULT 0
-);
-
-
---
--- Name: fichajes_resumen_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.fichajes_resumen_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: fichajes_resumen_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.fichajes_resumen_id_seq OWNED BY public.fichajes_resumen.id;
-
-
---
 -- Name: generos; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -770,6 +806,77 @@ CREATE SEQUENCE public.paises_id_seq
 --
 
 ALTER SEQUENCE public.paises_id_seq OWNED BY public.paises.id;
+
+
+--
+-- Name: periodos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.periodos (
+    id integer NOT NULL,
+    descripcion text NOT NULL,
+    anio integer NOT NULL,
+    mes integer NOT NULL,
+    periodo date NOT NULL,
+    fecha_desde date NOT NULL,
+    fecha_hasta date NOT NULL,
+    observaciones text
+);
+
+
+--
+-- Name: periodos_detalle; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.periodos_detalle (
+    id integer NOT NULL,
+    id_persona integer NOT NULL,
+    dias_trabajados numeric(10,2),
+    horas_comunes numeric(10,2),
+    horas_extras numeric(10,2),
+    inasistencias_justificadas numeric(10,2),
+    inasistencias_injustificadas numeric(10,2),
+    dias_vacaciones integer DEFAULT 0,
+    id_periodo integer NOT NULL
+);
+
+
+--
+-- Name: periodos_detalle_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.periodos_detalle_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: periodos_detalle_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.periodos_detalle_id_seq OWNED BY public.periodos_detalle.id;
+
+
+--
+-- Name: periodos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.periodos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: periodos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.periodos_id_seq OWNED BY public.periodos.id;
 
 
 --
@@ -1013,6 +1120,44 @@ CREATE SEQUENCE public.regimenes_id_seq
 --
 
 ALTER SEQUENCE public.regimenes_id_seq OWNED BY public.regimenes.id;
+
+
+--
+-- Name: tabla_ganancias; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tabla_ganancias (
+    id integer NOT NULL,
+    minimo numeric(10,2) NOT NULL,
+    maximo numeric(10,2),
+    base numeric(10,2) NOT NULL,
+    porcentaje numeric(10,2) NOT NULL
+);
+
+
+--
+-- Name: tabla_vacaciones; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tabla_vacaciones (
+    id integer NOT NULL,
+    desde numeric(10,2) NOT NULL,
+    hasta numeric(10,2) NOT NULL,
+    dias integer NOT NULL
+);
+
+
+--
+-- Name: tabla_vacaciones_dias; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.tabla_vacaciones_dias (
+    id integer NOT NULL,
+    desde integer NOT NULL,
+    hasta integer NOT NULL,
+    dias integer NOT NULL,
+    descripcion text
+);
 
 
 --
@@ -1305,6 +1450,30 @@ CREATE VIEW public.v_liquidaciones AS
 
 
 --
+-- Name: v_periodos_detalle; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.v_periodos_detalle AS
+ SELECT pd.id,
+    pd.id_persona,
+    pd.dias_trabajados,
+    pd.horas_comunes,
+    pd.horas_extras,
+    pd.inasistencias_justificadas,
+    pd.inasistencias_injustificadas,
+    pd.dias_vacaciones,
+    pd.id_periodo,
+    p.descripcion AS descripcion_periodo,
+    p.anio,
+    p.mes,
+    p.periodo,
+    p.fecha_desde,
+    p.fecha_hasta
+   FROM (public.periodos_detalle pd
+     JOIN public.periodos p ON ((p.id = pd.id_periodo)));
+
+
+--
 -- Name: v_personas; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -1345,7 +1514,9 @@ CREATE VIEW public.v_personas AS
     c.valor_hora,
     a.id_tipo_contrato,
     tc.descripcion AS tipo_contrato,
-    a.horas_jornada
+    a.horas_jornada,
+    a.fecha_ingreso,
+    a.fecha_egreso
    FROM (((((((((public.personas a
      LEFT JOIN public.estados_civiles ec ON ((ec.id = a.id_estado_civil)))
      LEFT JOIN public.categorias c ON ((c.id = a.id_categoria)))
@@ -1657,13 +1828,6 @@ ALTER TABLE ONLY public.fichajes ALTER COLUMN id SET DEFAULT nextval('public.fic
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.fichajes_resumen ALTER COLUMN id SET DEFAULT nextval('public.fichajes_resumen_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY public.generos ALTER COLUMN id SET DEFAULT nextval('public.generos_id_seq'::regclass);
 
 
@@ -1707,6 +1871,20 @@ ALTER TABLE ONLY public.obras_sociales ALTER COLUMN id SET DEFAULT nextval('publ
 --
 
 ALTER TABLE ONLY public.paises ALTER COLUMN id SET DEFAULT nextval('public.paises_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos ALTER COLUMN id SET DEFAULT nextval('public.periodos_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos_detalle ALTER COLUMN id SET DEFAULT nextval('public.periodos_detalle_id_seq'::regclass);
 
 
 --
@@ -1998,20 +2176,7 @@ SELECT pg_catalog.setval('public.feriados_id_seq', 1, false);
 -- Name: fichajes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.fichajes_id_seq', 2, true);
-
-
---
--- Data for Name: fichajes_resumen; Type: TABLE DATA; Schema: public; Owner: -
---
-
-
-
---
--- Name: fichajes_resumen_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.fichajes_resumen_id_seq', 1, false);
+SELECT pg_catalog.setval('public.fichajes_id_seq', 1, false);
 
 
 --
@@ -2119,6 +2284,53 @@ SELECT pg_catalog.setval('public.paises_id_seq', 1, true);
 
 
 --
+-- Data for Name: periodos; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.periodos VALUES (3, 'Test', 2019, 8, '2019-08-01', '2019-08-01', '2019-08-31', 'nada');
+
+
+--
+-- Data for Name: periodos_detalle; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.periodos_detalle VALUES (5, 10, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (6, 13, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (7, 11, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (8, 19, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (9, 17, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (10, 18, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (11, 23, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (12, 15, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (13, 20, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (14, 8, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (15, 9, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (16, 16, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (17, 25, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (18, 12, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (19, 21, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (20, 14, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (21, 22, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (22, 7, NULL, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (3, 24, 23.00, NULL, NULL, NULL, NULL, 0, 3);
+INSERT INTO public.periodos_detalle VALUES (4, 26, 99.00, NULL, NULL, NULL, NULL, 0, 3);
+
+
+--
+-- Name: periodos_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.periodos_detalle_id_seq', 22, true);
+
+
+--
+-- Name: periodos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.periodos_id_seq', 3, true);
+
+
+--
 -- Data for Name: persona_tareas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -2156,7 +2368,7 @@ INSERT INTO public.personas VALUES (23, 'Jorgelina', 'Parra', '1976-05-11', 1, '
 INSERT INTO public.personas VALUES (24, 'Norma', 'Poletti', '1967-11-07', 1, '18601061', 2, 1, true, 2, 2, 2, 1, 1, NULL, '1986-09-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27186010618', 7.00, NULL);
 INSERT INTO public.personas VALUES (25, 'Lautaro', 'Riccardo', '1986-05-29', 1, '32378152', 1, 1, true, 33, 1, 3, 1, 1, NULL, '2013-10-07', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20323781525', 7.00, NULL);
 INSERT INTO public.personas VALUES (26, 'Ana Gladys', 'Romero', '1966-05-04', 1, '18148598', 2, 1, true, 3, 3, 1, 1, 1, NULL, '1986-11-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27181485987', 7.00, NULL);
-INSERT INTO public.personas VALUES (2, 'Martin', 'Garay', '1989-05-11', 1, '34555008', 1, 1, false, 4611, 1, 1, 1, 1, 'martingaray_12@gmail.com', '2018-08-15', '2019-08-15', '08:00:00', '15:00:00', 1, 'San Vicente 1351', '1 ', 'D         ', '01122777025', '01122777025', 1, '23345550089', 7.00, 100.00);
+INSERT INTO public.personas VALUES (2, 'Martin', 'Garay', '1989-05-11', 1, '34555008', 1, 1, false, 4611, 1, 1, 1, 1, 'martingaray_12@gmail.com', '2019-07-01', '2019-08-15', '08:00:00', '15:00:00', 1, 'San Vicente 1351', '1 ', 'D         ', '01122777025', '01122777025', 1, '23345550089', 7.00, 10000.00);
 
 
 --
@@ -2256,6 +2468,33 @@ INSERT INTO public.regimenes VALUES (3, 'Capitalización');
 --
 
 SELECT pg_catalog.setval('public.regimenes_id_seq', 1, false);
+
+
+--
+-- Data for Name: tabla_ganancias; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
+-- Data for Name: tabla_vacaciones; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.tabla_vacaciones VALUES (1, 1.00, 5.00, 14);
+INSERT INTO public.tabla_vacaciones VALUES (2, 5.00, 10.00, 21);
+INSERT INTO public.tabla_vacaciones VALUES (3, 10.00, 20.00, 28);
+INSERT INTO public.tabla_vacaciones VALUES (4, 20.00, 99.00, 35);
+
+
+--
+-- Data for Name: tabla_vacaciones_dias; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.tabla_vacaciones_dias VALUES (5, 140, 182, 5, 'Más de 20 semanas de trabajo');
+INSERT INTO public.tabla_vacaciones_dias VALUES (3, 84, 111, 3, 'Entre 12 y 15 semanas de trabajo');
+INSERT INTO public.tabla_vacaciones_dias VALUES (2, 56, 83, 2, 'Entre 8 y 11 semanas de trabajo');
+INSERT INTO public.tabla_vacaciones_dias VALUES (1, 28, 55, 1, 'Entre 4 y 7 semanas de trabajo');
+INSERT INTO public.tabla_vacaciones_dias VALUES (4, 112, 139, 4, 'Entre 16 y 19 semanas de trabajo');
 
 
 --
@@ -2396,11 +2635,8 @@ SELECT pg_catalog.setval('public.vacaciones_id_seq', 1, false);
 --
 
 INSERT INTO sistema.reservadas VALUES (4, 'diasmes', 'Cantidad del mes', 'Cantidad del mes a liquidar. Tabla: liquidacion.periodo', 'select dias_mes(periodo) as resultado from liquidaciones where id={ID_LIQUIDACION}', NULL, 1, 1, NULL);
-INSERT INTO sistema.reservadas VALUES (2, 'antiguedad', 'ANTIGUEDAD', 'Trae la antiguedad en años del empleado', 'SELECT edad(fecha_ingreso)  as resultado FROM personas WHERE id={ID_PERSONA}', NULL, 2, 1, '0');
-INSERT INTO sistema.reservadas VALUES (3, 'hstrab', 'Total Horas Trabajadas', 'Realiza el calculo de las horas trabajadas', 'select EXTRACT(EPOCH FROM hora_salida-hora_entrada)/3600 as resultado from fichajes WHERE id_persona={ID_PERSONA}', NULL, 2, 4, '0');
 INSERT INTO sistema.reservadas VALUES (5, 'tiempocomp', 'Trabaja a tiempo completo', 'Devuelve verdadero si el trabajador tiene contrato a tiempo completo', 'SELECT (id_tipo_contrato=1) as resultado FROM personas WHERE id={ID_PERSONA}', NULL, 2, 2, 'false');
 INSERT INTO sistema.reservadas VALUES (6, 'tiempoparc', 'Trabaja a tiempo parcial', 'Devuelve verdadero si el trabajador tiene contrato a tiempo parcial', 'SELECT (id_tipo_contrato=2) as resultado FROM personas WHERE id={ID_PERSONA}', NULL, 2, 2, 'false');
-INSERT INTO sistema.reservadas VALUES (7, 'diastrab', 'Dias Trabajados en el mes', '', 'SELECT sistema.dias_trabajados_periodo({ID_LIQUIDACION}, {ID_PERSONA}) as resultado;', NULL, 2, 4, '0');
 INSERT INTO sistema.reservadas VALUES (8, 'hsextras', 'Horas Extras', 'Suma las horas extras del periodo de la liquidacion', 'select sum(horas_extras) as resultado from fichajes_resumen 
 where id_persona = {ID_PERSONA} 
 	and periodo=(select periodo from liquidaciones where id={ID_LIQUIDACION})
@@ -2408,13 +2644,27 @@ group by periodo', NULL, 2, 4, '0');
 INSERT INTO sistema.reservadas VALUES (9, 'bruto', 'BRUTO', 'Este se carga con el mismo valor que el sueldo basico pero el liquidador se encarga de ir sumandole los conceptos que sean de haberes y que tengan el tilde totaliza.
 El bruto se puede usar en cualquier momento de la liquidacion, pero  se tiene que tener en cuenta que hasta no termine todo el calculo de haberes este valor puede cambiar', 'SELECT sueldo_basico as resultado FROM personas WHERE id={ID_PERSONA}', NULL, 2, 4, '0');
 INSERT INTO sistema.reservadas VALUES (1, 'basico', 'Sueldo Basico', 'Trae el sueldo basico de la categoria correspondiente del empleado', 'SELECT sueldo_basico as resultado FROM categorias WHERE id=(SELECT id_categoria FROM personas WHERE id={ID_PERSONA})', NULL, 2, 4, NULL);
+INSERT INTO sistema.reservadas VALUES (7, 'diastrab', 'Dias Trabajados en el mes', 'Cantidad de dias tabajados en el mes', 'SELECT COALESCE(dias_trabajados,0) as resultado 
+FROM v_periodos_detalle 
+WHERE id_persona={ID_PERSONA} 
+AND periodo=(SELECT periodo FROM liquidaciones WHERE id={ID_LIQUIDACION});', NULL, 2, 4, '0');
+INSERT INTO sistema.reservadas VALUES (3, 'hstrab', 'Total Horas Trabajadas', 'Total de "horas comunes" trabajadas al mes', 'SELECT COALESCE(horas_comunes,0) as resultado 
+FROM v_periodos_detalle 
+WHERE id_persona={ID_PERSONA} 
+	AND periodo=(SELECT periodo FROM liquidaciones WHERE id={ID_LIQUIDACION});', NULL, 2, 4, '0');
+INSERT INTO sistema.reservadas VALUES (10, 'diasvacac', 'Dias de Vacaciones', 'Dias que se toma de Vacaciones en el mes', 'SELECT COALESCE(dias_vacaciones,0) as resultado 
+FROM v_periodos_detalle 
+WHERE id_persona={ID_PERSONA} 
+AND periodo=(SELECT periodo FROM liquidaciones WHERE id={ID_LIQUIDACION});', NULL, 2, 1, NULL);
+INSERT INTO sistema.reservadas VALUES (2, 'antiguedad', 'ANTIGUEDAD', 'Trae la antiguedad en años del empleado calculada a la fecha hasta de la liquidacion', 'SELECT antiguedad({ID_PERSONA}, (SELECT fecha_hasta from liquidaciones where id={ID_LIQUIDACION}) ) as resultado;', NULL, 2, 1, '0');
+INSERT INTO sistema.reservadas VALUES (11, 'totalvacac', 'Total Dias de Vacaciones', 'Devuelve la cantidad de dias que tiene de vacaciones segun la antiguedad calculada a la fecha hasta de la liquidacion', 'SELECT total_vacaciones({ID_PERSONA}, fecha_hasta_liquidacion({ID_LIQUIDACION})) as resultado;', NULL, 2, 1, '0');
 
 
 --
 -- Name: reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
 --
 
-SELECT pg_catalog.setval('sistema.reservadas_id_seq', 9, true);
+SELECT pg_catalog.setval('sistema.reservadas_id_seq', 11, true);
 
 
 --
@@ -2546,14 +2796,6 @@ ALTER TABLE ONLY public.fichajes
 
 
 --
--- Name: pk_fichajes_resumen; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.fichajes_resumen
-    ADD CONSTRAINT pk_fichajes_resumen PRIMARY KEY (id);
-
-
---
 -- Name: pk_generos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2618,6 +2860,22 @@ ALTER TABLE ONLY public.paises
 
 
 --
+-- Name: pk_periodo_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos_detalle
+    ADD CONSTRAINT pk_periodo_detalle PRIMARY KEY (id);
+
+
+--
+-- Name: pk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos
+    ADD CONSTRAINT pk_periodos PRIMARY KEY (id);
+
+
+--
 -- Name: pk_persona_tareas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2671,6 +2929,30 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 ALTER TABLE ONLY public.regimenes
     ADD CONSTRAINT pk_regimenes PRIMARY KEY (id);
+
+
+--
+-- Name: pk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tabla_ganancias
+    ADD CONSTRAINT pk_tabla_ganancias PRIMARY KEY (id);
+
+
+--
+-- Name: pk_tabla_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tabla_vacaciones
+    ADD CONSTRAINT pk_tabla_vacaciones PRIMARY KEY (id);
+
+
+--
+-- Name: pk_tabla_vacaciones_dias; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.tabla_vacaciones_dias
+    ADD CONSTRAINT pk_tabla_vacaciones_dias PRIMARY KEY (id);
 
 
 --
@@ -2743,6 +3025,14 @@ ALTER TABLE ONLY public.conceptos
 
 ALTER TABLE ONLY public.estados_liquidacion
     ADD CONSTRAINT uk_estados_liquidacion UNIQUE (descripcion);
+
+
+--
+-- Name: uk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos
+    ADD CONSTRAINT uk_periodos UNIQUE (periodo);
 
 
 --
@@ -2897,14 +3187,6 @@ ALTER TABLE ONLY public.fichajes
 
 
 --
--- Name: fk_fichajes_resumen__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.fichajes_resumen
-    ADD CONSTRAINT fk_fichajes_resumen__personas FOREIGN KEY (id_persona) REFERENCES public.personas(id);
-
-
---
 -- Name: fk_liquidacion__estado; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2950,6 +3232,22 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 ALTER TABLE ONLY public.localidades
     ADD CONSTRAINT fk_localidad_provincia FOREIGN KEY (id_provincia) REFERENCES public.provincias(id);
+
+
+--
+-- Name: fk_periodo_detalle__periodo; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos_detalle
+    ADD CONSTRAINT fk_periodo_detalle__periodo FOREIGN KEY (id_periodo) REFERENCES public.periodos(id);
+
+
+--
+-- Name: fk_periodo_detalle__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.periodos_detalle
+    ADD CONSTRAINT fk_periodo_detalle__personas FOREIGN KEY (id_persona) REFERENCES public.personas(id);
 
 
 --

@@ -7,20 +7,22 @@ class form_ml_js extends asociacion_ei_formulario_ml
 
 	function extender_objeto_js()
 	{		
-		if(!toba::consulta_php('comunes')->navegador_es_IE())
-			echo "
-			//deshabilito el select del id_tipo_contrato		
-				$('select[id$=\"ef_form_2889_form_mlid_tipo_contrato\"]').on('mousedown', function(e) {
+		if(!toba::consulta_php('comunes')->navegador_es_IE())			
+
+			echo "								
+				//deshabilito el select del id_persona		
+				$('select[id$=\"ef_form_18000815_form_mlid_persona\"]').on('mousedown', function(e) {
 					e.preventDefault();
 					this.blur();
 					window.focus();				
 				});			
-				//deshabilito el select del id_posicion
-				$('select[id$=\"ef_form_2889_form_mlid_tipo_contrato\"]').attr('disabled','disabled');
-				
-			";
+				//deshabilito el select del id_persona
+				$('select[id$=\"ef_form_18000815_form_mlid_persona\"]').attr('disabled','disabled');
 
-			echo "								
+				//deshabilito el legajo para que tenga el mismo color que la persona
+				$('input[id$=\"ef_form_18000815_form_mllegajo\"]').attr('disabled','disabled');				
+				
+
 				$('th').css({
 					'width':'20px',
 					'font-size':'1.1em',
@@ -182,6 +184,8 @@ class form_ml_js extends asociacion_ei_formulario_ml
 	                }
 	                return (parts.length == 3 ? '-' : '') + result;
 	            }
+
+	            $('#ef_form_18000819_formdescripcion').attr('size','40');
 			";
 	}
 }
