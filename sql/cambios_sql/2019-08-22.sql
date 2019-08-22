@@ -1,0 +1,1 @@
+alter table conceptos add column remunerativo boolean not null default false;

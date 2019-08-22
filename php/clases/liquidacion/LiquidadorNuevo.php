@@ -20,14 +20,29 @@ class LiquidadorNuevo extends Evaluator
 	}
 
 	//calcula y guarda el concepto como una nueva variable en el liquidador
-	function calcular_concepto($codigo, $formula){
+	//Si el concepto Totaliza  
+	function calcular_concepto($codigo, $formula, $id_tipo_concepto, $totaliza){
 		$resultado = $this->ejecutar($formula);
 		$nombre_variable = 'c'.$codigo;
 		$this->agregar_variable($nombre_variable, $resultado);	//agrego el concepto a las variables del liquidador
 		return $resultado;
-	}
+	}	
 	function agregar_variable($variable, $valor){
 		$this->variables = array_merge($this->variables,[ $variable => $valor ]);
+	}
+	//suma el valor a los totalizadores por tipo_concepto
+	function actualizar_acumuladores($id_tipo_concepto, $valor){
+		switch (variable) {
+			case 1:
+				$this->incrementar_variable('bruto',$valor);
+				break;
+			case 2:
+				$this->incrementar_variable('total_deducciones',$valor);
+				break;		
+		}
+	}
+	function incrementar_variable($nombre, $valor=1){
+		$this->variables[$nombre] = $this->variables[$nombre] + $valor; 
 	}	
 	function ejecutar($formula){
 		return $this->execute($formula);

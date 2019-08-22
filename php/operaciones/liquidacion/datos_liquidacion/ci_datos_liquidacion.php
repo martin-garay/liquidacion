@@ -163,12 +163,6 @@ class ci_datos_liquidacion extends asociacion_ci
 
 				$conceptos = $this->tabla('recibos_conceptos')->get_filas(null, true);
 				$conceptos_ordenados = $this->ordenar_conceptos($conceptos);				
-				
-				//traigo los conceptos del recibo ordenados por codigo ascendente				
-				//$dt_busqueda = $this->tabla('recibos_conceptos')->nueva_busqueda();
-				//$dt_busqueda->set_condicion('id_recibo','===',$recibo['id']);
-				//$dt_busqueda->set_columnas_orden(array('codigo' => SORT_ASC)); //$dt_busqueda->set_padre('recibos',$key);			
-				//$conceptos = $dt_busqueda->buscar_filas();
 
 				foreach ($conceptos_ordenados as $key2 => $variable) {
 					$this->tabla('recibos_conceptos')->set_cursor($key2);					
@@ -179,10 +173,9 @@ class ci_datos_liquidacion extends asociacion_ci
 
 						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para 
 						que valla acumulando en las variables que corresponda.
-						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza
-						*/
-
-						$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula']);
+						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
+											
+						$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula'], $concepto['id_tipo_concepto'], $concepto['totaliza']);
 						$this->tabla('recibos_conceptos')->set($concepto);					
 					}
 					Logger::grabar($concepto['codigo'].'='.$concepto['importe'],Logger::INFO);
