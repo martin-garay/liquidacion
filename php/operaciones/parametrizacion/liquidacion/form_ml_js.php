@@ -7,20 +7,22 @@ class form_ml_js extends asociacion_ei_formulario_ml
 
 	function extender_objeto_js()
 	{		
-		if(!toba::consulta_php('comunes')->navegador_es_IE())
-			echo "
-			//deshabilito el select del id_tipo_contrato		
-				$('select[id$=\"ef_form_2889_form_mlid_tipo_contrato\"]').on('mousedown', function(e) {
+		if(!toba::consulta_php('comunes')->navegador_es_IE())			
+
+			echo "								
+				//deshabilito el select del id_persona		
+				$('select[id$=\"ef_form_18000815_form_mlid_persona\"]').on('mousedown', function(e) {
 					e.preventDefault();
 					this.blur();
 					window.focus();				
 				});			
-				//deshabilito el select del id_posicion
-				$('select[id$=\"ef_form_2889_form_mlid_tipo_contrato\"]').attr('disabled','disabled');
-				
-			";
+				//deshabilito el select del id_persona
+				$('select[id$=\"ef_form_18000815_form_mlid_persona\"]').attr('disabled','disabled');
 
-			echo "								
+				//deshabilito el legajo para que tenga el mismo color que la persona
+				$('input[id$=\"ef_form_18000815_form_mllegajo\"]').attr('disabled','disabled');				
+				
+
 				$('th').css({
 					'width':'20px',
 					'font-size':'1.1em',
@@ -182,6 +184,26 @@ class form_ml_js extends asociacion_ei_formulario_ml
 	                }
 	                return (parts.length == 3 ? '-' : '') + result;
 	            }
+
+	            
+
+	        	//armo corte de control   
+	        	{$this->objeto_js}.corte_control = function(){
+	        		var filas = this.filas();
+	        		var corte_anterior = 0;
+	        		var tr = '<tr><td colspan=20 class=\"ei-cuadro-cc-tit-nivel-0\"><strong>Mes VALOR_CORTE</strong></td></tr>';
+	        		for (id_fila in filas) {
+				      var corte = this.ef('mes').ir_a_fila(filas[id_fila]).get_estado();
+				      if( corte !== corte_anterior ){				      					      	
+				      	titulo_corte = tr.replace('VALOR_CORTE',corte);				      					      	
+				      	$('#js_form_2896_form_ml_fila'+filas[id_fila]).before($(titulo_corte));
+    					corte_anterior = corte;
+				      }
+				      
+				 	}	
+	        	}
+					
+				{$this->objeto_js}.corte_control();
 			";
 	}
 }

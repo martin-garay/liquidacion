@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2892]--  Planilla Fichajes - relacion 
+--[2897]--  2Planilla Fichajes - relacion 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,7 +9,7 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'asociacion', --proyecto
-	'2892', --objeto
+	'2897', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'Planilla Fichajes - relacion', --nombre
+	'2Planilla Fichajes - relacion', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -46,7 +46,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_montaje, ap_clase, ap_archivo, sinc_susp_constraints, sinc_orden_automatico, sinc_lock_optimista) VALUES (
 	'asociacion', --proyecto
-	'2892', --objeto
+	'2897', --objeto
 	'0', --debug
 	NULL, --clave
 	'2', --ap
@@ -65,8 +65,8 @@ INSERT INTO apex_objeto_datos_rel (proyecto, objeto, debug, clave, ap, punto_mon
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
-	'1750', --dep_id
-	'2892', --objeto_consumidor
+	'1753', --dep_id
+	'2897', --objeto_consumidor
 	'2890', --objeto_proveedor
 	'periodo', --identificador
 	'1', --parametros_a
@@ -77,8 +77,8 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
-	'1751', --dep_id
-	'2892', --objeto_consumidor
+	'1754', --dep_id
+	'2897', --objeto_consumidor
 	'2891', --objeto_proveedor
 	'periodo_detalle', --identificador
 	'1', --parametros_a
@@ -96,8 +96,8 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador, padre_proyecto, padre_objeto, padre_id, padre_clave, hijo_proyecto, hijo_objeto, hijo_id, hijo_clave, cascada, orden) VALUES (
 	'asociacion', --proyecto
-	'2892', --objeto
-	'97', --asoc_id
+	'2897', --objeto
+	'98', --asoc_id
 	NULL, --identificador
 	'asociacion', --padre_proyecto
 	'2890', --padre_objeto
@@ -117,8 +117,8 @@ INSERT INTO apex_objeto_datos_rel_asoc (proyecto, objeto, asoc_id, identificador
 ------------------------------------------------------------
 INSERT INTO apex_objeto_rel_columnas_asoc (proyecto, objeto, asoc_id, padre_objeto, padre_clave, hijo_objeto, hijo_clave) VALUES (
 	'asociacion', --proyecto
-	'2892', --objeto
-	'97', --asoc_id
+	'2897', --objeto
+	'98', --asoc_id
 	'2890', --padre_objeto
 	'1553', --padre_clave
 	'2891', --hijo_objeto
