@@ -1,15 +1,15 @@
 ------------------------------------------------------------
---[2900]--  DT - tabla_ganancias_detalle 
+--[18000820]--  DT - conceptos_personas 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
 -- apex_objeto
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 0
+--- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'asociacion', --proyecto
-	'2900', --objeto
+	'18000820', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - tabla_ganancias_detalle', --nombre
+	'DT - conceptos_personas', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,24 +36,24 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2019-08-22 16:12:08', --creacion
+	'2019-08-23 10:53:12', --creacion
 	NULL  --posicion_botonera
 );
---- FIN Grupo de desarrollo 0
+--- FIN Grupo de desarrollo 18
 
 ------------------------------------------------------------
 -- apex_objeto_db_registros
 ------------------------------------------------------------
 INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, min_registros, punto_montaje, ap, ap_clase, ap_archivo, tabla, tabla_ext, alias, modificar_claves, fuente_datos_proyecto, fuente_datos, permite_actualizacion_automatica, esquema, esquema_ext) VALUES (
 	'asociacion', --objeto_proyecto
-	'2900', --objeto
+	'18000820', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
 	'16', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'tabla_ganancias_detalle', --tabla
+	'conceptos_personas', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -68,117 +68,61 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 -- apex_objeto_db_registros_col
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 0
+--- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1574', --col_id
+	'18000820', --objeto
+	'18001156', --col_id
 	'id', --columna
 	'E', --tipo
 	'1', --pk
-	'tabla_ganancias_detalle_id_seq', --secuencia
+	'conceptos_personas_id_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
+	NULL, --externa
+	'conceptos_personas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1576', --col_id
-	'mes', --columna
+	'18000820', --objeto
+	'18001157', --col_id
+	'id_concepto', --columna
 	'E', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
+	NULL, --externa
+	'conceptos_personas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1577', --col_id
-	'desde', --columna
-	'N', --tipo
+	'18000820', --objeto
+	'18001158', --col_id
+	'id_persona', --columna
+	'E', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
+	NULL, --externa
+	'conceptos_personas'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1578', --col_id
-	'hasta', --columna
+	'18000820', --objeto
+	'18001159', --col_id
+	'valor_fijo', --columna
 	'N', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'0', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
+	NULL, --externa
+	'conceptos_personas'  --tabla
 );
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1579', --col_id
-	'fijo', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1580', --col_id
-	'porcentaje', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1581', --col_id
-	'excedente', --columna
-	'N', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
-);
-INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
-	'asociacion', --objeto_proyecto
-	'2900', --objeto
-	'1582', --col_id
-	'id_cabecera', --columna
-	'E', --tipo
-	'0', --pk
-	'', --secuencia
-	NULL, --largo
-	NULL, --no_nulo
-	'1', --no_nulo_db
-	'0', --externa
-	'tabla_ganancias_detalle'  --tabla
-);
---- FIN Grupo de desarrollo 0
+--- FIN Grupo de desarrollo 18

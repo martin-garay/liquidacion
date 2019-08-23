@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.19
--- Dumped by pg_dump version 9.5.19
+-- Dumped from database version 11.4 (Ubuntu 11.4-1.pgdg18.04+1)
+-- Dumped by pg_dump version 11.4 (Ubuntu 11.4-1.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -26,6 +27,7 @@ CREATE DATABASE asociacion WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLAT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -39,20 +41,6 @@ SET row_security = off;
 --
 
 CREATE SCHEMA sistema;
-
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
@@ -325,6 +313,38 @@ CREATE SEQUENCE public.conceptos_id_seq
 --
 
 ALTER SEQUENCE public.conceptos_id_seq OWNED BY public.conceptos.id;
+
+
+--
+-- Name: conceptos_personas; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.conceptos_personas (
+    id integer NOT NULL,
+    id_concepto integer NOT NULL,
+    id_persona integer NOT NULL,
+    valor_fijo numeric(10,2)
+);
+
+
+--
+-- Name: conceptos_personas_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.conceptos_personas_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: conceptos_personas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.conceptos_personas_id_seq OWNED BY public.conceptos_personas.id;
 
 
 --
@@ -1434,7 +1454,8 @@ CREATE VIEW public.v_conceptos AS
     c.totaliza,
     c.mostrar_si_cero,
     c.valor_fijo,
-    c.observaciones
+    c.observaciones,
+    ((('['::text || c.codigo) || '] '::text) || c.descripcion) AS descripcion_codigo
    FROM (public.conceptos c
      JOIN public.tipos_conceptos tc ON ((tc.id = c.id_tipo_concepto)));
 
@@ -1802,280 +1823,287 @@ CREATE VIEW sistema.v_reservadas AS
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bancos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bancos ALTER COLUMN id SET DEFAULT nextval('public.bancos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: categorias id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categorias ALTER COLUMN id SET DEFAULT nextval('public.categorias_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos ALTER COLUMN id SET DEFAULT nextval('public.conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: conceptos_personas id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conceptos_personas ALTER COLUMN id SET DEFAULT nextval('public.conceptos_personas_id_seq'::regclass);
+
+
+--
+-- Name: datos_actuales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales ALTER COLUMN id SET DEFAULT nextval('public.datos_actuales_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: datos_laborales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales ALTER COLUMN id SET DEFAULT nextval('public.datos_laborales_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: datos_salud id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud ALTER COLUMN id SET DEFAULT nextval('public.datos_salud_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: establecimientos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos ALTER COLUMN id SET DEFAULT nextval('public.establecimientos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: estados_civiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_civiles ALTER COLUMN id SET DEFAULT nextval('public.estados_civiles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: estados_liquidacion id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_liquidacion ALTER COLUMN id SET DEFAULT nextval('public.estados_liquidacion_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: feriados id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.feriados ALTER COLUMN id SET DEFAULT nextval('public.feriados_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: fichajes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fichajes ALTER COLUMN id SET DEFAULT nextval('public.fichajes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: generos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generos ALTER COLUMN id SET DEFAULT nextval('public.generos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: liquidaciones id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones ALTER COLUMN id SET DEFAULT nextval('public.liquidaciones_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos ALTER COLUMN id SET DEFAULT nextval('public.liquidaciones_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: localidades id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.localidades ALTER COLUMN id SET DEFAULT nextval('public.localidades_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: nacionalidades id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.nacionalidades ALTER COLUMN id SET DEFAULT nextval('public.nacionalidades_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: obras_sociales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.obras_sociales ALTER COLUMN id SET DEFAULT nextval('public.obras_sociales_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: paises id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.paises ALTER COLUMN id SET DEFAULT nextval('public.paises_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: periodos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos ALTER COLUMN id SET DEFAULT nextval('public.periodos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: periodos_detalle id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle ALTER COLUMN id SET DEFAULT nextval('public.periodos_detalle_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: persona_tareas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas ALTER COLUMN id SET DEFAULT nextval('public.persona_tareas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: personas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas ALTER COLUMN id SET DEFAULT nextval('public.personas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: personas_jornadas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_jornadas ALTER COLUMN id SET DEFAULT nextval('public.personas_jornadas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: provincias id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.provincias ALTER COLUMN id SET DEFAULT nextval('public.provincias_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recibos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos ALTER COLUMN id SET DEFAULT nextval('public.recibos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recibos_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos ALTER COLUMN id SET DEFAULT nextval('public.recibos_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: regimenes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.regimenes ALTER COLUMN id SET DEFAULT nextval('public.regimenes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla_ganancias id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias ALTER COLUMN id SET DEFAULT nextval('public.tabla_ganancias_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla_ganancias_detalle id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias_detalle ALTER COLUMN id SET DEFAULT nextval('public.tabla_ganancias_detalle_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tareas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tareas ALTER COLUMN id SET DEFAULT nextval('public.tareas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos ALTER COLUMN id SET DEFAULT nextval('public.tipo_liquidacion_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_conceptos ALTER COLUMN id SET DEFAULT nextval('public.tipos_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_contratos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_contratos ALTER COLUMN id SET DEFAULT nextval('public.tipos_contratos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_documentos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_documentos ALTER COLUMN id SET DEFAULT nextval('public.tipos_documentos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_empleadores id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_empleadores ALTER COLUMN id SET DEFAULT nextval('public.tipos_empleadores_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_liquidaciones id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_liquidaciones ALTER COLUMN id SET DEFAULT nextval('public.tipos_liquidaciones_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vacaciones id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vacaciones ALTER COLUMN id SET DEFAULT nextval('public.vacaciones_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: sistema; Owner: -
+-- Name: reservadas id; Type: DEFAULT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas ALTER COLUMN id SET DEFAULT nextval('sistema.reservadas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: sistema; Owner: -
+-- Name: tipos_datos id; Type: DEFAULT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_datos ALTER COLUMN id SET DEFAULT nextval('sistema.tipos_datos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: sistema; Owner: -
+-- Name: tipos_reservadas id; Type: DEFAULT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_reservadas ALTER COLUMN id SET DEFAULT nextval('sistema.tipos_reservadas_id_seq'::regclass);
@@ -2086,13 +2114,6 @@ ALTER TABLE ONLY sistema.tipos_reservadas ALTER COLUMN id SET DEFAULT nextval('s
 --
 
 INSERT INTO public.bancos VALUES (1, 'Galicia');
-
-
---
--- Name: bancos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.bancos_id_seq', 1, true);
 
 
 --
@@ -2107,17 +2128,9 @@ INSERT INTO public.categorias VALUES (5, 'Maestranza', 35000.00, NULL, '5');
 
 
 --
--- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.categorias_id_seq', 5, false);
-
-
---
 -- Data for Name: conceptos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.conceptos VALUES (1, 'Sueldo Básico', '1', 1, 'basico', true, true, true, NULL, NULL, false);
 INSERT INTO public.conceptos VALUES (4, 'Idem Sueldo Basico', '90', 1, 'c1', false, false, false, 'Ver si se utiliza el concepto nro 1 directamente', NULL, false);
 INSERT INTO public.conceptos VALUES (6, 'Antiguedad', '102', 1, 'c90 * ( antiguedad + c101 ) * 0.02', true, true, false, 'Ver si se puede cambiar a :
 c1 * ( antiguedad + c101 ) * 0.02', NULL, false);
@@ -2128,13 +2141,14 @@ INSERT INTO public.conceptos VALUES (8, 'Jubilacion', '500', 2, 'bruto * 0.11', 
 INSERT INTO public.conceptos VALUES (9, 'INNSJP-LEY 1903', '501', 2, 'bruto * 0.03', true, true, false, NULL, NULL, false);
 INSERT INTO public.conceptos VALUES (10, 'Obra Social', '502', 2, 'bruto * 0.03', true, true, false, NULL, NULL, false);
 INSERT INTO public.conceptos VALUES (11, 'Cuota solidaria Utedyc', '511', 2, 'bruto * 0.25', true, true, false, NULL, NULL, false);
+INSERT INTO public.conceptos VALUES (1, 'Sueldo Básico', '1', 1, 'basico', true, true, true, NULL, NULL, false);
 
 
 --
--- Name: conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+-- Data for Name: conceptos_personas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.conceptos_id_seq', 11, true);
+INSERT INTO public.conceptos_personas VALUES (1, 5, 19, 3.00);
 
 
 --
@@ -2144,23 +2158,9 @@ SELECT pg_catalog.setval('public.conceptos_id_seq', 11, true);
 
 
 --
--- Name: datos_actuales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.datos_actuales_id_seq', 1, true);
-
-
---
 -- Data for Name: datos_laborales; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: datos_laborales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
 
 
 --
@@ -2170,24 +2170,10 @@ SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
 
 
 --
--- Name: datos_salud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.datos_salud_id_seq', 1, true);
-
-
---
 -- Data for Name: establecimientos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.establecimientos VALUES (1, 'Asociación Médica de Luján', 'Mariano Moreno 1460', 1, NULL, NULL, NULL);
-
-
---
--- Name: establecimientos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.establecimientos_id_seq', 1, false);
 
 
 --
@@ -2200,25 +2186,11 @@ INSERT INTO public.estados_civiles VALUES (3, 'Divorciado/a');
 
 
 --
--- Name: estados_civiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.estados_civiles_id_seq', 1, false);
-
-
---
 -- Data for Name: estados_liquidacion; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.estados_liquidacion VALUES (1, 'PENDIENTE LIQUIDACION');
 INSERT INTO public.estados_liquidacion VALUES (2, 'LIQUIDADA');
-
-
---
--- Name: estados_liquidacion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.estados_liquidacion_id_seq', 1, false);
 
 
 --
@@ -2228,23 +2200,9 @@ SELECT pg_catalog.setval('public.estados_liquidacion_id_seq', 1, false);
 
 
 --
--- Name: feriados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.feriados_id_seq', 1, false);
-
-
---
 -- Data for Name: fichajes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: fichajes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.fichajes_id_seq', 1, false);
 
 
 --
@@ -2253,13 +2211,6 @@ SELECT pg_catalog.setval('public.fichajes_id_seq', 1, false);
 
 INSERT INTO public.generos VALUES (1, 'Masculino');
 INSERT INTO public.generos VALUES (2, 'Femenino');
-
-
---
--- Name: generos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.generos_id_seq', 1, false);
 
 
 --
@@ -2275,20 +2226,6 @@ SELECT pg_catalog.setval('public.generos_id_seq', 1, false);
 
 
 --
--- Name: liquidaciones_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.liquidaciones_conceptos_id_seq', 30, true);
-
-
---
--- Name: liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.liquidaciones_id_seq', 23, true);
-
-
---
 -- Data for Name: localidades; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -2296,24 +2233,10 @@ INSERT INTO public.localidades VALUES (1, 'LUJAN', 3450, 7);
 
 
 --
--- Name: localidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.localidades_id_seq', 1, true);
-
-
---
 -- Data for Name: nacionalidades; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.nacionalidades VALUES (1, 'Argentino');
-
-
---
--- Name: nacionalidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.nacionalidades_id_seq', 1, false);
 
 
 --
@@ -2331,24 +2254,10 @@ INSERT INTO public.obras_sociales VALUES (8, '3801', 'osde inmigrantes españole
 
 
 --
--- Name: obras_sociales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.obras_sociales_id_seq', 1, false);
-
-
---
 -- Data for Name: paises; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.paises VALUES (1, 'Argentina', 'Argentino');
-
-
---
--- Name: paises_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.paises_id_seq', 1, true);
 
 
 --
@@ -2385,31 +2294,10 @@ INSERT INTO public.periodos_detalle VALUES (4, 26, 99.00, NULL, NULL, NULL, NULL
 
 
 --
--- Name: periodos_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.periodos_detalle_id_seq', 22, true);
-
-
---
--- Name: periodos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.periodos_id_seq', 3, true);
-
-
---
 -- Data for Name: persona_tareas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.persona_tareas VALUES (2, 2, 1);
-
-
---
--- Name: persona_tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.persona_tareas_id_seq', 2, true);
 
 
 --
@@ -2440,23 +2328,9 @@ INSERT INTO public.personas VALUES (2, 'Martin', 'Garay', '1989-05-11', 1, '3455
 
 
 --
--- Name: personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.personas_id_seq', 26, true);
-
-
---
 -- Data for Name: personas_jornadas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: personas_jornadas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.personas_jornadas_id_seq', 1, false);
 
 
 --
@@ -2490,13 +2364,6 @@ INSERT INTO public.provincias VALUES (24, 'Tucumán', 1);
 
 
 --
--- Name: provincias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.provincias_id_seq', 24, true);
-
-
---
 -- Data for Name: recibos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -2509,33 +2376,12 @@ SELECT pg_catalog.setval('public.provincias_id_seq', 24, true);
 
 
 --
--- Name: recibos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.recibos_conceptos_id_seq', 447, true);
-
-
---
--- Name: recibos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.recibos_id_seq', 156, true);
-
-
---
 -- Data for Name: regimenes; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.regimenes VALUES (1, 'Reparto');
 INSERT INTO public.regimenes VALUES (2, 'Sipa');
 INSERT INTO public.regimenes VALUES (3, 'Capitalización');
-
-
---
--- Name: regimenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.regimenes_id_seq', 1, false);
 
 
 --
@@ -2554,20 +2400,6 @@ INSERT INTO public.tabla_ganancias_detalle VALUES (2, 2, 100.00, 100.00, 100.00,
 INSERT INTO public.tabla_ganancias_detalle VALUES (3, 3, 100.00, 100.00, 100.00, 100.00, 10.00, 1);
 INSERT INTO public.tabla_ganancias_detalle VALUES (4, 1, 100.00, 100.00, 100.00, 100.00, 100.00, 1);
 INSERT INTO public.tabla_ganancias_detalle VALUES (5, 1, 20.00, 50.00, 100.00, 10.00, 110.00, 1);
-
-
---
--- Name: tabla_ganancias_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_ganancias_detalle_id_seq', 5, true);
-
-
---
--- Name: tabla_ganancias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_ganancias_id_seq', 1, true);
 
 
 --
@@ -2610,25 +2442,17 @@ INSERT INTO public.tareas VALUES (12, 'Ad./Jefa de Personal');
 
 
 --
--- Name: tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tareas_id_seq', 1, false);
-
-
---
 -- Data for Name: tipo_liquidacion_conceptos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.tipo_liquidacion_conceptos VALUES (1, 1, 1);
 INSERT INTO public.tipo_liquidacion_conceptos VALUES (6, 4, 1);
-
-
---
--- Name: tipo_liquidacion_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipo_liquidacion_conceptos_id_seq', 6, true);
+INSERT INTO public.tipo_liquidacion_conceptos VALUES (7, 5, 1);
+INSERT INTO public.tipo_liquidacion_conceptos VALUES (8, 6, 1);
+INSERT INTO public.tipo_liquidacion_conceptos VALUES (9, 7, 1);
+INSERT INTO public.tipo_liquidacion_conceptos VALUES (10, 10, 1);
+INSERT INTO public.tipo_liquidacion_conceptos VALUES (11, 9, 1);
+INSERT INTO public.tipo_liquidacion_conceptos VALUES (12, 11, 1);
 
 
 --
@@ -2641,25 +2465,11 @@ INSERT INTO public.tipos_conceptos VALUES (3, 'ASIGNACIONES F.');
 
 
 --
--- Name: tipos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_conceptos_id_seq', 4, false);
-
-
---
 -- Data for Name: tipos_contratos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.tipos_contratos VALUES (1, 'a tiempo comp.');
 INSERT INTO public.tipos_contratos VALUES (2, 'a tiempo parcial');
-
-
---
--- Name: tipos_contratos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_contratos_id_seq', 1, false);
 
 
 --
@@ -2673,23 +2483,9 @@ INSERT INTO public.tipos_documentos VALUES (4, 'LC');
 
 
 --
--- Name: tipos_documentos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_documentos_id_seq', 1, false);
-
-
---
 -- Data for Name: tipos_empleadores; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: tipos_empleadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, false);
 
 
 --
@@ -2705,23 +2501,9 @@ INSERT INTO public.tipos_liquidaciones VALUES (6, 'Despido sin Causa', true);
 
 
 --
--- Name: tipos_liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_liquidaciones_id_seq', 6, true);
-
-
---
 -- Data for Name: vacaciones; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: vacaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.vacaciones_id_seq', 1, false);
 
 
 --
@@ -2758,13 +2540,6 @@ INSERT INTO sistema.reservadas VALUES (11, 'total_vacaciones', 'Total Dias de Va
 
 
 --
--- Name: reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
---
-
-SELECT pg_catalog.setval('sistema.reservadas_id_seq', 13, true);
-
-
---
 -- Data for Name: tipos_datos; Type: TABLE DATA; Schema: sistema; Owner: -
 --
 
@@ -2772,13 +2547,6 @@ INSERT INTO sistema.tipos_datos VALUES (1, 'INTEGER');
 INSERT INTO sistema.tipos_datos VALUES (2, 'BOOLEAN');
 INSERT INTO sistema.tipos_datos VALUES (3, 'TEXT');
 INSERT INTO sistema.tipos_datos VALUES (4, 'NUMERIC');
-
-
---
--- Name: tipos_datos_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
---
-
-SELECT pg_catalog.setval('sistema.tipos_datos_id_seq', 1, false);
 
 
 --
@@ -2790,6 +2558,286 @@ INSERT INTO sistema.tipos_reservadas VALUES (2, 'PERSONA');
 
 
 --
+-- Name: bancos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.bancos_id_seq', 1, true);
+
+
+--
+-- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.categorias_id_seq', 5, false);
+
+
+--
+-- Name: conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.conceptos_id_seq', 11, true);
+
+
+--
+-- Name: conceptos_personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.conceptos_personas_id_seq', 1, true);
+
+
+--
+-- Name: datos_actuales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.datos_actuales_id_seq', 1, true);
+
+
+--
+-- Name: datos_laborales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
+
+
+--
+-- Name: datos_salud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.datos_salud_id_seq', 1, true);
+
+
+--
+-- Name: establecimientos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.establecimientos_id_seq', 1, false);
+
+
+--
+-- Name: estados_civiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.estados_civiles_id_seq', 1, false);
+
+
+--
+-- Name: estados_liquidacion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.estados_liquidacion_id_seq', 1, false);
+
+
+--
+-- Name: feriados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.feriados_id_seq', 1, false);
+
+
+--
+-- Name: fichajes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.fichajes_id_seq', 1, false);
+
+
+--
+-- Name: generos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.generos_id_seq', 1, false);
+
+
+--
+-- Name: liquidaciones_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.liquidaciones_conceptos_id_seq', 30, true);
+
+
+--
+-- Name: liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.liquidaciones_id_seq', 23, true);
+
+
+--
+-- Name: localidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.localidades_id_seq', 1, true);
+
+
+--
+-- Name: nacionalidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.nacionalidades_id_seq', 1, false);
+
+
+--
+-- Name: obras_sociales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.obras_sociales_id_seq', 1, false);
+
+
+--
+-- Name: paises_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.paises_id_seq', 1, true);
+
+
+--
+-- Name: periodos_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.periodos_detalle_id_seq', 22, true);
+
+
+--
+-- Name: periodos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.periodos_id_seq', 3, true);
+
+
+--
+-- Name: persona_tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.persona_tareas_id_seq', 2, true);
+
+
+--
+-- Name: personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.personas_id_seq', 26, true);
+
+
+--
+-- Name: personas_jornadas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.personas_jornadas_id_seq', 1, false);
+
+
+--
+-- Name: provincias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.provincias_id_seq', 24, true);
+
+
+--
+-- Name: recibos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.recibos_conceptos_id_seq', 447, true);
+
+
+--
+-- Name: recibos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.recibos_id_seq', 156, true);
+
+
+--
+-- Name: regimenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.regimenes_id_seq', 1, false);
+
+
+--
+-- Name: tabla_ganancias_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_ganancias_detalle_id_seq', 5, true);
+
+
+--
+-- Name: tabla_ganancias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_ganancias_id_seq', 1, true);
+
+
+--
+-- Name: tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tareas_id_seq', 1, false);
+
+
+--
+-- Name: tipo_liquidacion_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipo_liquidacion_conceptos_id_seq', 12, true);
+
+
+--
+-- Name: tipos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_conceptos_id_seq', 4, false);
+
+
+--
+-- Name: tipos_contratos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_contratos_id_seq', 1, false);
+
+
+--
+-- Name: tipos_documentos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_documentos_id_seq', 1, false);
+
+
+--
+-- Name: tipos_empleadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, false);
+
+
+--
+-- Name: tipos_liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_liquidaciones_id_seq', 6, true);
+
+
+--
+-- Name: vacaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.vacaciones_id_seq', 1, false);
+
+
+--
+-- Name: reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
+--
+
+SELECT pg_catalog.setval('sistema.reservadas_id_seq', 13, true);
+
+
+--
+-- Name: tipos_datos_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
+--
+
+SELECT pg_catalog.setval('sistema.tipos_datos_id_seq', 1, false);
+
+
+--
 -- Name: tipos_reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
 --
 
@@ -2797,7 +2845,7 @@ SELECT pg_catalog.setval('sistema.tipos_reservadas_id_seq', 1, false);
 
 
 --
--- Name: persona_tareas_id_persona_id_tarea_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: persona_tareas persona_tareas_id_persona_id_tarea_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas
@@ -2805,7 +2853,7 @@ ALTER TABLE ONLY public.persona_tareas
 
 
 --
--- Name: pk_bancos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bancos pk_bancos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bancos
@@ -2813,7 +2861,7 @@ ALTER TABLE ONLY public.bancos
 
 
 --
--- Name: pk_categorias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: categorias pk_categorias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categorias
@@ -2821,7 +2869,7 @@ ALTER TABLE ONLY public.categorias
 
 
 --
--- Name: pk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos pk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos
@@ -2829,7 +2877,15 @@ ALTER TABLE ONLY public.conceptos
 
 
 --
--- Name: pk_datos_actuales; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas pk_conceptos_personas; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conceptos_personas
+    ADD CONSTRAINT pk_conceptos_personas PRIMARY KEY (id);
+
+
+--
+-- Name: datos_actuales pk_datos_actuales; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -2837,7 +2893,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: pk_datos_laborales; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales pk_datos_laborales; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -2845,7 +2901,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: pk_datos_salud; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_salud pk_datos_salud; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud
@@ -2853,7 +2909,7 @@ ALTER TABLE ONLY public.datos_salud
 
 
 --
--- Name: pk_establecimientos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: establecimientos pk_establecimientos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos
@@ -2861,7 +2917,7 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
--- Name: pk_estados_civiles; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: estados_civiles pk_estados_civiles; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_civiles
@@ -2869,7 +2925,7 @@ ALTER TABLE ONLY public.estados_civiles
 
 
 --
--- Name: pk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: estados_liquidacion pk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_liquidacion
@@ -2877,7 +2933,7 @@ ALTER TABLE ONLY public.estados_liquidacion
 
 
 --
--- Name: pk_feriados; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: feriados pk_feriados; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.feriados
@@ -2885,7 +2941,7 @@ ALTER TABLE ONLY public.feriados
 
 
 --
--- Name: pk_fichajes; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: fichajes pk_fichajes; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fichajes
@@ -2893,7 +2949,7 @@ ALTER TABLE ONLY public.fichajes
 
 
 --
--- Name: pk_generos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: generos pk_generos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generos
@@ -2901,7 +2957,7 @@ ALTER TABLE ONLY public.generos
 
 
 --
--- Name: pk_liquidaciones; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_liquidaciones pk_liquidaciones; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_liquidaciones
@@ -2909,7 +2965,7 @@ ALTER TABLE ONLY public.tipos_liquidaciones
 
 
 --
--- Name: pk_liquidaciones2; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones pk_liquidaciones2; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -2917,7 +2973,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: pk_liquidaciones_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos pk_liquidaciones_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -2925,7 +2981,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: pk_localidad; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: localidades pk_localidad; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.localidades
@@ -2933,7 +2989,7 @@ ALTER TABLE ONLY public.localidades
 
 
 --
--- Name: pk_nacionalidades; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: nacionalidades pk_nacionalidades; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.nacionalidades
@@ -2941,7 +2997,7 @@ ALTER TABLE ONLY public.nacionalidades
 
 
 --
--- Name: pk_obras_sociales; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: obras_sociales pk_obras_sociales; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.obras_sociales
@@ -2949,7 +3005,7 @@ ALTER TABLE ONLY public.obras_sociales
 
 
 --
--- Name: pk_paises; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: paises pk_paises; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.paises
@@ -2957,7 +3013,7 @@ ALTER TABLE ONLY public.paises
 
 
 --
--- Name: pk_periodo_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos_detalle pk_periodo_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle
@@ -2965,7 +3021,7 @@ ALTER TABLE ONLY public.periodos_detalle
 
 
 --
--- Name: pk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos pk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos
@@ -2973,7 +3029,7 @@ ALTER TABLE ONLY public.periodos
 
 
 --
--- Name: pk_persona_tareas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: persona_tareas pk_persona_tareas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas
@@ -2981,7 +3037,7 @@ ALTER TABLE ONLY public.persona_tareas
 
 
 --
--- Name: pk_personas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas pk_personas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -2989,7 +3045,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: pk_personas_jornadas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_jornadas pk_personas_jornadas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_jornadas
@@ -2997,7 +3053,7 @@ ALTER TABLE ONLY public.personas_jornadas
 
 
 --
--- Name: pk_provincias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: provincias pk_provincias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.provincias
@@ -3005,7 +3061,7 @@ ALTER TABLE ONLY public.provincias
 
 
 --
--- Name: pk_recibos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos pk_recibos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -3013,7 +3069,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: pk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos pk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -3021,7 +3077,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: pk_regimenes; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: regimenes pk_regimenes; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.regimenes
@@ -3029,7 +3085,7 @@ ALTER TABLE ONLY public.regimenes
 
 
 --
--- Name: pk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias pk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias
@@ -3037,7 +3093,7 @@ ALTER TABLE ONLY public.tabla_ganancias
 
 
 --
--- Name: pk_tabla_ganancias_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias_detalle pk_tabla_ganancias_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias_detalle
@@ -3045,7 +3101,7 @@ ALTER TABLE ONLY public.tabla_ganancias_detalle
 
 
 --
--- Name: pk_tabla_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_vacaciones pk_tabla_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_vacaciones
@@ -3053,7 +3109,7 @@ ALTER TABLE ONLY public.tabla_vacaciones
 
 
 --
--- Name: pk_tabla_vacaciones_dias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_vacaciones_dias pk_tabla_vacaciones_dias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_vacaciones_dias
@@ -3061,7 +3117,7 @@ ALTER TABLE ONLY public.tabla_vacaciones_dias
 
 
 --
--- Name: pk_tareas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tareas pk_tareas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tareas
@@ -3069,7 +3125,7 @@ ALTER TABLE ONLY public.tareas
 
 
 --
--- Name: pk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos pk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -3077,7 +3133,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: pk_tipos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_conceptos pk_tipos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_conceptos
@@ -3085,7 +3141,7 @@ ALTER TABLE ONLY public.tipos_conceptos
 
 
 --
--- Name: pk_tipos_documentos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_documentos pk_tipos_documentos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_documentos
@@ -3093,7 +3149,7 @@ ALTER TABLE ONLY public.tipos_documentos
 
 
 --
--- Name: pk_tipos_empleadores; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_empleadores pk_tipos_empleadores; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_empleadores
@@ -3101,7 +3157,7 @@ ALTER TABLE ONLY public.tipos_empleadores
 
 
 --
--- Name: pk_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vacaciones pk_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vacaciones
@@ -3109,7 +3165,7 @@ ALTER TABLE ONLY public.vacaciones
 
 
 --
--- Name: tipos_contratos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_contratos tipos_contratos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_contratos
@@ -3117,7 +3173,7 @@ ALTER TABLE ONLY public.tipos_contratos
 
 
 --
--- Name: uk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos uk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos
@@ -3125,7 +3181,15 @@ ALTER TABLE ONLY public.conceptos
 
 
 --
--- Name: uk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas uk_conceptos_personas; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conceptos_personas
+    ADD CONSTRAINT uk_conceptos_personas UNIQUE (id_concepto, id_persona);
+
+
+--
+-- Name: estados_liquidacion uk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_liquidacion
@@ -3133,7 +3197,7 @@ ALTER TABLE ONLY public.estados_liquidacion
 
 
 --
--- Name: uk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos uk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos
@@ -3141,7 +3205,7 @@ ALTER TABLE ONLY public.periodos
 
 
 --
--- Name: uk_personas_dni; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas uk_personas_dni; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -3149,7 +3213,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: uk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias uk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias
@@ -3157,7 +3221,7 @@ ALTER TABLE ONLY public.tabla_ganancias
 
 
 --
--- Name: uk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos uk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -3165,7 +3229,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: pk_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
+-- Name: reservadas pk_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas
@@ -3173,7 +3237,7 @@ ALTER TABLE ONLY sistema.reservadas
 
 
 --
--- Name: pk_tipos_datos; Type: CONSTRAINT; Schema: sistema; Owner: -
+-- Name: tipos_datos pk_tipos_datos; Type: CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_datos
@@ -3181,7 +3245,7 @@ ALTER TABLE ONLY sistema.tipos_datos
 
 
 --
--- Name: pk_tipos_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
+-- Name: tipos_reservadas pk_tipos_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_reservadas
@@ -3189,14 +3253,14 @@ ALTER TABLE ONLY sistema.tipos_reservadas
 
 
 --
--- Name: trg_ai_recibos; Type: TRIGGER; Schema: public; Owner: -
+-- Name: recibos trg_ai_recibos; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trg_ai_recibos AFTER INSERT ON public.recibos FOR EACH ROW EXECUTE PROCEDURE public.sp_trg_ai_recibos();
 
 
 --
--- Name: conceptos_id_tipo_concepto_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos conceptos_id_tipo_concepto_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos
@@ -3204,7 +3268,7 @@ ALTER TABLE ONLY public.conceptos
 
 
 --
--- Name: establecimientos_id_localidad_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: establecimientos establecimientos_id_localidad_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos
@@ -3212,7 +3276,23 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
--- Name: fk_datos_actuales__estado_civil; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas fk_conceptos_personas__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conceptos_personas
+    ADD CONSTRAINT fk_conceptos_personas__conceptos FOREIGN KEY (id_concepto) REFERENCES public.conceptos(id);
+
+
+--
+-- Name: conceptos_personas fk_conceptos_personas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.conceptos_personas
+    ADD CONSTRAINT fk_conceptos_personas__personas FOREIGN KEY (id_persona) REFERENCES public.personas(id);
+
+
+--
+-- Name: datos_actuales fk_datos_actuales__estado_civil; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -3220,7 +3300,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: fk_datos_actuales__peresona; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_actuales fk_datos_actuales__peresona; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -3228,7 +3308,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: fk_datos_actuales_localidades; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_actuales fk_datos_actuales_localidades; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -3236,7 +3316,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: fk_datos_laborales__categorias; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__categorias; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -3244,7 +3324,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_laborales__establecimiento; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__establecimiento; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -3252,7 +3332,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_laborales__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -3260,7 +3340,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_laborales__tipos_contratos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__tipos_contratos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -3268,7 +3348,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_salud__obra_social; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_salud fk_datos_salud__obra_social; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud
@@ -3276,7 +3356,7 @@ ALTER TABLE ONLY public.datos_salud
 
 
 --
--- Name: fk_datos_salud__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_salud fk_datos_salud__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud
@@ -3284,7 +3364,7 @@ ALTER TABLE ONLY public.datos_salud
 
 
 --
--- Name: fk_establecimientos__tipo_empleador; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: establecimientos fk_establecimientos__tipo_empleador; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos
@@ -3292,7 +3372,7 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
--- Name: fk_fichajes__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fichajes fk_fichajes__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fichajes
@@ -3300,7 +3380,7 @@ ALTER TABLE ONLY public.fichajes
 
 
 --
--- Name: fk_liquidacion__estado; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones fk_liquidacion__estado; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -3308,7 +3388,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: fk_liquidaciones__bancos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones fk_liquidaciones__bancos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -3316,7 +3396,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: fk_liquidaciones__tipos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones fk_liquidaciones__tipos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -3324,7 +3404,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: fk_liquidaciones_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos fk_liquidaciones_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -3332,7 +3412,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: fk_liquidaciones_conceptos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos fk_liquidaciones_conceptos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -3340,7 +3420,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: fk_localidad_provincia; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: localidades fk_localidad_provincia; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.localidades
@@ -3348,7 +3428,7 @@ ALTER TABLE ONLY public.localidades
 
 
 --
--- Name: fk_periodo_detalle__periodo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos_detalle fk_periodo_detalle__periodo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle
@@ -3356,7 +3436,7 @@ ALTER TABLE ONLY public.periodos_detalle
 
 
 --
--- Name: fk_periodo_detalle__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos_detalle fk_periodo_detalle__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle
@@ -3364,7 +3444,7 @@ ALTER TABLE ONLY public.periodos_detalle
 
 
 --
--- Name: fk_persona__nacionalidades; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas fk_persona__nacionalidades; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -3372,7 +3452,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: fk_personas__generos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas fk_personas__generos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -3380,7 +3460,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: fk_personas_jornadas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_jornadas fk_personas_jornadas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_jornadas
@@ -3388,7 +3468,7 @@ ALTER TABLE ONLY public.personas_jornadas
 
 
 --
--- Name: fk_personas_tareas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: persona_tareas fk_personas_tareas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas
@@ -3396,7 +3476,7 @@ ALTER TABLE ONLY public.persona_tareas
 
 
 --
--- Name: fk_provincias_pais; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: provincias fk_provincias_pais; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.provincias
@@ -3404,7 +3484,7 @@ ALTER TABLE ONLY public.provincias
 
 
 --
--- Name: fk_recibos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos fk_recibos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -3412,7 +3492,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: fk_recibos__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos fk_recibos__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -3420,7 +3500,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: fk_recibos_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos fk_recibos_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -3428,7 +3508,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: fk_recibos_conceptos__recibo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos fk_recibos_conceptos__recibo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -3436,7 +3516,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: fk_tabla_ganancias_detalle__cabecera; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias_detalle fk_tabla_ganancias_detalle__cabecera; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias_detalle
@@ -3444,7 +3524,7 @@ ALTER TABLE ONLY public.tabla_ganancias_detalle
 
 
 --
--- Name: fk_tipo_liquidacion_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos fk_tipo_liquidacion_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -3452,7 +3532,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: fk_tipo_liquidacion_conceptos__tipo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos fk_tipo_liquidacion_conceptos__tipo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -3460,7 +3540,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: fk_vacaciones__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vacaciones fk_vacaciones__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vacaciones
@@ -3468,7 +3548,7 @@ ALTER TABLE ONLY public.vacaciones
 
 
 --
--- Name: fk_reservadas__tipos_datos; Type: FK CONSTRAINT; Schema: sistema; Owner: -
+-- Name: reservadas fk_reservadas__tipos_datos; Type: FK CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas
@@ -3476,7 +3556,7 @@ ALTER TABLE ONLY sistema.reservadas
 
 
 --
--- Name: fk_tipos_reservadas__reservadas; Type: FK CONSTRAINT; Schema: sistema; Owner: -
+-- Name: reservadas fk_tipos_reservadas__reservadas; Type: FK CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas
