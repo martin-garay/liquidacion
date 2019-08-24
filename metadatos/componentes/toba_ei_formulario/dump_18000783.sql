@@ -138,13 +138,13 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 		</tr>
 		<tr>
 			<td>
-				[ef id=mes_periodo]</td>
+				[ef id=mes]</td>
 			<td>
 				[ef id=fecha_desde]</td>
 		</tr>
 		<tr>
 			<td>
-				[ef id=anio_periodo]</td>
+				[ef id=anio]</td>
 			<td>
 				[ef id=fecha_hasta]</td>
 		</tr>
@@ -171,7 +171,8 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 				&nbsp;</td>
 		</tr>
 	</tbody>
-</table>', --template
+</table>
+<p>&nbsp;</p>', --template
 	NULL  --template_impresion
 );
 
@@ -184,9 +185,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'6084', --objeto_ei_formulario_fila
 	'18000783', --objeto_ei_formulario
 	'asociacion', --objeto_ei_formulario_proyecto
-	'mes_periodo', --identificador
+	'mes', --identificador
 	'ef_combo', --elemento_formulario
-	'mes_periodo', --columnas
+	'mes', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'3', --orden
@@ -264,9 +265,9 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'6085', --objeto_ei_formulario_fila
 	'18000783', --objeto_ei_formulario
 	'asociacion', --objeto_ei_formulario_proyecto
-	'anio_periodo', --identificador
+	'anio', --identificador
 	'ef_combo', --elemento_formulario
-	'anio_periodo', --columnas
+	'anio', --columnas
 	'1', --obligatorio
 	'0', --oculto_relaja_obligatorio
 	'4', --orden

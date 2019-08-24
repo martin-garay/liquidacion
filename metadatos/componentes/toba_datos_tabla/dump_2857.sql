@@ -116,7 +116,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'2857', --objeto
 	'1474', --col_id
 	'fecha_desde', --columna
-	'T', --tipo
+	'F', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
@@ -130,7 +130,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'2857', --objeto
 	'1475', --col_id
 	'fecha_hasta', --columna
-	'T', --tipo
+	'F', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
@@ -248,6 +248,34 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
+	'0', --externa
+	'liquidaciones'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2857', --objeto
+	'1588', --col_id
+	'mes', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'liquidaciones'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2857', --objeto
+	'1589', --col_id
+	'anio', --columna
+	'E', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
 	'0', --externa
 	'liquidaciones'  --tabla
 );

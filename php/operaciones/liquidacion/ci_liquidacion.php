@@ -70,14 +70,27 @@ class ci_liquidacion extends asociacion_ci
 
 	function conf__cuadro(asociacion_ei_cuadro $cuadro)
 	{
-		//if(isset($this->s__filtro))
-			return toba::consulta_php('liquidacion')->get_liquidaciones();
+		$where = null;
+		if(isset($this->s__filtro))
+			$where = $this->dep('filtro')->get_sql_where();
+			return toba::consulta_php('liquidacion')->get_liquidaciones($where, "anio desc,mes desc");
 	}
 	function evt__cuadro__seleccion($seleccion)
 	{
 		$this->relacion()->cargar($seleccion);
 		$this->set_pantalla('pant_edicion');
 	}	
+	function evt__cuadro__borrar($seleccion)
+	{
+		$this->ci_hijo()->borrar($seleccion);		
+	}
+	function conf_evt__cuadro__borrar(toba_evento_usuario $evento, $fila)
+	{
+		$datos = $this->dep('cuadro')->get_datos();
+        if( $datos[$fila]['id_estado']!==1 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
+            $evento->anular();
+        }
+	}
 
 }
 ?>

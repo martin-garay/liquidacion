@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2840]--  2ABM Generico 
+--[2840]--  ABM Tipos Contratos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'operaciones/ci_generico_una_pantalla.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'2ABM Generico', --nombre
+	'ABM Tipos Contratos', --nombre
 	NULL, --titulo
 	'0', --colapsable
 	NULL, --descripcion
@@ -78,6 +78,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2840', --objeto_consumidor
 	'2839', --objeto_proveedor
 	'cuadro', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1764', --dep_id
+	'2840', --objeto_consumidor
+	'2799', --objeto_proveedor
+	'datos', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c

@@ -36,6 +36,22 @@ class ci_datos_persona extends asociacion_ci
 		$this->relacion()->tabla("personas_tareas")->procesar_filas($datos);	
 	}
 
+	//-----------------------------------------------------------------------------------
+	//---- form_ml_conceptos ------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form_ml_conceptos(asociacion_ei_formulario_ml $form_ml)
+	{
+		if( $this->relacion()->tabla("personas_conceptos")->esta_cargada() )
+			return $this->relacion()->tabla("personas_conceptos")->get_filas();
+	}
+
+	function evt__form_ml_conceptos__modificacion($datos)
+	{
+		$this->relacion()->tabla("personas_conceptos")->procesar_filas($datos);
+	}
+
+
 /* --------------------------------------------------------------------------- */
 /* --------------------------- API para Consumidores -------------------------- */
 /* --------------------------------------------------------------------------- */
@@ -63,15 +79,6 @@ class ci_datos_persona extends asociacion_ci
 	function imprimir(toba_vista_pdf $salida){
 		$salida->subtitulo('Datos Generales');
 		$this->dep('form_persona')->vista_pdf($salida);
-
-		$salida->subtitulo('Datos Actuales');
-		$this->dep('form_datos_actuales')->vista_pdf($salida);
-
-		$salida->subtitulo('Datos Salud');
-		$this->dep('form_salud')->vista_pdf($salida);
-
-		$salida->subtitulo('Datos Laborales');
-		$this->dep('form_laboral')->vista_pdf($salida);
 		
 		$this->dep('form_ml_tareas')->vista_pdf($salida);
 		
@@ -81,5 +88,6 @@ class ci_datos_persona extends asociacion_ci
 	}
 	/* ------------------------------- FIN API --------------------------------- */	
 
+	
 }
 ?>

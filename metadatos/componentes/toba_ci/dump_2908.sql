@@ -1,26 +1,26 @@
 ------------------------------------------------------------
---[18000829]--  datosABM Conceptos 
+--[2908]--  ABM Acumuladores 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
 -- apex_objeto
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 18
+--- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'asociacion', --proyecto
-	'18000829', --objeto
+	'2908', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
 	'toba', --clase_proyecto
 	'toba_ci', --clase
 	'16', --punto_montaje
-	'ci_datos_conceptos', --subclase
-	'operaciones/parametrizacion/abm_conceptos/ci_datos_conceptos.php', --subclase_archivo
+	'ci_generico_una_pantalla', --subclase
+	'operaciones/parametrizacion/liquidacion/ci_generico_una_pantalla.php', --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'datosABM Conceptos', --nombre
+	'ABM Acumuladores', --nombre
 	NULL, --titulo
 	'0', --colapsable
 	NULL, --descripcion
@@ -29,9 +29,9 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --solicitud_registrar
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
-	'conceptos', --parametro_a
-	'codigo::int', --parametro_b
-	'v_conceptos', --parametro_c
+	'v_acumuladores', --parametro_a
+	'nombre', --parametro_b
+	NULL, --parametro_c
 	NULL, --parametro_d
 	NULL, --parametro_e
 	NULL, --parametro_f
@@ -39,20 +39,20 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	'2019-08-11 20:12:31', --creacion
 	'abajo'  --posicion_botonera
 );
---- FIN Grupo de desarrollo 18
+--- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
 -- apex_objeto_mt_me
 ------------------------------------------------------------
 INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_etiq, ev_cancelar_etiq, ancho, alto, posicion_botonera, tipo_navegacion, botonera_barra_item, con_toc, incremental, debug_eventos, activacion_procesar, activacion_cancelar, ev_procesar, ev_cancelar, objetos, post_procesar, metodo_despachador, metodo_opciones) VALUES (
 	'asociacion', --objeto_mt_me_proyecto
-	'18000829', --objeto_mt_me
+	'2908', --objeto_mt_me
 	NULL, --ev_procesar_etiq
 	NULL, --ev_cancelar_etiq
-	'1000px', --ancho
+	'800px', --ancho
 	NULL, --alto
 	NULL, --posicion_botonera
-	'tab_h', --tipo_navegacion
+	NULL, --tipo_navegacion
 	'0', --botonera_barra_item
 	'0', --con_toc
 	NULL, --incremental
@@ -71,12 +71,48 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 -- apex_objeto_dependencias
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 18
+--- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
-	'18000862', --dep_id
-	'18000829', --objeto_consumidor
-	'18000825', --objeto_proveedor
+	'1767', --dep_id
+	'2908', --objeto_consumidor
+	'2905', --objeto_proveedor
+	'cuadro', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1770', --dep_id
+	'2908', --objeto_consumidor
+	'2909', --objeto_proveedor
+	'datos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1768', --dep_id
+	'2908', --objeto_consumidor
+	'2906', --objeto_proveedor
+	'filtro', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1769', --dep_id
+	'2908', --objeto_consumidor
+	'2907', --objeto_proveedor
 	'form', --identificador
 	NULL, --parametros_a
 	NULL, --parametros_b
@@ -84,114 +120,22 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --inicializar
 	NULL  --orden
 );
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'18000863', --dep_id
-	'18000829', --objeto_consumidor
-	'18000826', --objeto_proveedor
-	'form_conceptos', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'18000864', --dep_id
-	'18000829', --objeto_consumidor
-	'18000827', --objeto_proveedor
-	'form_funciones', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'18000868', --dep_id
-	'18000829', --objeto_consumidor
-	'18000830', --objeto_proveedor
-	'form_ml_personas', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'18000865', --dep_id
-	'18000829', --objeto_consumidor
-	'18000828', --objeto_proveedor
-	'form_reservadas', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
-INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
-	'asociacion', --proyecto
-	'18000866', --dep_id
-	'18000829', --objeto_consumidor
-	'18000822', --objeto_proveedor
-	'relacion', --identificador
-	NULL, --parametros_a
-	NULL, --parametros_b
-	NULL, --parametros_c
-	NULL, --inicializar
-	NULL  --orden
-);
---- FIN Grupo de desarrollo 18
+--- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
 -- apex_objeto_ci_pantalla
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 18
+--- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
 	'asociacion', --objeto_ci_proyecto
-	'18000829', --objeto_ci
-	'18000274', --pantalla
-	'pant_concepto', --identificador
+	'2908', --objeto_ci
+	'1372', --pantalla
+	'pant_inicial', --identificador
 	'1', --orden
-	'Concepto', --etiqueta
+	'Pantalla Inicial', --etiqueta
 	NULL, --descripcion
 	NULL, --tip
-	'apex', --imagen_recurso_origen
-	NULL, --imagen
-	NULL, --objetos
-	NULL, --eventos
-	NULL, --subclase
-	NULL, --subclase_archivo
-	'<table>
-	<tbody>
-		<tr>
-			<td style="vertical-align: top;">
-				[dep id=form_reservadas][dep id=form_funciones]</td>
-			<td style="vertical-align: top;box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.28);">
-				[dep id=form]</td>
-			<td style="vertical-align: top;">
-				[dep id=form_conceptos]</td>
-		</tr>
-	</tbody>
-</table>', --template
-	NULL, --template_impresion
-	'16'  --punto_montaje
-);
-INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, identificador, orden, etiqueta, descripcion, tip, imagen_recurso_origen, imagen, objetos, eventos, subclase, subclase_archivo, template, template_impresion, punto_montaje) VALUES (
-	'asociacion', --objeto_ci_proyecto
-	'18000829', --objeto_ci
-	'18000276', --pantalla
-	'pant_personas', --identificador
-	'2', --orden
-	'Empleados', --etiqueta
-	'Empleados a las que aplica el concepto. Dejar vacio si se calcula para todos.
-<br><br>
-<strong>ATENCION SI SE USA EN OTRO CALCULO! </strong> Si otro concepto usa a este en la formula no sera calculado para otras personas que no esten en esta lista y el liquidador puede devolver error de que no existe el concepto ya que no se le genero a la persona. Por ej: El concepto Años de Reconocimiento es usado en la formula Antiguedad que es usado por todas las personas. Si se limita el 1ro a ciertas personas el 2do devolvera error para las personas que no se definieron.', --descripcion
-	'Solo para ciertos empleados', --tip
 	'apex', --imagen_recurso_origen
 	NULL, --imagen
 	NULL, --objetos
@@ -202,43 +146,29 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	NULL, --template_impresion
 	'16'  --punto_montaje
 );
---- FIN Grupo de desarrollo 18
+--- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
 -- apex_objetos_pantalla
 ------------------------------------------------------------
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto
-	'18000274', --pantalla
-	'18000829', --objeto_ci
-	'3', --orden
-	'18000862'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'asociacion', --proyecto
-	'18000274', --pantalla
-	'18000829', --objeto_ci
+	'1372', --pantalla
+	'2908', --objeto_ci
 	'1', --orden
-	'18000863'  --dep_id
+	'1767'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto
-	'18000274', --pantalla
-	'18000829', --objeto_ci
+	'1372', --pantalla
+	'2908', --objeto_ci
 	'0', --orden
-	'18000864'  --dep_id
+	'1768'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto
-	'18000274', --pantalla
-	'18000829', --objeto_ci
+	'1372', --pantalla
+	'2908', --objeto_ci
 	'2', --orden
-	'18000865'  --dep_id
-);
-INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
-	'asociacion', --proyecto
-	'18000276', --pantalla
-	'18000829', --objeto_ci
-	'0', --orden
-	'18000868'  --dep_id
+	'1769'  --dep_id
 );

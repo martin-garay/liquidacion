@@ -27,7 +27,7 @@ class LiquidadorNuevo extends Evaluator
 		$this->agregar_variable($nombre_variable, $resultado);	//agrego el concepto a las variables del liquidador
 		return $resultado;
 	}	
-	function agregar_variable($variable, $valor){
+	function agregar_variable($variable, $valor){		
 		$this->variables = array_merge($this->variables,[ $variable => $valor ]);
 	}
 	//suma el valor a los totalizadores por tipo_concepto

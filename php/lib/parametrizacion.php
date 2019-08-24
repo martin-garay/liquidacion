@@ -83,4 +83,7 @@ class parametrizacion extends comunes
 	function get_tipos_liquidaciones_activas($where=null, $order_by=null){
 		return $this->get_tipos_liquidaciones('activo');
 	}
+	function get_acumuladores($where=null, $order_by=null){
+		return $this->get_generico('v_acumuladores',$where,$order_by);
+	}
 }

@@ -56,9 +56,87 @@ class ci_datos_liquidacion extends asociacion_ci
 			toba::notificacion()->error('Error al grabar <br>'.$e->get_mensaje_motor());
 		}
 	}
+	function borrar($seleccion){        
+		$this->relacion()->cargar($seleccion);
+		try{
+			$this->relacion()->eliminar_todo();
+			$this->relacion()->sincronizar();
+			toba::notificacion()->agregar('La liquidacion fue eliminada correctamente!');
+		}catch(toba_error_db $e){
+			if($e->get_sqlstate()=="db_23503"){
+				toba::notificacion()->agregar('ATENCION! El registro esta siendo utilizado');
+			}else{
+				toba::notificacion()->agregar('ERROR! El registro No puede eliminarse');
+			}
+		}
+		$this->relacion()->resetear();
+	}
 	function desactivar_edicion(){
 		$this->desactivar_edicion = true;
 	}
+
+	function liquidar(){		
+
+		//verifico que el estado sea PENDIENTE LIQUIDACION
+		if( $this->tabla('liquidacion')->get_columna('id_estado')==1 ){			
+			
+			$id_liquidacion = $this->tabla('liquidacion')->get_columna('id');
+			$liquidador = new LiquidadorNuevo($id_liquidacion);			
+
+			Logger::titulo('Liquidacion '.$id_liquidacion);
+			//recorro cada recibo
+			$recibos = $this->tabla('recibos')->get_filas(null, true);		
+			foreach( $recibos as $key => $recibo ) {
+				$this->tabla('recibos')->set_cursor( $key );
+				$recibo = $this->tabla('recibos')->get();	//por las dudas
+				
+				$liquidador->nuevo_recibo($recibo['id_persona']);								//se cargan las reservadas del empleado
+				Logger::separador('Generando recibo '.$recibo['id'].' persona '.$recibo['id_persona']);
+
+				$conceptos = $this->tabla('recibos_conceptos')->get_filas(null, true);
+				$conceptos_ordenados = $this->ordenar_conceptos($conceptos);				
+
+				foreach ($conceptos_ordenados as $key2 => $variable) {
+					$this->tabla('recibos_conceptos')->set_cursor($key2);					
+					$concepto = $this->tabla('recibos_conceptos')->get();
+
+					//si el usuario le puso un valor al concepto le dejo ese, sino lo calcula el liquidador
+					if( !isset($concepto['importe']) ){
+
+						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para que valla acumulando en las variables que corresponda.
+						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
+											
+						$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula'], $concepto['id_tipo_concepto'], $concepto['totaliza']);
+						$this->tabla('recibos_conceptos')->set($concepto);					
+					}else{
+
+						//si existe un importe fijo igual tengo que cargar el concepto como una variable del liquidador para los siguientes calculos
+						$nombre_variable = 'c'.$concepto['codigo'];
+						$liquidador->agregar_variable($nombre_variable, $concepto['importe']);
+						
+					}
+					Logger::info($concepto['codigo'].'='.$concepto['importe']);
+				}
+				Logger::separador('Fin recibo persona '.$recibo['id_persona']);
+			}
+			$this->tabla('liquidacion')->set_columna_valor('id_estado',2);	//paso a liquidada
+			//$this->relacion()->dump_contenido();
+			$this->guardar();					
+		}else{
+			throw new toba_error_usuario("Solo se pueden liquidar Liquidaciones con estado: PENDIENTE LIQUIDACION");
+		}
+	}
+	
+	function ordenar_conceptos($conceptos){		
+		uasort($conceptos, function($a, $b) {
+			    if ($a['codigo'] == $b['codigo']) {
+			        return 0;
+			    }
+			    return ($a['codigo'] < $b['codigo']) ? -1 : 1;
+		});
+		return $conceptos; 
+	}
+
 	function conf(){
 		if( !$this->relacion()->esta_cargada() ){
 			$this->pantalla()->tab('pant_recibos')->ocultar();
@@ -88,7 +166,7 @@ class ci_datos_liquidacion extends asociacion_ci
 
 	function evt__form_liquidacion__modificacion($datos)
 	{
-		$datos['periodo'] = $datos['anio_periodo'].'-'.$datos['mes_periodo'].'-01';
+		$datos['periodo'] = $datos['anio'].'-'.$datos['mes'].'-01';
 		$this->tabla('liquidacion')->set($datos);
 	}
 
@@ -143,64 +221,7 @@ class ci_datos_liquidacion extends asociacion_ci
 		$this->tabla('recibos')->procesar_filas($datos);
 	}
 
-	function liquidar(){		
-
-		//verifico que el estado sea PENDIENTE LIQUIDACION
-		if( $this->tabla('liquidacion')->get_columna('id_estado')==1 ){			
-			
-			$id_liquidacion = $this->tabla('liquidacion')->get_columna('id');
-			$liquidador = new LiquidadorNuevo($id_liquidacion);			
-
-			Logger::titulo('Liquidacion '.$id_liquidacion);
-			//recorro cada recibo
-			$recibos = $this->tabla('recibos')->get_filas(null, true);		
-			foreach( $recibos as $key => $recibo ) {
-				$this->tabla('recibos')->set_cursor( $key );
-				$recibo = $this->tabla('recibos')->get();	//por las dudas
-				
-				$liquidador->nuevo_recibo($recibo['id_persona']);								//se cargan las reservadas del empleado
-				Logger::separador('Generando recibo '.$recibo['id'].' persona '.$recibo['id_persona']);
-
-				$conceptos = $this->tabla('recibos_conceptos')->get_filas(null, true);
-				$conceptos_ordenados = $this->ordenar_conceptos($conceptos);				
-
-				foreach ($conceptos_ordenados as $key2 => $variable) {
-					$this->tabla('recibos_conceptos')->set_cursor($key2);					
-					$concepto = $this->tabla('recibos_conceptos')->get();
-
-					//si el usuario le puso un valor al concepto le dejo ese, sino lo calcula el liquidador
-					if( !isset($concepto['importe']) ){
-
-						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para 
-						que valla acumulando en las variables que corresponda.
-						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
-											
-						$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula'], $concepto['id_tipo_concepto'], $concepto['totaliza']);
-						$this->tabla('recibos_conceptos')->set($concepto);					
-					}
-					Logger::grabar($concepto['codigo'].'='.$concepto['importe'],Logger::INFO);
-				}
-				Logger::separador('Fin recibo persona '.$recibo['id_persona']);
-			}
-			$this->tabla('liquidacion')->set_columna_valor('id_estado',2);	//paso a liquidada
-			//$this->relacion()->dump_contenido();
-			$this->guardar();					
-		}else{
-			throw new toba_error_usuario("Solo se pueden liquidar Liquidaciones con estado: PENDIENTE LIQUIDACION");
-		}
-	}
-
 	
-	function ordenar_conceptos($conceptos){		
-		uasort($conceptos, function($a, $b) {
-			    if ($a['codigo'] == $b['codigo']) {
-			        return 0;
-			    }
-			    return ($a['codigo'] < $b['codigo']) ? -1 : 1;
-		});
-		return $conceptos; 
-	}
-
 //-----------------------------------------------------------------------------------
 //---- Pantalla Recibos -------------------------------------------------------------
 //-----------------------------------------------------------------------------------
@@ -244,8 +265,19 @@ class ci_datos_liquidacion extends asociacion_ci
 				echo "$form_ml_conceptos_recibo.ocultar();";
 			}else{
 				echo "$form_ml_conceptos_recibo.mostrar();";
-			}	
+			}			
 		}
+
+		//pongo los select desabilitados con ancho 100%
+		echo "
+		$('select').each(function(){
+			var attr = $(this).attr('disabled');
+		
+			if (typeof attr !== typeof undefined && attr !== false) {	
+				$(this).css('width','100%');
+			}
+		});
+			";	
 		
 		
 	}

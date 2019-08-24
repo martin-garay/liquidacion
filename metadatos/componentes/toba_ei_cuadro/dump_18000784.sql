@@ -283,7 +283,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'asociacion', --objeto_cuadro_proyecto
 	'18000784', --objeto_cuadro
 	'18001140', --objeto_cuadro_col
-	'valor', --clave
+	'valor_fijo', --clave
 	'4', --orden
 	'Valor Fijo', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
