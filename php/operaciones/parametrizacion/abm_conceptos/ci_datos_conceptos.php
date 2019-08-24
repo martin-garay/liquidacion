@@ -52,6 +52,11 @@ class ci_datos_conceptos extends asociacion_ci
 	{
 		$this->tabla('concepto')->set($datos);		
 	}
+	//para cargar la lista de acumuladores
+	function get_lista_acumuladores(){
+		$sql = "SELECT *, ' '||nombre||' ' as codigo, nombre||' - '||descripcion as descripcion FROM acumuladores ORDER BY nombre";
+		return toba::db()->consultar($sql);
+	}
 
 	//para cargar la lista de palabras reservadas
 	function get_lista_reservadas(){

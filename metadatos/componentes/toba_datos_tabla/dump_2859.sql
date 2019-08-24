@@ -167,6 +167,20 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'1', --externa
 	NULL  --tabla
 );
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'1604', --col_id
+	'remunerativo', --columna
+	'L', --tipo
+	'0', --pk
+	NULL, --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'1', --externa
+	NULL  --tabla
+);
 --- FIN Grupo de desarrollo 0
 
 --- INICIO Grupo de desarrollo 18
@@ -253,6 +267,13 @@ INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_i
 	'2859', --objeto
 	'17', --externa_id
 	'1546', --col_id
+	'1'  --es_resultado
+);
+INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_id, col_id, es_resultado) VALUES (
+	'asociacion', --objeto_proyecto
+	'2859', --objeto
+	'17', --externa_id
+	'1604', --col_id
 	'1'  --es_resultado
 );
 INSERT INTO apex_objeto_db_registros_ext_col (objeto_proyecto, objeto, externa_id, col_id, es_resultado) VALUES (

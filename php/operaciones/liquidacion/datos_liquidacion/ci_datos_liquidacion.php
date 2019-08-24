@@ -106,7 +106,8 @@ class ci_datos_liquidacion extends asociacion_ci
 						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para que valla acumulando en las variables que corresponda.
 						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
 											
-						$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula'], $concepto['id_tipo_concepto'], $concepto['totaliza']);
+						//$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula'], $concepto['id_tipo_concepto'], $concepto['totaliza']);
+						$concepto['importe'] = $liquidador->calcular_concepto($concepto);
 						$this->tabla('recibos_conceptos')->set($concepto);					
 					}else{
 
@@ -117,6 +118,10 @@ class ci_datos_liquidacion extends asociacion_ci
 					}
 					Logger::info($concepto['codigo'].'='.$concepto['importe']);
 				}
+				//Guardo los acumulares totalizados
+				$acumuladores = $liquidador->get_acumuladores_totalizados();
+				$this->tabla('recibos_acumuladores')->procesar_filas($acumuladores);
+				
 				Logger::separador('Fin recibo persona '.$recibo['id_persona']);
 			}
 			$this->tabla('liquidacion')->set_columna_valor('id_estado',2);	//paso a liquidada

@@ -33,7 +33,7 @@ class Evaluator {
 		$value = $str;
 		return true;
 	}
-	private function getVariable(string $name): float {
+	protected function getVariable(string $name): float {
 		$value = $this->variables[$name] ?? null;
 		if (!isset($value) && isset($this->onVariable)) {
 			call_user_func_array($this->onVariable, [$name, &$value]);
