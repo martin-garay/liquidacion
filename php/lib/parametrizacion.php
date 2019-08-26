@@ -5,7 +5,7 @@ class parametrizacion extends comunes
 {
 	function get_anios(){
 		for ($i=0; $i < 20; $i++) { 
-			$datos[$i]['anio'] = $i+2018;
+			$datos[$i]['anio'] = $i+2019;
 		}
 		return $datos;
 	}
@@ -25,10 +25,10 @@ class parametrizacion extends comunes
 		return $datos;
 	}
 	function get_mes_actual(){
-
+		return date('n') - 1;
 	}
 	function get_anio_actual(){
-		
+		return date("Y");
 	}	
 	function get_perfiles($where=null, $order_by=null){
 		return $this->get_generico('perfiles',$where,$order_by);

@@ -66,7 +66,7 @@ class ci_datos_conceptos extends asociacion_ci
 
 	//para cargar la lista de conceptos
 	function get_lista_conceptos(){
-		$sql = "SELECT ' c'||codigo||' ' as codigo,codigo||' - '||descripcion as descripcion FROM conceptos ORDER BY codigo asc";
+		$sql = "SELECT ' c'||codigo||' ' as codigo,codigo||' - '||descripcion as descripcion FROM conceptos ORDER BY codigo::int asc";
 		return toba::db()->consultar($sql);
 	}
 
