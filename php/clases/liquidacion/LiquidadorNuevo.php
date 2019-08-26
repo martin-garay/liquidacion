@@ -45,8 +45,8 @@ class LiquidadorNuevo extends Evaluator
 	function actualizar_acumuladores($concepto, $resultado){
 		//$acumuladores_totalizados
 		foreach ($this->acumuladores as $key => $acumulador) {
-			if($acumulador['id_tipo_concepto'] == $concepto['id_tipo_concepto']){
-				if($acumulador['remunerativo'] == $concepto['remunerativo']){	//si tienen el mismo valor
+			if( ($acumulador['id_tipo_concepto'] == $concepto['id_tipo_concepto']) && $concepto['totaliza'] ){
+				if( !($acumulador['remunerativo'] xor $concepto['remunerativo']) ){	//si tienen el mismo valor
 					$this->incrementar_variable($acumulador['nombre'], $resultado);
 				}
 			}

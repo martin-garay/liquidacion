@@ -6,7 +6,7 @@ INSERT INTO apex_proyecto (proyecto, descripcion, descripcion_corta, estilo, con
 	'asociacion', --proyecto
 	'ASOCIACION', --descripcion
 	'Asociacion', --descripcion_corta
-	'v2_azul', --estilo
+	'asociacion', --estilo
 	'1', --con_frames
 	NULL, --frames_clase
 	NULL, --frames_archivo
