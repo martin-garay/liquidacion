@@ -253,8 +253,10 @@ class ci_datos_liquidacion extends asociacion_ci
 
 	function conf__form_ml_conceptos_recibo(asociacion_ei_formulario_ml $form_ml)
 	{
-		if( $this->tabla('recibos')->hay_cursor() )
-			return $this->tabla('recibos_conceptos')->get_filas();
+		if( $this->tabla('recibos')->hay_cursor() ){
+			$datos = $this->tabla('recibos_conceptos')->get_filas();
+			return $this->ordenar_conceptos($datos);
+		}
 	}
 
 	function evt__form_ml_conceptos_recibo__modificacion($datos)

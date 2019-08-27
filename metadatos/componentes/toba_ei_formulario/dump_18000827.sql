@@ -61,7 +61,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase_proyecto
 	NULL, --clase
 	NULL, --auto_reset
-	'280px', --ancho
+	'100%', --ancho
 	'0px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
@@ -164,7 +164,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --selec_cant_maxima
 	'0', --selec_utilidades
 	'10', --selec_tamano
-	'270px', --selec_ancho
+	'290px', --selec_ancho
 	'0', --selec_serializar
 	NULL, --selec_cant_columnas
 	NULL, --upload_extensiones

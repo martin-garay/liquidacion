@@ -3,6 +3,8 @@
 class LiquidadorNuevo extends Evaluator
 {
 	protected $id_liquidacion;
+	protected $periodo;
+	protected $id_persona;							//id del empleado al que se le esta liquidando
 	protected $variables_liquidacion = array();		//variables a nivel liquidacion, se usan para todos los empleados
 	protected $variables_empleado = array();		//se calculan individualmente por cada empleado.
 	protected $acumuladores = array();				//carga los acumuladores con los valores iniciales
@@ -11,10 +13,12 @@ class LiquidadorNuevo extends Evaluator
 	function __construct($id_liquidacion)
 	{
 		$this->id_liquidacion = $id_liquidacion;
-		$this->functions = FunctionesLiquidador::get_definicion_funciones();	//cargar funciones del liquidador
+		$this->periodo = $this->get_periodo();									//lo cargo para no hacer la consulta varias veces
+		$this->functions = FunctionesLiquidador::get_definicion_funciones($this);	//cargar funciones del liquidador
 		$this->crear_variables_liquidacion($id_liquidacion);
 		$this->crear_acumuladores();
 	}
+
 
 	//limpia las variables del liquidador
 	function nuevo_recibo($id_persona){
@@ -129,4 +133,22 @@ class LiquidadorNuevo extends Evaluator
 		return $acumuladores;
 	}
 
+	/* VER SI LOS VALORES DE LAS TABLAS LOS CARGO AL INICIO PARA NO HACER CONSULTAS EN CADA RECIBO */
+
+	//devuelve el valor de la tabla dinamica de deducciones
+	function get_valor_tabla($id_tabla){
+		return toba::consulta_php('liquidacion')->get_valor_tabla($id_tabla, $this->periodo);
+	}
+	//devuelve el tope de la tabla dinamica de deducciones
+	function get_tope_tabla($id_tabla){
+		return toba::consulta_php('liquidacion')->get_tope_tabla($id_tabla, $this->periodo);	
+	}	
+	function get_periodo(){
+		return toba::consulta_php('liquidacion')->get_periodo_liquidacion($this->id_liquidacion);
+	}
+
+	/* VER SI LO PUEDO CARGAN CON LAS RESERVADA. AUNQUE NO SERIA DINAMICO!!! */
+	function get_deduccion_informada($id_tabla){
+		return toba::consulta_php('liquidacion')->get_deduccion_informada($id_tabla, $this->periodo, $this->id_persona);
+	}
 }

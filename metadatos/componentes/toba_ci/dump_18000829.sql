@@ -49,7 +49,7 @@ INSERT INTO apex_objeto_mt_me (objeto_mt_me_proyecto, objeto_mt_me, ev_procesar_
 	'18000829', --objeto_mt_me
 	NULL, --ev_procesar_etiq
 	NULL, --ev_cancelar_etiq
-	'1000px', --ancho
+	'100%', --ancho
 	NULL, --alto
 	NULL, --posicion_botonera
 	'tab_h', --tipo_navegacion
@@ -150,6 +150,24 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL, --inicializar
 	NULL  --orden
 );
+--- FIN Grupo de desarrollo 18
+
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1777', --dep_id
+	'18000829', --objeto_consumidor
+	'2916', --objeto_proveedor
+	'form_tablas', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+--- FIN Grupo de desarrollo 0
+
+--- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
 	'18000866', --dep_id
@@ -188,11 +206,9 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	<tbody>
 		<tr>
 			<td style="vertical-align: top;">
-				[dep id=form_reservadas][dep id=form_funciones]</td>
+				[dep id=form_reservadas] [dep id=form_funciones] [dep id=form_conceptos] [dep id=form_acumuladores] [dep id=form_tablas]</td>
 			<td style="vertical-align: top;box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.28);">
 				[dep id=form]</td>
-			<td style="vertical-align: top;">
-				[dep id=form_conceptos][dep id=form_acumuladores]</td>
 		</tr>
 	</tbody>
 </table>', --template
@@ -231,6 +247,13 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'18000829', --objeto_ci
 	'4', --orden
 	'1771'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'asociacion', --proyecto
+	'18000274', --pantalla
+	'18000829', --objeto_ci
+	'5', --orden
+	'1777'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto

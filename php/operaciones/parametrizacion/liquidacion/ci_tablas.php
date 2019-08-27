@@ -1,7 +1,14 @@
 <?php
 class ci_tablas extends ci_generico_dos_pantallas_relacion
 {	
+	/*
 	protected $s__form;
+
+	function conf(){
+		if($this->get_id_pantalla()=='pant_edicion'){
+			$this->relacion()->dump_contenido();
+		}
+	}
 
 	function conf__form(asociacion_ei_formulario $form)
 	{		
@@ -52,6 +59,16 @@ class ci_tablas extends ci_generico_dos_pantallas_relacion
 		//$this->tabla_detalle()->resetear();
 		$this->tabla_detalle()->procesar_filas($datos);
 	}
+	function evt__form_ml__cargar_anio($datos)
+	{
+		foreach ($datos as $key => $fila) {
+			$datos[$key]['anio'] = $this->s__form['anio'];
+			$datos[$key]['periodo'] = $datos[$key]['anio'] . '-' .$datos[$key]['mes'] . '-01';
+		}
+		//$this->tabla_detalle()->resetear();
+		$this->tabla_detalle()->procesar_filas($datos);
+	}
+	
 
 	function extender_objeto_js(){
 		if($this->get_id_pantalla()=='pant_edicion'){
@@ -66,6 +83,24 @@ class ci_tablas extends ci_generico_dos_pantallas_relacion
 			";	
 		}		
 	}
+	*/	
+	function conf__form_ml(asociacion_ei_formulario_ml $form_ml)
+	{
+		//si es edicion traigo los datos grabados
+		if( $this->tabla_cabecera()->esta_cargada() )
+			return $this->tabla_detalle()->get_filas();		
+		else
+			return toba::consulta_php('liquidacion')->get_detalle_nueva_tabla_deducciones();		
+	}
+
+	function evt__form_ml__modificacion($datos)
+	{
+		foreach ($datos as $key => $fila) {
+			$datos[$key]['periodo'] = $datos[$key]['anio'] . '-' .$datos[$key]['mes'] . '-01';
+		}		
+		$this->tabla_detalle()->procesar_filas($datos);
+	}
+
 }
 
 ?>

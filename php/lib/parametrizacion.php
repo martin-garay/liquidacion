@@ -86,4 +86,7 @@ class parametrizacion extends comunes
 	function get_acumuladores($where=null, $order_by=null){
 		return $this->get_generico('v_acumuladores',$where,$order_by);
 	}
+	function get_tablas($where=null, $order_by=null){
+		return $this->get_generico('tabla',$where,$order_by);
+	}
 }

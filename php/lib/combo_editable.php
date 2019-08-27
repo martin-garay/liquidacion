@@ -26,7 +26,8 @@ class combo_editable extends comunes
 	}	
 	function get_conceptos($filtro){
         $sql = "SELECT id, codigo||' '||descripcion||' ('||tipo_concepto||')' as descripcion 
-                FROM v_conceptos WHERE codigo||' '||descripcion||' ('||tipo_concepto||')' ILIKE '%$filtro%'";
+                FROM v_conceptos WHERE codigo||' '||descripcion||' ('||tipo_concepto||')' ILIKE '%$filtro%'
+                ORDER BY codigo::int";
         return toba::db()->consultar($sql);
 	}	
 	function get_conceptos_descripcion($id_concepto){

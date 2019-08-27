@@ -70,6 +70,22 @@ class ci_datos_conceptos extends asociacion_ci
 		return toba::db()->consultar($sql);
 	}
 
+	//para cargar la lista de tablas
+	function get_lista_tablas(){
+		$lista = array();
+		$sql = "SELECT * FROM tabla ORDER BY descripcion";
+		$tablas = toba::db()->consultar($sql);		
+		foreach ($tablas as $key => $tabla) {
+			$codigo = 'tabla("' . $tabla['clave'] . '")';			
+			$lista[] = array('codigo'=>$codigo, 'descripcion'=>$tabla['descripcion'] . '. Valor Tabla');
+			$codigo = 'tope("' . $tabla['clave'] . '")';
+			$lista[] = array('codigo'=>$codigo, 'descripcion'=>$tabla['descripcion'] . '. Tope Tabla');
+			$codigo = 'informado("' . $tabla['clave'] . '")';
+			$lista[] = array('codigo'=>$codigo, 'descripcion'=>$tabla['descripcion'] . '. Valor Informado');
+		}		
+		return $lista;
+	}
+
 	//para cargar la lista de funciones definidas en Matex
 	function get_lista_funciones(){
 		$funciones = [		

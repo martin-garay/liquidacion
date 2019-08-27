@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3602]--  Actualización Planilla Persona 
+--[3602]--  Actualización Sueldos Básicos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Actualización Planilla Persona', --nombre
+	'Actualización Sueldos Básicos', --nombre
 	NULL, --descripcion
 	'16', --punto_montaje
 	NULL, --actividad_accion

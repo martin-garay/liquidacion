@@ -22,7 +22,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --objeto_categoria
 	'datosABM Conceptos - form_acumuladores', --nombre
 	'Acumuladores', --titulo
-	'0', --colapsable
+	'1', --colapsable
 	NULL, --descripcion
 	'asociacion', --fuente_datos_proyecto
 	'asociacion', --fuente_datos
@@ -61,7 +61,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 	NULL, --clase_proyecto
 	NULL, --clase
 	NULL, --auto_reset
-	'300px', --ancho
+	'100%', --ancho
 	'0px', --ancho_etiqueta
 	'0', --expandir_descripcion
 	NULL, --campo_bl
@@ -163,7 +163,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	NULL, --selec_cant_minima
 	NULL, --selec_cant_maxima
 	'0', --selec_utilidades
-	NULL, --selec_tamano
+	'10', --selec_tamano
 	'290px', --selec_ancho
 	'0', --selec_serializar
 	NULL, --selec_cant_columnas
