@@ -18,6 +18,9 @@ class form_funciones_js extends asociacion_ei_formulario
 
 			    $('#$id_ef_formula').val(textBefore + reservada + textAfter);
 
+			    //pongo el foco en la formula
+			    $('#$id_ef_formula').focus();
+
 		});
 		
 
@@ -27,9 +30,7 @@ class form_funciones_js extends asociacion_ei_formulario
 		/*
 		$('img[id^=\"colapsar_boton_\"]').on('click',function(){
 		//$('.ei-form-barra-sup').on('click',function(){
-			
-			
-
+						
 			var id_boton_colapsar = $(this).attr('id');
 			//console.log(id_boton_colapsar);
 			//console.log('colapsar_boton_'+'$id_form');

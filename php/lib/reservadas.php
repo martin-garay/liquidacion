@@ -77,13 +77,17 @@ class reservadas extends comunes
 		$calculadas = array();
 		foreach ($reservadas as $key => $value) {			
 			$query = str_replace("{ID_LIQUIDACION}", $id_liquidacion, $value['query']);
-			$datos = toba::db()->consultar($query);			
-			if(isset($datos[0]['resultado'])){				
-				$calculadas[ $value['nombre'] ] = $datos[0]['resultado'];				
-			}else{
-				$err = '<br>No se pudo crear '.$value['nombre'];
-				throw new Exception("Error al cargar palabras reservadas".$err, 1);				
-			}			
+			try {
+				$datos = toba::db()->consultar($query);			
+				if(isset($datos[0]['resultado'])){				
+					$calculadas[ $value['nombre'] ] = $datos[0]['resultado'];				
+				}else{
+					$err = '<br>No se pudo crear '.$value['nombre'];
+					throw new Exception("Error al cargar palabras reservadas".$err, 1);				
+				}	
+			} catch (toba_error_db $e) {
+				toba::notificacion()->error('error al genenerar reservada '.$value['nombre']);
+			}					
 		}	
 
 		return $calculadas;       	

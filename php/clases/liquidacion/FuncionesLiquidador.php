@@ -25,6 +25,7 @@ class FunctionesLiquidador
 			'tabla'			=>	['ref' => [$liquidador, 'get_valor_tabla']			, 'arc' => null],		//llama al metodo de la instancia
 			'tope'			=>	['ref' => [$liquidador, 'get_valor_toppe']			, 'arc' => null],		//llama al metodo de la instancia
 			'informado'		=>	['ref' => [$liquidador,'get_deduccion_informada']	, 'arc' => null],		//llama al metodo de la instancia
+			'ganancias'		=>	['ref' => [$liquidador,'ganancias']					, 'arc' => null],		//llama al metodo de la instancia
 		];
 		return $funciones;
 	}

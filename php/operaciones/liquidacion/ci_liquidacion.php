@@ -33,16 +33,20 @@ class ci_liquidacion extends asociacion_ci
 	function evt__procesar()
 	{
 		$this->ci_hijo()->crear();
+		
 		$this->set_pantalla('pant_inicial');	
 	}
 	function evt__cancelar()
 	{
 		$this->ci_hijo()->resetear();
+		
 		$this->set_pantalla('pant_inicial');
+
 	}
 	function evt__nueva()
 	{
 		$this->ci_hijo()->relacion()->resetear();
+		$this->ci_hijo()->disparar_limpieza_memoria();
 		$this->set_pantalla('pant_edicion');
 	}
 
@@ -84,7 +88,19 @@ class ci_liquidacion extends asociacion_ci
 	{
 		$this->ci_hijo()->borrar($seleccion);		
 	}
+	function evt__cuadro__liquidar($seleccion)
+	{
+		$this->relacion()->cargar($seleccion);
+		$this->ci_hijo()->liquidar();
+	}
 	function conf_evt__cuadro__borrar(toba_evento_usuario $evento, $fila)
+	{
+		$datos = $this->dep('cuadro')->get_datos();
+        if( $datos[$fila]['id_estado']!==1 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
+            $evento->anular();
+        }
+	}
+	function conf_evt__cuadro__liquidar(toba_evento_usuario $evento, $fila)
 	{
 		$datos = $this->dep('cuadro')->get_datos();
         if( $datos[$fila]['id_estado']!==1 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION

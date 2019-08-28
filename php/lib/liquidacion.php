@@ -25,7 +25,7 @@ class liquidacion extends comunes
 		return $this->get_generico('tabla_ganancias',$where,$order_by);	
 	}
 	function get_tabla_ganancias_detalle($where=null, $order_by=null){
-		return $this->get_generico('tabla_ganancias_detalle',$where,$order_by);	
+		return $this->get_generico('v_tabla_ganancias_detalle',$where,$order_by);	
 	}
 	function get_tabla_detalle($where=null, $order_by=null){
 		return $this->get_generico('v_tabla_detalle',$where,$order_by);	
@@ -52,7 +52,12 @@ class liquidacion extends comunes
 	//Trae el valor que informo el empleado en el periodo. Sino informo nada devuelve 0
 	function get_deduccion_informada($id_tabla, $periodo, $id_persona){
 		$sql = "SELECT valor FROM v_tabla_personas WHERE clave='$id_tabla' and periodo='$periodo' and id_persona='$id_persona'";
-		return (isset($datos[0]['periodo'])) ? $datos[0]['periodo'] : 0;			 
+		try {
+			$datos = toba::db()->consultar($sql);
+		} catch (toba_error_db $e) {
+			throw new toba_error_db("Error al traer la deduccion informada por el empleado", 1);			
+		}
+		return (isset($datos[0]['valor'])) ? $datos[0]['valor'] : 0;			 
 	}
 	function get_detalle_nueva_tabla_deducciones(){
 		$anio = toba::consulta_php('parametrizacion')->get_anio_actual();
@@ -61,5 +66,13 @@ class liquidacion extends comunes
 			$filas[] = array('mes'=>$mes, 'anio'=>$anio, 'apex_ei_analisis_fila'=>'A');
 		}
 		return $filas;
+	}
+
+	//function get_tabla_ganancias_detalle($where=null, $order_by=null){
+	//	return $this->get_generico('v_tabla_ganancias_detalle',$where,$order_by);	
+	//}
+	//Devuelve el valor de la tabla de ganancias segun el rango que caiga
+	function get_valor_tabla_ganancias($valor, $periodo, $id_persona){
+		
 	}
 }

@@ -8,15 +8,17 @@ class LiquidadorNuevo extends Evaluator
 	protected $variables_liquidacion = array();		//variables a nivel liquidacion, se usan para todos los empleados
 	protected $variables_empleado = array();		//se calculan individualmente por cada empleado.
 	protected $acumuladores = array();				//carga los acumuladores con los valores iniciales
+
 	//protected $acumuladores_totalizados = array();	//totaliza los acumuladores de un recibo
 
 	function __construct($id_liquidacion)
 	{
 		$this->id_liquidacion = $id_liquidacion;
-		$this->periodo = $this->get_periodo();									//lo cargo para no hacer la consulta varias veces
+		$this->periodo = $this->get_periodo();										//lo cargo para no hacer la consulta varias veces
 		$this->functions = FunctionesLiquidador::get_definicion_funciones($this);	//cargar funciones del liquidador
 		$this->crear_variables_liquidacion($id_liquidacion);
 		$this->crear_acumuladores();
+		$this->cargar_tabla_ganancias();											//carga la tabla de ganancias del periodo					
 	}
 
 
@@ -24,7 +26,8 @@ class LiquidadorNuevo extends Evaluator
 	function nuevo_recibo($id_persona){
 		$this->cargar_variables_liquidacion();				//tambien inicializa los acumuladores
 		$this->cargar_acumuladores();						//se inicializan con su valor inicial
-		$this->cargar_variables_empleado($id_persona);
+		$this->cargar_variables_empleado($id_persona);		
+		$this->id_persona = $id_persona;
 	}
 
 	//calcula y guarda el concepto como una nueva variable en el liquidador
@@ -150,5 +153,33 @@ class LiquidadorNuevo extends Evaluator
 	/* VER SI LO PUEDO CARGAN CON LAS RESERVADA. AUNQUE NO SERIA DINAMICO!!! */
 	function get_deduccion_informada($id_tabla){
 		return toba::consulta_php('liquidacion')->get_deduccion_informada($id_tabla, $this->periodo, $this->id_persona);
+	}
+
+	function cargar_tabla_ganancias(){
+		$where = "periodo='{$this->periodo}'";
+		$this->tabla_ganancias = toba::consulta_php('liquidacion')->get_tabla_ganancias_detalle($where,"desde asc");
+	}
+	/* Para evitar consultas traigo la tabla del periodo y realizo los calculos en PHP */
+	function ganancias($ganancia_neta_imponible){
+		if($ganancia_neta_imponible>0){
+			$rango=array();
+			Logger::info( "Calculando Ganancias con Ganancia neta imponible = $ganancia_neta_imponible");
+			$minimo_imponible = $this->tabla_ganancias[0]['desde'];
+			$valor = $ganancia_neta_imponible - $minimo_imponible;
+
+			foreach ($this->tabla_ganancias as $key => $value) {
+				if( $valor >= $value['desde'] && $valor <= $value['hasta']){
+					$rango = $value;
+					Logger::info( 'Rango Ganancias =' . ($key+1) );
+					break;
+				}
+			}				
+			
+			//calculo con el rango correspondiente		
+			return (count($rango)>0) ?  $rango['fijo'] + ( ($valor-$rango['desde']) * $rango['porcentaje'] )  :  0;	
+		}else{
+			return 0;
+		}
+					
 	}
 }

@@ -53,6 +53,12 @@ class ci_datos_liquidacion extends asociacion_ci
 				throw new toba_error_usuario("No se seleccionaron personas o conceptos");				
 			}
 		} catch (toba_error_db $e) {
+			// if($e->get_sqlstate()=="db_23505"){
+			// 	/* Clave Duplicada */
+			// 	$mensaje ="Ya existe una liquidacion en el periodo";  //NOOOO puede haber varias liquidaciones
+			// }else{
+
+			// }
 			toba::notificacion()->error('Error al grabar <br>'.$e->get_mensaje_motor());
 		}
 	}
@@ -193,7 +199,7 @@ class ci_datos_liquidacion extends asociacion_ci
 				$id_tipo_liquidacion = $this->tabla('liquidacion')->get_columna('id_tipo_liquidacion');
 				if( isset($id_tipo_liquidacion) ){
 					$where = "id_tipo_liquidacion=$id_tipo_liquidacion";
-					return toba::consulta_php('liquidacion')->get_conceptos_nueva_liquidacion($where,"codigo");
+					return toba::consulta_php('liquidacion')->get_conceptos_nueva_liquidacion($where,"codigo::int");
 				}
 			}			
 		}
