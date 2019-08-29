@@ -1,46 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo_establecimiento" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo_establecimiento" language="groovy" pageWidth="232" pageHeight="802" columnWidth="232" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6d58f73f-ccc9-4def-9559-3ce9e08c3449">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<queryString language="SQL">
-		<![CDATA[SELECT * FROM liquidaciones]]>
+	<parameter name="id_recibo" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select r.*,
+    /*liquidacion*/
+    l.descripcion as descripcion_liquidacion,l.periodo_depositado,mes,anio,
+    cuit,actividad,
+
+    lugar_pago ||', '||to_char(fecha_pago , 'DD/MM/YYYY') as lugar_fechapago,
+    /*establecimiento*/
+    e.descripcion as establecimiento, e.direccion as direccion_establecimiento, e.localidad as localidad_establecimiento,
+    e.cp as cp_establecimiento, e.provincia as provincia_establecimiento,e.direccion||' '||e.cp||' - '||e.localidad as direccion_descripcion_establecimiento,
+    /*persona*/
+    p.legajo,p.apellido,p.nombre,p.cuil,p.sueldo_basico,p.domicilio,p.cp,p.localidad,p.nro_documento,p.fecha_ingreso,p.fecha_egreso,categoria,obra_social,tipo_contrato
+from recibos r
+join liquidaciones l ON l.id=r.id_liquidacion
+join v_establecimientos e ON e.id=l.id_establecimiento
+join v_personas p ON p.id=r.id_persona
+WHERE r.id=$P{id_recibo}]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer"/>
-	<field name="descripcion" class="java.lang.String"/>
-	<field name="periodo" class="java.sql.Date"/>
-	<field name="fecha_desde" class="java.sql.Timestamp"/>
-	<field name="fecha_hasta" class="java.sql.Timestamp"/>
-	<field name="id_tipo_liquidacion" class="java.lang.Integer"/>
-	<field name="id_establecimiento" class="java.lang.Integer"/>
-	<field name="id_banco" class="java.lang.Integer"/>
-	<field name="fecha_pago" class="java.sql.Date"/>
+	<field name="nro_recibo" class="java.lang.Integer"/>
+	<field name="id_persona" class="java.lang.Integer"/>
+	<field name="total_remunerativos" class="java.math.BigDecimal"/>
+	<field name="total_no_remunerativos" class="java.math.BigDecimal"/>
+	<field name="total_deducciones" class="java.math.BigDecimal"/>
+	<field name="total_neto" class="java.math.BigDecimal"/>
+	<field name="total_basico" class="java.math.BigDecimal"/>
+	<field name="id_liquidacion" class="java.lang.Integer"/>
+	<field name="descripcion_liquidacion" class="java.lang.String"/>
 	<field name="periodo_depositado" class="java.lang.String"/>
-	<field name="lugar_pago" class="java.lang.String"/>
-	<field name="fecha_deposito" class="java.sql.Date"/>
-	<field name="id_estado" class="java.lang.Integer"/>
+	<field name="mes" class="java.lang.Integer"/>
+	<field name="anio" class="java.lang.Integer"/>
+	<field name="cuit" class="java.lang.String"/>
+	<field name="actividad" class="java.lang.String"/>
+	<field name="lugar_fechapago" class="java.lang.String"/>
+	<field name="establecimiento" class="java.lang.String"/>
+	<field name="direccion_establecimiento" class="java.lang.String"/>
+	<field name="localidad_establecimiento" class="java.lang.String"/>
+	<field name="cp_establecimiento" class="java.lang.Integer"/>
+	<field name="provincia_establecimiento" class="java.lang.String"/>
+	<field name="direccion_descripcion_establecimiento" class="java.lang.String"/>
+	<field name="legajo" class="java.lang.Integer"/>
+	<field name="apellido" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="cuil" class="java.lang.String"/>
+	<field name="sueldo_basico" class="java.math.BigDecimal"/>
+	<field name="domicilio" class="java.lang.String"/>
+	<field name="cp" class="java.lang.Integer"/>
+	<field name="localidad" class="java.lang.String"/>
+	<field name="nro_documento" class="java.lang.String"/>
+	<field name="fecha_ingreso" class="java.sql.Date"/>
+	<field name="fecha_egreso" class="java.sql.Date"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="obra_social" class="java.lang.String"/>
+	<field name="tipo_contrato" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch"/>
+		<band height="100" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="231" height="20" uuid="35989a99-f0ee-42fe-a51a-44943eecbc65"/>
+				<textElement>
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{establecimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="20" width="231" height="20" uuid="ccc689d8-63ed-4d23-82c5-5218d5697739"/>
+				<textFieldExpression><![CDATA[$F{direccion_descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="37" y="40" width="194" height="20" uuid="0603cb25-99c9-4df6-ae0c-d98d7ea067d5"/>
+				<textFieldExpression><![CDATA[$F{cuit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="37" height="20" uuid="8ac52203-018b-41b9-8b39-446c1b6e5ee5"/>
+				<text><![CDATA[CUIT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="55" height="20" uuid="2630f917-6677-4d0c-a098-21446892013d"/>
+				<text><![CDATA[Actividad:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="55" y="60" width="176" height="20" uuid="2763f7c9-d5ec-4291-915f-4ede622c66f3"/>
+				<textFieldExpression><![CDATA[$F{actividad}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="80" width="120" height="20" uuid="d1a0e32a-235e-4949-9039-e933c63f6740"/>
+				<text><![CDATA[PERIODO ABONADO:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="120" y="80" width="111" height="20" uuid="91096a01-2e70-4583-bbe4-87e9fe236adf"/>
+				<textFieldExpression><![CDATA[$F{periodo_depositado}]]></textFieldExpression>
+			</textField>
+		</band>
 	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
-	</pageHeader>
-	<columnHeader>
-		<band height="61" splitType="Stretch"/>
-	</columnHeader>
-	<detail>
-		<band height="125" splitType="Stretch"/>
-	</detail>
-	<columnFooter>
-		<band height="45" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="54" splitType="Stretch"/>
-	</pageFooter>
-	<summary>
-		<band height="42" splitType="Stretch"/>
-	</summary>
 </jasperReport>

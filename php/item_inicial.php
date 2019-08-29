@@ -6,5 +6,5 @@
 	//$liquidacion = new Liquidacion(16);
 	//$liquidacion->liquidar();
 	//$liquidacion->grabar();
-	echo toba::consulta_php('liquidacion')->get_valor_tabla('deducciones_especiales', '2019-01-01');
+	
 ?>

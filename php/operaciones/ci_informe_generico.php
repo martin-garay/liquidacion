@@ -32,9 +32,9 @@ class ci_informe_generico extends asociacion_ci
 	//-----------------------------------------------------------------------------------
 
 	function conf__cuadro(asociacion_ei_cuadro $cuadro)
-	{
-		$where = (isset($this->s__datos_filtro)) ? $this->dep('filtro')->get_sql_where() : '';
-		$tabla = ( null !== $this->get_parametro('c') ) ? $this->get_parametro('c')	: $this->get_parametro('a');	
+	{		
+		$where = (isset($this->s__datos_filtro)) ? $this->dep('filtro')->get_sql_where() : null;
+		$tabla = $this->get_parametro('a');
 		$datos = toba::consulta_php('comunes')->get_generico($tabla,$where,$this->get_parametro('b'));
 		$cuadro->set_datos($datos);
 	}	
