@@ -38,8 +38,7 @@ class ci_liquidacion extends asociacion_ci
 	}
 	function evt__cancelar()
 	{
-		$this->ci_hijo()->resetear();
-		
+		$this->ci_hijo()->resetear();		
 		$this->set_pantalla('pant_inicial');
 
 	}
@@ -81,7 +80,7 @@ class ci_liquidacion extends asociacion_ci
 	}
 	function evt__cuadro__seleccion($seleccion)
 	{
-		$this->relacion()->cargar($seleccion);
+		$this->relacion()->cargar($seleccion);		
 		$this->set_pantalla('pant_edicion');
 	}	
 	function evt__cuadro__borrar($seleccion)
@@ -107,6 +106,19 @@ class ci_liquidacion extends asociacion_ci
             $evento->anular();
         }
 	}
+
+	//-----------------------------------------------------------------------------------
+	//---- Configuraciones --------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	// function conf__pant_edicion(toba_ei_pantalla $pantalla)
+	// {
+	// 	$descripcion = $t
+	// 	$anio =  
+	// 	$mes = 
+	// 	$descripcion_liquidacion = $this->relacion()
+	// 	$pantalla->set_descripcion();
+	// }
 
 }
 ?>

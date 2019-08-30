@@ -120,7 +120,7 @@ INSERT INTO apex_objeto_cuadro (objeto_cuadro_proyecto, objeto_cuadro, titulo, s
 	'0', --scroll
 	NULL, --scroll_alto
 	't', --cc_modo
-	'0', --cc_modo_anidado_colap
+	'1', --cc_modo_anidado_colap
 	NULL, --cc_modo_anidado_totcol
 	NULL  --cc_modo_anidado_totcua
 );

@@ -10,16 +10,16 @@ class parametrizacion extends comunes
 		return $datos;
 	}
 	function get_meses(){		
-		$datos[0]['id'] = '01'; 	$datos[0]['descripcion'] = 'Enero';
-		$datos[1]['id'] = '02'; 	$datos[1]['descripcion'] = 'Febrero';
-		$datos[2]['id'] = '03'; 	$datos[2]['descripcion'] = 'Marzo';
-		$datos[3]['id'] = '04'; 	$datos[3]['descripcion'] = 'Abril';
-		$datos[4]['id'] = '05'; 	$datos[4]['descripcion'] = 'Mayo';
-		$datos[5]['id'] = '06'; 	$datos[5]['descripcion'] = 'Junio';
-		$datos[6]['id'] = '07'; 	$datos[6]['descripcion'] = 'Julio';
-		$datos[7]['id'] = '08'; 	$datos[7]['descripcion'] = 'Agosto';
-		$datos[8]['id'] = '09'; 	$datos[8]['descripcion'] = 'Septiembre';
-		$datos[9]['id'] = '10'; 	$datos[9]['descripcion'] = 'Octubre';
+		$datos[0]['id']  = '1'; 	$datos[0]['descripcion']  = 'Enero';
+		$datos[1]['id']  = '2'; 	$datos[1]['descripcion']  = 'Febrero';
+		$datos[2]['id']  = '3'; 	$datos[2]['descripcion']  = 'Marzo';
+		$datos[3]['id']  = '4'; 	$datos[3]['descripcion']  = 'Abril';
+		$datos[4]['id']  = '5'; 	$datos[4]['descripcion']  = 'Mayo';
+		$datos[5]['id']  = '6'; 	$datos[5]['descripcion']  = 'Junio';
+		$datos[6]['id']  = '7'; 	$datos[6]['descripcion']  = 'Julio';
+		$datos[7]['id']  = '8'; 	$datos[7]['descripcion']  = 'Agosto';
+		$datos[8]['id']  = '9'; 	$datos[8]['descripcion']  = 'Septiembre';
+		$datos[9]['id']  = '10'; 	$datos[9]['descripcion']  = 'Octubre';
 		$datos[10]['id'] = '11'; 	$datos[10]['descripcion'] = 'Noviembre';
 		$datos[11]['id'] = '12'; 	$datos[11]['descripcion'] = 'Diciembre';
 		return $datos;

@@ -196,8 +196,8 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	'Liquidacion', --etiqueta
 	NULL, --descripcion
 	'0', --obligatorio
-	'0', --inicial
-	'5', --orden
+	'1', --inicial
+	'2', --orden
 	NULL, --estado_defecto
 	'0', --opciones_es_multiple
 	'ef_combo_editable', --opciones_ef
@@ -255,7 +255,7 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	NULL, --descripcion
 	'0', --obligatorio
 	'1', --inicial
-	'2', --orden
+	'3', --orden
 	NULL, --estado_defecto
 	'0', --opciones_es_multiple
 	NULL, --opciones_ef
@@ -313,7 +313,7 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	NULL, --descripcion
 	'0', --obligatorio
 	'1', --inicial
-	'3', --orden
+	'4', --orden
 	NULL, --estado_defecto
 	'0', --opciones_es_multiple
 	NULL, --opciones_ef
@@ -370,8 +370,8 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	'Visibles en Recibo', --etiqueta
 	NULL, --descripcion
 	'0', --obligatorio
-	'1', --inicial
-	'4', --orden
+	'0', --inicial
+	'5', --orden
 	NULL, --estado_defecto
 	'0', --opciones_es_multiple
 	NULL, --opciones_ef

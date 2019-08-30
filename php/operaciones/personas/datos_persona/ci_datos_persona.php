@@ -8,6 +8,14 @@ class ci_datos_persona extends asociacion_ci
 	function tabla($nombre){
 		return $this->relacion()->tabla($nombre);
 	}
+	function conf(){
+		if( $this->relacion()->esta_cargada() ){
+			$descripcion = 'Legajo: ' . $this->tabla('personas')->get_columna('legajo') . ' - ';
+			$descripcion .= $this->tabla('personas')->get_columna('nro_documento') . ' ' .
+							$this->tabla('personas')->get_columna('apellido').' '. $this->tabla('personas')->get_columna('nombre'); 
+			$this->set_titulo($descripcion);	
+		}		
+	}
 	//-----------------------------------------------------------------------------------
 	//---- form_persona ------------------------------------------------------------------
 	//-----------------------------------------------------------------------------------

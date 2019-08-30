@@ -30,7 +30,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --solicitud_obj_obs_tipo
 	NULL, --solicitud_obj_observacion
 	'v_recibos_conceptos_detallado', --parametro_a
-	'periodo,legajo,codigo::int', --parametro_b
+	'periodo,nro_recibo,codigo::int', --parametro_b
 	NULL, --parametro_c
 	NULL, --parametro_d
 	NULL, --parametro_e

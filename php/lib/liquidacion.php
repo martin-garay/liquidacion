@@ -75,4 +75,9 @@ class liquidacion extends comunes
 	function get_valor_tabla_ganancias($valor, $periodo, $id_persona){
 		
 	}
+	function get_ultimo_nro_recibo(){
+		$sql = "SELECT COALESCE(max(nro_recibo),1) as nro_recibo FROM recibos";
+		$datos = toba::db()->consultar($sql);
+		return (isset($datos[0]['nro_recibo'])) ? $datos[0]['nro_recibo'] : 1;
+	}
 }

@@ -215,8 +215,7 @@ INSERT INTO apex_objeto_ut_formulario (objeto_ut_formulario_proyecto, objeto_ut_
 				[ef id=piso]</td>
 		</tr>
 	</tbody>
-</table>
-<p>&nbsp;</p>', --template
+</table>', --template
 	NULL  --template_impresion
 );
 

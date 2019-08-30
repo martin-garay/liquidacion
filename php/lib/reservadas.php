@@ -83,7 +83,7 @@ class reservadas extends comunes
 					$calculadas[ $value['nombre'] ] = $datos[0]['resultado'];				
 				}else{
 					$err = '<br>No se pudo crear '.$value['nombre'];
-					throw new Exception("Error al cargar palabras reservadas".$err, 1);				
+					throw new toba_error_db("Error al cargar palabras reservadas".$err, 1);				
 				}	
 			} catch (toba_error_db $e) {
 				toba::notificacion()->error('error al genenerar reservada '.$value['nombre']);

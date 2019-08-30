@@ -2,7 +2,7 @@
 class ci_datos_liquidacion extends asociacion_ci
 {
 	protected $desactivar_edicion = false;
-
+	
 	function relacion(){
 		return $this->dep('relacion');
 	}
@@ -24,7 +24,7 @@ class ci_datos_liquidacion extends asociacion_ci
 			return $this->tabla('liquidacion')->get_columna('id_estado');
 		else
 			return null;
-	}
+	}	
 	function cantidad_empleados(){
 		return $this->tabla('recibos')->get_cantidad_filas();
 	}
@@ -44,13 +44,16 @@ class ci_datos_liquidacion extends asociacion_ci
 		}
 	}
 	function guardar(){
+		$this->relacion()->persistidor()->desactivar_transaccion(true);
+		toba::db()->abrir_transaccion();
 		try {
 			if( $this->cantidad_empleados()>0 && $this->cantidad_conceptos()>0 ){
 				$this->relacion()->sincronizar();
+				toba::db()->cerrar_transaccion();
 				toba::notificacion()->info('Se grabo correctamente');
 			}
 			else{								
-				throw new toba_error_usuario("No se seleccionaron personas o conceptos");				
+				throw new toba_error_usuario("No se seleccionaron personas o conceptos");
 			}
 		} catch (toba_error_db $e) {
 			// if($e->get_sqlstate()=="db_23505"){
@@ -60,6 +63,7 @@ class ci_datos_liquidacion extends asociacion_ci
 
 			// }
 			toba::notificacion()->error('Error al grabar <br>'.$e->get_mensaje_motor());
+			toba::db()->abortar_transaccion();
 		}
 	}
 	function borrar($seleccion){        
@@ -150,7 +154,13 @@ class ci_datos_liquidacion extends asociacion_ci
 
 	function conf(){
 		if( !$this->relacion()->esta_cargada() ){
-			$this->pantalla()->tab('pant_recibos')->ocultar();
+			$this->pantalla()->tab('pant_recibos')->ocultar();			
+		}else{
+			$descripcion = $this->tabla('liquidacion')->get_columna('descripcion');
+			$descripcion .= ' - Periodo: ' . $this->tabla('liquidacion')->get_columna('mes') . ' ' .
+							$this->tabla('liquidacion')->get_columna('anio'); 
+			$this->set_titulo($descripcion);
+			//echo $descripcion;
 		}
 	}
 	function post_configurar() {		
@@ -171,8 +181,10 @@ class ci_datos_liquidacion extends asociacion_ci
 
 	function conf__form_liquidacion(asociacion_ei_formulario $form)
 	{
-		//if( $this->tabla('liquidacion')->esta_cargada() )
-			return $this->tabla('liquidacion')->get();
+		$datos = $this->tabla('liquidacion')->get();
+		if( !isset($datos['nro_recibo_inicial']) )
+			$datos['nro_recibo_inicial'] = toba::consulta_php('liquidacion')->get_ultimo_nro_recibo()+1;					
+		return $datos;
 	}
 
 	function evt__form_liquidacion__modificacion($datos)
