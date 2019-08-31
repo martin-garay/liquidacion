@@ -39,7 +39,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --zona
 	NULL, --zona_orden
 	NULL, --zona_listar
-	'apex', --imagen_recurso_origen
+	'proyecto', --imagen_recurso_origen
 	NULL, --imagen
 	NULL, --parametro_a
 	NULL, --parametro_b

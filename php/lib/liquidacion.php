@@ -80,4 +80,10 @@ class liquidacion extends comunes
 		$datos = toba::db()->consultar($sql);
 		return (isset($datos[0]['nro_recibo'])) ? $datos[0]['nro_recibo'] : 1;
 	}
+	function get_historico_liquidaciones($where=null, $order_by=null){
+		return $this->get_generico('historico_liquidaciones',$where,$order_by);	
+	}
+	function get_historico_recibos($where=null, $order_by=null){
+		return $this->get_generico('historico_recibos',$where,$order_by);	
+	}	
 }

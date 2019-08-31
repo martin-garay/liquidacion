@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo_historico_detalle" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2d7f39c0-56f3-4558-bd52-14765ec63bf3">
+	<property name="ireport.zoom" value="1.3310000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_recibo" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from historico_recibos_conceptos
+where id_recibo=$P{id_recibo} and mostrar_en_recibo
+order by codigo::int asc]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="id_concepto" class="java.lang.Integer"/>
+	<field name="importe" class="java.math.BigDecimal"/>
+	<field name="id_recibo" class="java.lang.Integer"/>
+	<field name="concepto" class="java.lang.String"/>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="formula" class="java.lang.String"/>
+	<field name="id_tipo_concepto" class="java.lang.Integer"/>
+	<field name="tipo_concepto" class="java.lang.String"/>
+	<field name="mostrar_en_recibo" class="java.lang.Boolean"/>
+	<field name="mostrar_si_cero" class="java.lang.Boolean"/>
+	<field name="totaliza" class="java.lang.Boolean"/>
+	<field name="valor_fijo" class="java.math.BigDecimal"/>
+	<field name="remunerativo" class="java.lang.Boolean"/>
+	<field name="retencion" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement x="6" y="1" width="45" height="11" uuid="53b52b47-ac5d-46b8-99c3-2a336124a0ce"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[COD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="52" y="1" width="145" height="11" uuid="d8567f55-f1f2-4c5f-af18-ad3ce18735a2"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[CONCEPTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="282" y="1" width="100" height="11" uuid="d4254dd4-3282-424f-9b8a-4c689f5f1975"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[HABERES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="382" y="1" width="100" height="11" uuid="88267860-62a2-4971-825c-62e8be0078fb"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[DEDUCCIONES]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="11" width="555" height="1" uuid="ec2315e5-7f69-4b8e-97c2-2635d44ab384"/>
+			</line>
+			<staticText>
+				<reportElement x="495" y="1" width="46" height="11" uuid="ddf7863f-6c28-4e5a-a630-5a54f0993ecf"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[ASIGNAC.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="6" y="0" width="45" height="12" uuid="b7bf7bcd-c38e-4393-a240-774c7a470b4a"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="52" y="0" width="224" height="12" uuid="7bbf6e0e-2967-4a2a-b944-f79d335ccd13"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="294" y="0" width="74" height="12" uuid="cf6b0924-c56a-4439-8b45-c00608b7089d">
+					<printWhenExpression><![CDATA[($F{id_tipo_concepto} == 1)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="394" y="0" width="73" height="12" uuid="c2e34653-be5d-4731-8e85-8d9e46e3bf88">
+					<printWhenExpression><![CDATA[($F{id_tipo_concepto}==2)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

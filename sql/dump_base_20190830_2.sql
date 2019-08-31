@@ -173,6 +173,65 @@ $$;
 
 
 --
+-- Name: sp_grabar_historico_liquidacion(integer); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.sp_grabar_historico_liquidacion(_id_liquidacion integer) RETURNS void
+    LANGUAGE plpgsql
+    AS $$
+begin 
+	--historico_liquidaciones
+	INSERT INTO public.historico_liquidaciones(id, descripcion, periodo, fecha_desde, fecha_hasta, id_tipo_liquidacion, id_establecimiento, id_banco, fecha_pago, 
+	periodo_depositado, lugar_pago, fecha_deposito, id_estado, mes, anio, nro_recibo_inicial, banco, estado, tipo_liquidacion, 
+	establecimiento, direccion_establecimiento, localidad_establecimiento, cp_establecimiento, provincia_establecimiento,cuit,actividad)        
+	select id,descripcion,periodo,fecha_desde,fecha_hasta,id_tipo_liquidacion,id_establecimiento,id_banco,fecha_pago,
+	periodo_depositado,lugar_pago,fecha_deposito,id_estado,mes,anio,nro_recibo_inicial,banco, estado, tipo_liquidacion,
+	establecimiento, direccion_establecimiento, localidad_establecimiento, cp_establecimiento, provincia_establecimiento,cuit,actividad
+	from v_liquidaciones l WHERE id=_id_liquidacion;
+
+	--historico_liquidaciones_conceptos
+	INSERT INTO public.historico_liquidaciones_conceptos(id, id_concepto, id_liquidacion, valor_fijo, concepto, codigo, formula, tipo_concepto)
+	select lc.id, lc.id_concepto, lc.id_liquidacion, lc.valor_fijo, c.descripcion as concepto, codigo, formula, tipo_concepto 
+	from liquidaciones_conceptos lc
+	join v_conceptos c ON c.id=lc.id_concepto
+	WHERE id_liquidacion=_id_liquidacion;
+
+	--recibos
+	INSERT INTO public.historico_recibos(id, nro_recibo, id_persona, total_remunerativos, total_no_remunerativos, total_deducciones, total_neto, total_basico, id_liquidacion, 
+	apellido, nombre, legajo, tipo_documento, nro_documento, genero, id_estado_civil, estado_civil, fecha_nacimiento, edad, regimen, cuil, 
+	id_categoria, categoria, tarea, sueldo_basico, 
+	fecha_ingreso, fecha_egreso, id_tipo_contrato, tipo_contrato, id_obra_social, obra_social, codigo_obra_social, id_localidad, localidad, cp, 
+	domicilio, id_nacionalidad, nacionalidad, pais, provincia)
+	SELECT r.id, r.nro_recibo, r.id_persona, r.total_remunerativos, r.total_no_remunerativos, r.total_deducciones, r.total_neto, r.total_basico, r.id_liquidacion, 
+	  p.apellido,p.nombre,p.legajo,p.tipo_documento,p.nro_documento,p.genero,p.id_estado_civil,p.estado_civil,p.fecha_nacimiento,edad(fecha_nacimiento),p.regimen,p.cuil,
+	  p.id_categoria,p.categoria,(select string_agg(descripcion,',') from persona_tareas p1 join tareas t ON p1.id_tarea=t.id where p1.id_persona=p.id) as tarea,p.sueldo_basico,
+	  p.fecha_ingreso,p.fecha_egreso,p.id_tipo_contrato,p.tipo_contrato,p.id_obra_social,p.obra_social,p.codigo_obra_social,p.id_localidad,p.localidad,p.cp,
+	  p.domicilio,p.id_nacionalidad,p.nacionalidad,p.pais,p.provincia
+	FROM recibos r     
+	JOIN v_personas p ON p.id = r.id_persona
+	WHERE id_liquidacion=_id_liquidacion;
+
+	--recibos_acumuladores_historico
+	INSERT INTO public.historico_recibos_acumuladores(id, id_acumulador, importe, id_recibo, nombre, descripcion, id_tipo_concepto, tipo_concepto)
+	select ra.id, ra.id_acumulador, ra.importe, ra.id_recibo,nombre,descripcion,id_tipo_concepto,tipo_concepto 
+	from recibos_acumuladores ra 
+	join v_acumuladores a ON a.id=ra.id_acumulador
+	WHERE id_recibo IN (SELECT id FROM recibos WHERE id_liquidacion=_id_liquidacion);
+
+	
+	--recibos_conceptos_historico
+	INSERT INTO public.historico_recibos_conceptos(id, id_concepto, importe, id_recibo, concepto, codigo, formula, id_tipo_concepto, tipo_concepto, 
+	mostrar_en_recibo, mostrar_si_cero, totaliza, valor_fijo, remunerativo, retencion)
+	select rc.id, rc.id_concepto, rc.importe, rc.id_recibo,c.descripcion as concepto,c.codigo,c.formula,c.id_tipo_concepto,c.tipo_concepto,
+	c.mostrar_en_recibo,c.mostrar_si_cero,totaliza,valor_fijo,remunerativo,retencion
+	from recibos_conceptos rc 
+	join v_conceptos c ON c.id=rc.id_concepto
+	WHERE id_recibo IN (SELECT id FROM recibos WHERE id_liquidacion=_id_liquidacion);
+END;
+$$;
+
+
+--
 -- Name: sp_trg_ai_liquidaciones_conceptos(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -749,6 +808,143 @@ ALTER SEQUENCE public.generos_id_seq OWNED BY public.generos.id;
 
 
 --
+-- Name: historico_liquidaciones; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.historico_liquidaciones (
+    id integer NOT NULL,
+    descripcion text NOT NULL,
+    periodo date NOT NULL,
+    fecha_desde date,
+    fecha_hasta date,
+    id_tipo_liquidacion integer NOT NULL,
+    id_establecimiento integer DEFAULT 1 NOT NULL,
+    id_banco integer NOT NULL,
+    fecha_pago date NOT NULL,
+    periodo_depositado character varying(10),
+    lugar_pago text,
+    fecha_deposito date,
+    id_estado integer DEFAULT 1 NOT NULL,
+    mes integer,
+    anio integer,
+    nro_recibo_inicial integer NOT NULL,
+    banco text,
+    estado text,
+    tipo_liquidacion text,
+    establecimiento text,
+    direccion_establecimiento text,
+    localidad_establecimiento text,
+    cp_establecimiento text,
+    provincia_establecimiento text,
+    cuit text,
+    actividad text
+);
+
+
+--
+-- Name: historico_liquidaciones_conceptos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.historico_liquidaciones_conceptos (
+    id integer NOT NULL,
+    id_concepto integer NOT NULL,
+    id_liquidacion integer NOT NULL,
+    valor_fijo numeric(10,2),
+    concepto text,
+    codigo text,
+    formula text,
+    tipo_concepto text
+);
+
+
+--
+-- Name: historico_recibos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.historico_recibos (
+    id integer NOT NULL,
+    nro_recibo integer,
+    id_persona integer NOT NULL,
+    total_remunerativos numeric(10,2),
+    total_no_remunerativos numeric(10,2),
+    total_deducciones numeric(10,2),
+    total_neto numeric(10,2),
+    total_basico numeric(10,2),
+    id_liquidacion integer NOT NULL,
+    apellido text,
+    nombre text,
+    legajo integer,
+    tipo_documento text,
+    nro_documento character varying(15),
+    genero text,
+    id_estado_civil integer,
+    estado_civil text,
+    fecha_nacimiento date,
+    edad integer,
+    regimen text,
+    cuil text,
+    id_categoria integer,
+    categoria text,
+    tarea text,
+    sueldo_basico numeric(10,2),
+    fecha_ingreso date,
+    fecha_egreso date,
+    id_tipo_contrato integer,
+    tipo_contrato text,
+    id_obra_social integer,
+    obra_social text,
+    codigo_obra_social text,
+    id_localidad integer,
+    localidad text,
+    cp integer,
+    domicilio text,
+    id_nacionalidad integer,
+    nacionalidad text,
+    pais text,
+    provincia text
+);
+
+
+--
+-- Name: historico_recibos_acumuladores; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.historico_recibos_acumuladores (
+    id integer NOT NULL,
+    id_acumulador integer NOT NULL,
+    importe numeric(10,2) NOT NULL,
+    id_recibo integer NOT NULL,
+    nombre text,
+    descripcion text,
+    id_tipo_concepto integer,
+    tipo_concepto text
+);
+
+
+--
+-- Name: historico_recibos_conceptos; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.historico_recibos_conceptos (
+    id integer NOT NULL,
+    id_concepto integer NOT NULL,
+    importe numeric(10,2),
+    id_recibo integer NOT NULL,
+    concepto text,
+    codigo text,
+    formula text,
+    id_tipo_concepto integer,
+    tipo_concepto text,
+    mostrar_en_recibo boolean,
+    mostrar_si_cero boolean,
+    totaliza boolean,
+    valor_fijo numeric(10,2),
+    remunerativo boolean,
+    retencion boolean
+);
+
+
+--
 -- Name: liquidaciones; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1077,7 +1273,8 @@ CREATE TABLE public.personas (
     horas_jornada numeric(10,2) NOT NULL,
     basico numeric(10,2),
     cant_hijos integer DEFAULT 0 NOT NULL,
-    horas_mes numeric(10,2)
+    horas_mes numeric(10,2),
+    id_regimen integer
 );
 
 
@@ -1817,11 +2014,19 @@ CREATE VIEW public.v_liquidaciones AS
     e.descripcion AS establecimiento,
     b.descripcion AS banco,
     l.mes,
-    l.anio
+    l.anio,
+    l.fecha_deposito,
+    l.nro_recibo_inicial,
+    e.direccion AS direccion_establecimiento,
+    e.localidad AS localidad_establecimiento,
+    e.cp AS cp_establecimiento,
+    e.provincia AS provincia_establecimiento,
+    e.cuit,
+    e.actividad
    FROM ((((public.liquidaciones l
      JOIN public.estados_liquidacion el ON ((el.id = l.id_estado)))
      JOIN public.tipos_liquidaciones tl ON ((tl.id = l.id_tipo_liquidacion)))
-     JOIN public.establecimientos e ON ((e.id = l.id_establecimiento)))
+     JOIN public.v_establecimientos e ON ((e.id = l.id_establecimiento)))
      LEFT JOIN public.bancos b ON ((b.id = l.id_banco)));
 
 
@@ -1891,8 +2096,10 @@ CREATE VIEW public.v_personas AS
     tc.descripcion AS tipo_contrato,
     a.horas_jornada,
     a.fecha_ingreso,
-    a.fecha_egreso
-   FROM (((((((((public.personas a
+    a.fecha_egreso,
+    a.id_regimen,
+    r.descripcion AS regimen
+   FROM ((((((((((public.personas a
      LEFT JOIN public.estados_civiles ec ON ((ec.id = a.id_estado_civil)))
      LEFT JOIN public.categorias c ON ((c.id = a.id_categoria)))
      LEFT JOIN public.establecimientos es ON ((es.id = a.id_establecimiento)))
@@ -1901,7 +2108,8 @@ CREATE VIEW public.v_personas AS
      LEFT JOIN public.nacionalidades n ON ((n.id = a.id_nacionalidad)))
      LEFT JOIN public.tipos_documentos td ON ((td.id = a.id_tipo_documento)))
      LEFT JOIN public.generos g ON ((g.id = a.id_genero)))
-     LEFT JOIN public.tipos_contratos tc ON ((tc.id = a.id_tipo_contrato)));
+     LEFT JOIN public.tipos_contratos tc ON ((tc.id = a.id_tipo_contrato)))
+     LEFT JOIN public.regimenes r ON ((r.id = a.id_regimen)));
 
 
 --
@@ -2723,7 +2931,7 @@ SELECT pg_catalog.setval('public.datos_salud_id_seq', 1, true);
 -- Data for Name: establecimientos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.establecimientos VALUES (1, 'Asociación Médica de Luján', 'Mariano Moreno 1460', 1, NULL, NULL, NULL);
+INSERT INTO public.establecimientos VALUES (1, 'Asociación Médica de Luján', 'Mariano Moreno 1460', 1, '33539819769', '911200', 1);
 
 
 --
@@ -2755,6 +2963,7 @@ SELECT pg_catalog.setval('public.estados_civiles_id_seq', 1, false);
 
 INSERT INTO public.estados_liquidacion VALUES (1, 'PENDIENTE LIQUIDACION');
 INSERT INTO public.estados_liquidacion VALUES (2, 'LIQUIDADA');
+INSERT INTO public.estados_liquidacion VALUES (3, 'CERRADA');
 
 
 --
@@ -2803,6 +3012,934 @@ INSERT INTO public.generos VALUES (2, 'Femenino');
 --
 
 SELECT pg_catalog.setval('public.generos_id_seq', 1, false);
+
+
+--
+-- Data for Name: historico_liquidaciones; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.historico_liquidaciones VALUES (75, 'Liquidacion Enero 2019', '2019-01-01', '2019-01-01', '2019-01-31', 1, 1, 1, '2019-02-01', '01 2019', 'Luján', '2019-02-01', 2, 1, 2019, 200, 'Galicia', 'LIQUIDADA', 'Liquidación Mensual Normal', 'Asociación Médica de Luján', 'Mariano Moreno 1460', 'LUJAN', '3450', 'Corrientes', '33539819769', '911200');
+
+
+--
+-- Data for Name: historico_liquidaciones_conceptos; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1350, 1, 75, NULL, 'Sueldo Básico', '1', 'basico', 'HABERES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1351, 7, 75, NULL, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 'HABERES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1352, 12, 75, NULL, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 'HABERES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1353, 4, 75, NULL, 'Idem Sueldo Basico', '90', 'c1', 'HABERES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1354, 5, 75, NULL, 'Años Reconocimiento', '101', '0', 'HABERES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1355, 6, 75, NULL, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 'HABERES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1356, 13, 75, NULL, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1357, 14, 75, 0.00, 'Ganancias - Gratificaciones', '302', '0', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1358, 16, 75, 0.00, 'Ganancias - SAC', '303', '0', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1359, 15, 75, NULL, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1360, 17, 75, NULL, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1361, 18, 75, NULL, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1362, 19, 75, NULL, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1363, 20, 75, NULL, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1364, 21, 75, NULL, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1365, 22, 75, NULL, 'Ganancia Neta Mensual', '321', 'c309-c320', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1366, 23, 75, NULL, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1367, 32, 75, NULL, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1368, 24, 75, NULL, 'Deducción. Especial', '330', 'tabla("especial")', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1369, 25, 75, NULL, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1370, 26, 75, NULL, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1371, 29, 75, 0.00, 'Deducciones. Cargas de familia', '333', '0', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1372, 27, 75, NULL, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1373, 28, 75, NULL, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1374, 30, 75, 0.00, 'Deducciones. Servicio doméstico', '336', '0', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1375, 31, 75, NULL, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1376, 33, 75, NULL, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1377, 34, 75, NULL, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1378, 35, 75, NULL, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1379, 36, 75, NULL, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1380, 37, 75, NULL, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1381, 38, 75, NULL, 'Ganancia neta imponible', '360', 'c322 - c350', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1382, 40, 75, NULL, 'Ganancia Escala', '370', 'ganancias(c360)', 'CALCULO GANANCIAS');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1383, 9, 75, NULL, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 'DEDUCCIONES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1384, 10, 75, NULL, 'Obra Social', '502', 'bruto * 0.03', 'DEDUCCIONES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1385, 11, 75, NULL, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 'DEDUCCIONES');
+INSERT INTO public.historico_liquidaciones_conceptos VALUES (1386, 39, 75, NULL, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 'DEDUCCIONES');
+
+
+--
+-- Data for Name: historico_recibos; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.historico_recibos VALUES (1081, 204, 12, NULL, NULL, NULL, NULL, NULL, 75, 'Dandrilli', 'Gisela Elizabeth', 34, 'DNI', '30939944', 'Femenino', 2, 'Casado/a', '1984-08-04', 35, NULL, '27309399442', 4, '2DA.ADM', NULL, 50000.00, '2014-02-03', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1082, 205, 13, NULL, NULL, NULL, NULL, NULL, 75, 'Delgado', 'Noemi Severa', 7, 'DNI', '12904169', 'Femenino', 2, 'Casado/a', '1956-10-27', 62, NULL, '27129041698', 2, '2DA.SUPERV', NULL, 40000.00, '1986-07-14', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1085, 208, 16, NULL, NULL, NULL, NULL, NULL, 75, 'Ferreyra', 'Rodrigo Raul', 32, 'DNI', '34831908', 'Masculino', 1, 'Soltero/a', '1989-10-10', 29, NULL, '20348319087', 4, '2DA.ADM', NULL, 50000.00, '2013-10-07', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1086, 209, 17, NULL, NULL, NULL, NULL, NULL, 75, 'Frascaroli', 'Micaela Noemi', 19, 'DNI', '29233345', 'Femenino', 1, 'Soltero/a', '1982-02-27', 37, NULL, '27292333450', 2, '2DA.SUPERV', NULL, 40000.00, '2003-10-01', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1087, 210, 18, NULL, NULL, NULL, NULL, NULL, 75, 'Gallesio', 'Betiana Nazareth', 21, 'DNI', '26167199', 'Femenino', 1, 'Soltero/a', '1978-01-04', 41, NULL, '27261671994', 2, '2DA.SUPERV', NULL, 40000.00, '2006-11-01', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1089, 212, 20, NULL, NULL, NULL, NULL, NULL, 75, 'Lombardo', 'Norma Elizabeth', 27, 'DNI', '14097779', 'Femenino', 2, 'Casado/a', '1960-11-25', 58, NULL, '27140977794', 2, '2DA.SUPERV', NULL, 40000.00, '2009-08-03', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1090, 213, 21, NULL, NULL, NULL, NULL, NULL, 75, 'Paccor', 'Maria Soledad', 35, 'DNI', '27033687', 'Femenino', 1, 'Soltero/a', '1979-03-05', 40, NULL, '27270336871', 3, '1RA.ADM', NULL, 60000.00, '2014-11-03', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1091, 214, 22, NULL, NULL, NULL, NULL, NULL, 75, 'Paris', 'Alejandra', 39, 'DNI', '30939775', 'Femenino', 1, 'Soltero/a', '1984-05-06', 35, NULL, '23309397754', 3, '1RA.ADM', NULL, 60000.00, '2016-07-01', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1092, 215, 23, NULL, NULL, NULL, NULL, NULL, 75, 'Parra', 'Jorgelina', 23, 'DNI', '25048843', 'Femenino', 1, 'Soltero/a', '1976-05-11', 43, NULL, '27250488438', 3, '1RA.ADM', NULL, 60000.00, '2007-07-02', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1094, 217, 25, NULL, NULL, NULL, NULL, NULL, 75, 'Riccardo', 'Lautaro', 33, 'DNI', '32378152', 'Masculino', 1, 'Soltero/a', '1986-05-29', 33, NULL, '20323781525', 3, '1RA.ADM', NULL, 60000.00, '2013-10-07', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1095, 218, 26, NULL, NULL, NULL, NULL, NULL, 75, 'Romero', 'Ana Gladys', 3, 'DNI', '18148598', 'Femenino', 3, 'Divorciado/a', '1966-05-04', 53, NULL, '27181485987', 1, '1RA.SUPERV', NULL, 50000.00, '1986-11-01', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1093, 216, 24, NULL, NULL, NULL, NULL, NULL, 75, 'Poletti', 'Norma', 2, 'DNI', '18601061', 'Femenino', 2, 'Casado/a', '1967-11-07', 51, NULL, '27186010618', 2, '2DA.SUPERV', NULL, 40000.00, '1986-09-01', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1084, 207, 15, NULL, NULL, NULL, NULL, NULL, 75, 'Ferrari', 'Maria Cecilia', 26, 'DNI', '29594863', 'Femenino', 1, 'Soltero/a', '1982-07-25', 37, NULL, '27295948634', 3, '1RA.ADM', NULL, 60000.00, '2008-02-20', NULL, 2, 'a tiempo parcial', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1083, 206, 14, NULL, NULL, NULL, NULL, NULL, 75, 'Echenique', 'Cesar Anibal', 37, 'DNI', '27113644', 'Masculino', 1, 'Soltero/a', '1978-12-24', 40, NULL, '20271136448', 3, '1RA.ADM', NULL, 60000.00, '2015-06-01', NULL, 2, 'a tiempo parcial', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1088, 211, 19, NULL, NULL, NULL, NULL, NULL, 75, 'Herrera', 'Claudia Fabiana', 10, 'DNI', '16833436', 'Femenino', 2, 'Casado/a', '1965-04-28', 54, NULL, '27168334368', 3, '1RA.ADM', 'ay.sub area', 60000.00, '1984-08-01', NULL, 1, 'a tiempo comp.', 1, 'swiss medical', '406', 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1096, 219, 7, NULL, NULL, NULL, NULL, NULL, 75, 'Zeppa', 'Silvio', 40, 'DNI', '26563056', 'Masculino', 2, 'Casado/a', '1978-05-20', 41, NULL, '20265630562', 4, '2DA.ADM', NULL, 50000.00, '2017-04-03', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1078, 201, 9, NULL, NULL, NULL, NULL, NULL, 75, 'Becaj', 'Ivan Guillermo', 31, 'DNI', '26583833', 'Masculino', 1, 'Soltero/a', '1978-05-01', 41, NULL, '20265838333', 2, '2DA.SUPERV', NULL, 40000.00, '2013-06-03', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1079, 202, 10, NULL, NULL, NULL, NULL, NULL, 75, 'Cano', 'Silvia Marina', 5, 'DNI', '14490100', 'Femenino', 2, 'Casado/a', '1960-12-22', 58, NULL, '27144901008', 2, '2DA.SUPERV', NULL, 40000.00, '1988-12-01', NULL, 1, 'a tiempo comp.', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1080, 203, 11, NULL, NULL, NULL, NULL, NULL, 75, 'Cespedes Ramirez', 'Teresita', 8, 'DNI', '92727141', 'Femenino', 3, 'Divorciado/a', '1965-05-20', 54, NULL, '27927271414', 5, 'Maestranza', NULL, 35000.00, '2010-03-01', NULL, 2, 'a tiempo parcial', NULL, NULL, NULL, 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+INSERT INTO public.historico_recibos VALUES (1077, 200, 8, NULL, NULL, NULL, NULL, NULL, 75, 'Acosta', 'Claudio Daniel', 29, 'DNI', '26823601', 'Masculino', 2, 'Casado/a', '1978-07-18', 41, NULL, '20268236016', 4, '2DA.ADM', 'ay.sub area,facturacion', 50000.00, '2011-04-06', NULL, 1, 'a tiempo comp.', 1, 'swiss medical', '406', 1, 'LUJAN', 3450, NULL, 1, 'Argentino', 'Argentina', 'Corrientes');
+
+
+--
+-- Data for Name: historico_recibos_acumuladores; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.historico_recibos_acumuladores VALUES (3861, 1, 39080.00, 1096, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3862, 2, 0.00, 1096, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3863, 3, 39080.00, 1096, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3864, 4, 0.00, 1096, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3865, 5, 12114.80, 1096, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3866, 1, 42595.49, 1077, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3867, 2, 0.00, 1077, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3868, 3, 42595.49, 1077, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3869, 4, 0.00, 1077, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3870, 5, 13204.60, 1077, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3871, 1, 49210.57, 1078, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3872, 2, 0.00, 1078, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3873, 3, 49210.57, 1078, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3874, 4, 0.00, 1078, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3875, 5, 15255.28, 1078, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3876, 1, 79572.58, 1079, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3877, 2, 0.00, 1079, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3878, 3, 79572.58, 1079, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3879, 4, 0.00, 1079, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3880, 5, 24667.50, 1079, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3881, 1, 30317.40, 1080, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3882, 2, 0.00, 1080, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3883, 3, 30317.40, 1080, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3884, 4, 0.00, 1080, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3885, 5, 9398.39, 1080, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3886, 1, 41567.27, 1081, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3887, 2, 0.00, 1081, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3888, 3, 41567.27, 1081, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3889, 4, 0.00, 1081, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3890, 5, 12885.85, 1081, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3891, 1, 84533.20, 1082, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3892, 2, 0.00, 1082, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3893, 3, 84533.20, 1082, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3894, 4, 0.00, 1082, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3895, 5, 26205.29, 1082, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3896, 1, 20010.00, 1083, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3897, 2, 0.00, 1083, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3898, 3, 20010.00, 1083, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3899, 4, 0.00, 1083, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3900, 5, 6203.10, 1083, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3901, 1, 78000.00, 1084, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3902, 2, 0.00, 1084, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3903, 3, 78000.00, 1084, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3904, 4, 0.00, 1084, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3905, 5, 24180.00, 1084, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3906, 1, 42039.72, 1085, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3907, 2, 0.00, 1085, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3908, 3, 42039.72, 1085, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3909, 4, 0.00, 1085, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3910, 5, 13032.31, 1085, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3911, 1, 65574.74, 1086, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3912, 2, 0.00, 1086, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3913, 3, 65574.74, 1086, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3914, 4, 0.00, 1086, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3915, 5, 20328.17, 1086, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3916, 1, 57173.51, 1087, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3917, 2, 0.00, 1087, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3918, 3, 57173.51, 1087, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3919, 4, 0.00, 1087, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3920, 5, 17723.79, 1087, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3921, 1, 77302.08, 1088, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3922, 2, 0.00, 1088, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3923, 3, 77302.08, 1088, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3924, 4, 0.00, 1088, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3925, 5, 23963.64, 1088, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3926, 1, 54678.40, 1089, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3927, 2, 0.00, 1089, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3928, 3, 54678.40, 1089, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3929, 4, 0.00, 1089, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3930, 5, 16950.30, 1089, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3931, 1, 45027.03, 1090, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3932, 2, 0.00, 1090, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3933, 3, 45027.03, 1090, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3934, 4, 0.00, 1090, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3935, 5, 13958.38, 1090, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3936, 1, 17971.76, 1091, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3937, 2, 0.00, 1091, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3938, 3, 17971.76, 1091, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3939, 4, 0.00, 1091, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3940, 5, 5571.24, 1091, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3941, 1, 51617.28, 1092, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3942, 2, 0.00, 1092, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3943, 3, 51617.28, 1092, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3944, 4, 0.00, 1092, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3945, 5, 16001.36, 1092, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3946, 1, 79950.39, 1093, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3947, 2, 0.00, 1093, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3948, 3, 79950.39, 1093, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3949, 4, 0.00, 1093, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3950, 5, 24784.62, 1093, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3951, 1, 41950.56, 1094, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3952, 2, 0.00, 1094, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3953, 3, 41950.56, 1094, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3954, 4, 0.00, 1094, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3955, 5, 13004.67, 1094, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3956, 1, 99287.36, 1095, 'total_remunerativos', 'Acumula los Haberes Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3957, 2, 0.00, 1095, 'total_no_remunerativos', 'Acumula los Haberes No Remunerativos', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3958, 3, 99287.36, 1095, 'bruto', 'Sueldo Bruto', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3959, 4, 0.00, 1095, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, 'HABERES');
+INSERT INTO public.historico_recibos_acumuladores VALUES (3960, 5, 30779.08, 1095, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, 'DEDUCCIONES');
+
+
+--
+-- Data for Name: historico_recibos_conceptos; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO public.historico_recibos_conceptos VALUES (27160, 14, 0.00, 1077, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27161, 16, 0.00, 1077, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27174, 29, 0.00, 1077, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27177, 30, 0.00, 1077, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27197, 14, 0.00, 1078, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27198, 16, 0.00, 1078, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27211, 29, 0.00, 1078, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27214, 30, 0.00, 1078, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27234, 14, 0.00, 1079, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27235, 16, 0.00, 1079, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27248, 29, 0.00, 1079, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27251, 30, 0.00, 1079, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27271, 14, 0.00, 1080, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27272, 16, 0.00, 1080, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27285, 29, 0.00, 1080, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27288, 30, 0.00, 1080, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27308, 14, 0.00, 1081, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27309, 16, 0.00, 1081, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27322, 29, 0.00, 1081, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27325, 30, 0.00, 1081, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27345, 14, 0.00, 1082, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27346, 16, 0.00, 1082, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27359, 29, 0.00, 1082, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27362, 30, 0.00, 1082, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27382, 14, 0.00, 1083, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27383, 16, 0.00, 1083, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27396, 29, 0.00, 1083, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27399, 30, 0.00, 1083, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27419, 14, 0.00, 1084, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27420, 16, 0.00, 1084, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27433, 29, 0.00, 1084, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27436, 30, 0.00, 1084, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27456, 14, 0.00, 1085, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27457, 16, 0.00, 1085, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27470, 29, 0.00, 1085, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27473, 30, 0.00, 1085, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27493, 14, 0.00, 1086, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27494, 16, 0.00, 1086, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27507, 29, 0.00, 1086, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27510, 30, 0.00, 1086, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27530, 14, 0.00, 1087, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27531, 16, 0.00, 1087, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27544, 29, 0.00, 1087, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27547, 30, 0.00, 1087, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27564, 5, 3.00, 1088, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27567, 14, 0.00, 1088, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27568, 16, 0.00, 1088, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27581, 29, 0.00, 1088, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27584, 30, 0.00, 1088, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27604, 14, 0.00, 1089, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27605, 16, 0.00, 1089, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27618, 29, 0.00, 1089, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27621, 30, 0.00, 1089, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27641, 14, 0.00, 1090, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27642, 16, 0.00, 1090, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27655, 29, 0.00, 1090, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27658, 30, 0.00, 1090, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27678, 14, 0.00, 1091, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27679, 16, 0.00, 1091, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27692, 29, 0.00, 1091, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27695, 30, 0.00, 1091, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27715, 14, 0.00, 1092, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27716, 16, 0.00, 1092, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27729, 29, 0.00, 1092, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27732, 30, 0.00, 1092, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27752, 14, 0.00, 1093, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27753, 16, 0.00, 1093, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27766, 29, 0.00, 1093, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27769, 30, 0.00, 1093, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27789, 14, 0.00, 1094, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27790, 16, 0.00, 1094, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27803, 29, 0.00, 1094, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27806, 30, 0.00, 1094, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27826, 14, 0.00, 1095, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27827, 16, 0.00, 1095, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27840, 29, 0.00, 1095, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27843, 30, 0.00, 1095, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27863, 14, 0.00, 1096, 'Ganancias - Gratificaciones', '302', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27864, 16, 0.00, 1096, 'Ganancias - SAC', '303', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27877, 29, 0.00, 1096, 'Deducciones. Cargas de familia', '333', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27880, 30, 0.00, 1096, 'Deducciones. Servicio doméstico', '336', '0', 4, 'CALCULO GANANCIAS', false, false, false, 0.00, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27153, 1, 34351.20, 1077, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27154, 7, 0.00, 1077, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27155, 12, 3435.12, 1077, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27156, 4, 34351.20, 1077, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27157, 5, 0.00, 1077, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27158, 6, 4809.17, 1077, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27159, 13, 3549.62, 1077, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27162, 15, 46145.11, 1077, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27163, 17, 5075.96, 1077, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27164, 18, 1384.35, 1077, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27165, 19, 1384.35, 1077, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27166, 20, 1153.63, 1077, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27167, 21, 8998.30, 1077, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27168, 22, 37146.82, 1077, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27169, 23, 37146.82, 1077, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27170, 32, 1857.34, 1077, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27171, 24, 34339.60, 1077, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27172, 25, 6669.50, 1077, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27173, 26, 0.00, 1077, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27175, 27, 7154.08, 1077, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27176, 28, 0.00, 1077, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27178, 31, 0.00, 1077, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27179, 33, 0.00, 1077, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27180, 34, 0.00, 1077, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27181, 35, 0.00, 1077, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27182, 36, 0.00, 1077, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27183, 37, 48163.18, 1077, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27184, 38, -11016.36, 1077, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27185, 40, 0.00, 1077, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27186, 9, 1277.86, 1077, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27187, 10, 1277.86, 1077, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27188, 11, 10648.87, 1077, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27189, 39, 0.00, 1077, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27190, 1, 41008.81, 1078, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27191, 7, 0.00, 1078, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27192, 12, 4100.88, 1078, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27193, 4, 41008.81, 1078, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27194, 5, 0.00, 1078, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27195, 6, 4100.88, 1078, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27196, 13, 4100.88, 1078, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27199, 15, 53311.45, 1078, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27200, 17, 5864.26, 1078, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27201, 18, 1599.34, 1078, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27202, 19, 1599.34, 1078, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27203, 20, 1332.79, 1078, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27204, 21, 10395.73, 1078, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27205, 22, 42915.72, 1078, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27206, 23, 42915.72, 1078, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27207, 32, 2145.79, 1078, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27208, 24, 34339.60, 1078, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27209, 25, 0.00, 1078, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27210, 26, 0.00, 1078, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27212, 27, 7154.08, 1078, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27213, 28, 0.00, 1078, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27215, 31, 2145.79, 1078, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27216, 33, 0.00, 1078, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27217, 34, 0.00, 1078, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27218, 35, 0.00, 1078, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27219, 36, 0.00, 1078, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27220, 37, 43639.47, 1078, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27221, 38, -723.75, 1078, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27222, 40, 0.00, 1078, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27223, 9, 1476.32, 1078, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27224, 10, 1476.32, 1078, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27225, 11, 12302.64, 1078, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27226, 39, 0.00, 1078, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27227, 1, 46807.40, 1079, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27228, 7, 0.00, 1079, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27229, 12, 4680.74, 1079, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27230, 4, 46807.40, 1079, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27231, 5, 0.00, 1079, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27232, 6, 28084.44, 1079, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27233, 13, 6631.05, 1079, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27236, 15, 86203.63, 1079, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27237, 17, 9482.40, 1079, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27238, 18, 2586.11, 1079, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27239, 19, 2586.11, 1079, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27240, 20, 2155.09, 1079, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27241, 21, 16809.71, 1079, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27242, 22, 69393.92, 1079, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27243, 23, 69393.92, 1079, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27244, 32, 3469.70, 1079, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27245, 24, 34339.60, 1079, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27246, 25, 6669.50, 1079, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27247, 26, 0.00, 1079, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27249, 27, 7154.08, 1079, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27250, 28, 0.00, 1079, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27252, 31, 0.00, 1079, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27253, 33, 0.00, 1079, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27254, 34, 0.00, 1079, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27255, 35, 0.00, 1079, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27256, 36, 0.00, 1079, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27257, 37, 48163.18, 1079, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27258, 38, 21230.74, 1079, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27259, 40, 110524.46, 1079, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27260, 9, 2387.18, 1079, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27261, 10, 2387.18, 1079, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27262, 11, 19893.15, 1079, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27263, 39, 110524.46, 1079, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27264, 1, 24061.43, 1080, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27265, 7, 0.00, 1080, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27447, 11, 19500.00, 1084, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27266, 12, 2406.14, 1080, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27267, 4, 24061.43, 1080, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27268, 5, 0.00, 1080, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27269, 6, 3849.83, 1080, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27270, 13, 2526.45, 1080, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27273, 15, 32843.85, 1080, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27274, 17, 3612.82, 1080, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27275, 18, 985.32, 1080, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27276, 19, 985.32, 1080, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27277, 20, 821.10, 1080, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27278, 21, 6404.55, 1080, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27279, 22, 26439.30, 1080, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27280, 23, 26439.30, 1080, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27281, 32, 1321.97, 1080, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27282, 24, 34339.60, 1080, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27283, 25, 0.00, 1080, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27284, 26, 0.00, 1080, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27286, 27, 7154.08, 1080, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27287, 28, 0.00, 1080, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27289, 31, 0.00, 1080, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27290, 33, 0.00, 1080, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27291, 34, 0.00, 1080, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27292, 35, 0.00, 1080, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27293, 36, 0.00, 1080, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27294, 37, 41493.68, 1080, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27295, 38, -15054.38, 1080, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27296, 40, 0.00, 1080, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27297, 9, 909.52, 1080, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27298, 10, 909.52, 1080, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27299, 11, 7579.35, 1080, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27300, 39, 0.00, 1080, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27301, 1, 35226.50, 1081, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27302, 7, 0.00, 1081, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27303, 12, 3522.65, 1081, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27304, 4, 35226.50, 1081, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27305, 5, 0.00, 1081, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27306, 6, 2818.12, 1081, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27307, 13, 3463.94, 1081, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27310, 15, 45031.21, 1081, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27311, 17, 4953.43, 1081, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27312, 18, 1350.94, 1081, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27313, 19, 1350.94, 1081, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27314, 20, 1125.78, 1081, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27315, 21, 8781.09, 1081, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27316, 22, 36250.12, 1081, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27317, 23, 36250.12, 1081, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27318, 32, 1812.51, 1081, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27319, 24, 34339.60, 1081, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27320, 25, 6669.50, 1081, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27321, 26, 0.00, 1081, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27323, 27, 7154.08, 1081, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27324, 28, 0.00, 1081, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27326, 31, 0.00, 1081, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27327, 33, 0.00, 1081, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27388, 20, 541.94, 1083, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27328, 34, 0.00, 1081, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27329, 35, 0.00, 1081, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27330, 36, 0.00, 1081, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27331, 37, 48163.18, 1081, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27332, 38, -11913.06, 1081, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27333, 40, 0.00, 1081, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27334, 9, 1247.02, 1081, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27335, 10, 1247.02, 1081, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27336, 11, 10391.82, 1081, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27337, 39, 0.00, 1081, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27338, 1, 48582.30, 1082, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27339, 7, 0.00, 1082, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27340, 12, 4858.23, 1082, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27341, 4, 48582.30, 1082, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27342, 5, 0.00, 1082, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27343, 6, 31092.67, 1082, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27344, 13, 7044.43, 1082, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27347, 15, 91577.64, 1082, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27348, 17, 10073.54, 1082, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27349, 18, 2747.33, 1082, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27350, 19, 2747.33, 1082, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27351, 20, 2289.44, 1082, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27352, 21, 17857.64, 1082, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27353, 22, 73720.00, 1082, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27354, 23, 73720.00, 1082, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27355, 32, 3686.00, 1082, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27356, 24, 34339.60, 1082, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27357, 25, 6669.50, 1082, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27358, 26, 0.00, 1082, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27360, 27, 7154.08, 1082, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27361, 28, 0.00, 1082, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27363, 31, 0.00, 1082, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27364, 33, 0.00, 1082, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27365, 34, 0.00, 1082, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27366, 35, 0.00, 1082, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27367, 36, 0.00, 1082, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27368, 37, 48163.18, 1082, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27369, 38, 25556.82, 1082, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27370, 40, 98759.12, 1082, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27371, 9, 2536.00, 1082, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27372, 10, 2536.00, 1082, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27373, 11, 21133.30, 1082, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27374, 39, 98759.12, 1082, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27375, 1, 17250.00, 1083, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27376, 7, 0.00, 1083, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27377, 12, 1725.00, 1083, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27378, 4, 17250.00, 1083, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27379, 5, 0.00, 1083, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27380, 6, 1035.00, 1083, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27381, 13, 1667.50, 1083, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27384, 15, 21677.50, 1083, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27385, 17, 2384.53, 1083, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27386, 18, 650.33, 1083, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27387, 19, 650.33, 1083, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27389, 21, 4227.11, 1083, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27390, 22, 17450.39, 1083, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27391, 23, 17450.39, 1083, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27392, 32, 872.52, 1083, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27393, 24, 34339.60, 1083, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27394, 25, 0.00, 1083, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27395, 26, 0.00, 1083, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27397, 27, 7154.08, 1083, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27398, 28, 0.00, 1083, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27400, 31, 0.00, 1083, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27401, 33, 0.00, 1083, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27402, 34, 0.00, 1083, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27403, 35, 0.00, 1083, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27404, 36, 0.00, 1083, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27405, 37, 41493.68, 1083, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27406, 38, -24043.29, 1083, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27407, 40, 0.00, 1083, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27408, 9, 600.30, 1083, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27409, 10, 600.30, 1083, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27410, 11, 5002.50, 1083, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27411, 39, 0.00, 1083, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27412, 1, 60000.00, 1084, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27413, 7, 0.00, 1084, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27414, 12, 6000.00, 1084, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27415, 4, 60000.00, 1084, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27416, 5, 0.00, 1084, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27417, 6, 12000.00, 1084, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27418, 13, 6500.00, 1084, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27421, 15, 84500.00, 1084, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27422, 17, 9295.00, 1084, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27423, 18, 2535.00, 1084, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27424, 19, 2535.00, 1084, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27425, 20, 2112.50, 1084, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27426, 21, 16477.50, 1084, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27427, 22, 68022.50, 1084, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27428, 23, 68022.50, 1084, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27429, 32, 3401.13, 1084, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27430, 24, 34339.60, 1084, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27431, 25, 0.00, 1084, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27432, 26, 0.00, 1084, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27434, 27, 7154.08, 1084, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27435, 28, 0.00, 1084, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27437, 31, 0.00, 1084, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27438, 33, 0.00, 1084, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27439, 34, 0.00, 1084, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27440, 35, 0.00, 1084, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27441, 36, 0.00, 1084, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27442, 37, 41493.68, 1084, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27443, 38, 26528.82, 1084, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27444, 40, 125003.21, 1084, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27445, 9, 2340.00, 1084, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27446, 10, 2340.00, 1084, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27448, 39, 125003.21, 1084, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27449, 1, 35033.10, 1085, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27450, 7, 0.00, 1085, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27451, 12, 3503.31, 1085, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27452, 4, 35033.10, 1085, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27453, 5, 0.00, 1085, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27454, 6, 3503.31, 1085, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27455, 13, 3503.31, 1085, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27458, 15, 45543.03, 1085, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27459, 17, 5009.73, 1085, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27460, 18, 1366.29, 1085, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27461, 19, 1366.29, 1085, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27462, 20, 1138.58, 1085, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27463, 21, 8880.89, 1085, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27464, 22, 36662.14, 1085, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27465, 23, 36662.14, 1085, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27466, 32, 1833.11, 1085, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27467, 24, 34339.60, 1085, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27468, 25, 0.00, 1085, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27469, 26, 0.00, 1085, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27471, 27, 7154.08, 1085, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27472, 28, 0.00, 1085, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27474, 31, 0.00, 1085, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27475, 33, 0.00, 1085, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27476, 34, 0.00, 1085, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27477, 35, 0.00, 1085, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27478, 36, 0.00, 1085, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27479, 37, 41493.68, 1085, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27480, 38, -4831.54, 1085, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27481, 40, 0.00, 1085, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27482, 9, 1261.19, 1085, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27483, 10, 1261.19, 1085, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27484, 11, 10509.93, 1085, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27485, 39, 0.00, 1085, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27486, 1, 46839.10, 1086, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27487, 7, 0.00, 1086, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27488, 12, 4683.91, 1086, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27489, 4, 46839.10, 1086, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27490, 5, 0.00, 1086, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27491, 6, 14051.73, 1086, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27492, 13, 5464.56, 1086, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27495, 15, 71039.30, 1086, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27496, 17, 7814.32, 1086, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27497, 18, 2131.18, 1086, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27498, 19, 2131.18, 1086, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27499, 20, 1775.98, 1086, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27500, 21, 13852.66, 1086, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27501, 22, 57186.64, 1086, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27502, 23, 57186.64, 1086, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27503, 32, 2859.33, 1086, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27504, 24, 34339.60, 1086, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27505, 25, 0.00, 1086, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27506, 26, 0.00, 1086, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27508, 27, 7154.08, 1086, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27509, 28, 0.00, 1086, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27511, 31, 0.00, 1086, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27512, 33, 0.00, 1086, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27513, 34, 0.00, 1086, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27514, 35, 0.00, 1086, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27515, 36, 0.00, 1086, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27516, 37, 41493.68, 1086, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27517, 38, 15692.96, 1086, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27518, 40, 90042.93, 1086, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27519, 9, 1967.24, 1086, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27520, 10, 1967.24, 1086, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27521, 11, 16393.69, 1086, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27522, 39, 90042.93, 1086, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27523, 1, 42666.80, 1087, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27524, 7, 0.00, 1087, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27525, 12, 4266.68, 1087, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27526, 4, 42666.80, 1087, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27527, 5, 0.00, 1087, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27528, 6, 10240.03, 1087, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27529, 13, 4764.46, 1087, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27532, 15, 61937.97, 1087, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27533, 17, 6813.18, 1087, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27534, 18, 1858.14, 1087, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27535, 19, 1858.14, 1087, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27536, 20, 1548.45, 1087, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27537, 21, 12077.90, 1087, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27538, 22, 49860.07, 1087, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27539, 23, 49860.07, 1087, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27540, 32, 2493.00, 1087, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27541, 24, 34339.60, 1087, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27542, 25, 0.00, 1087, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27543, 26, 0.00, 1087, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27545, 27, 7154.08, 1087, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27546, 28, 0.00, 1087, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27548, 31, 0.00, 1087, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27549, 33, 0.00, 1087, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27550, 34, 0.00, 1087, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27551, 35, 0.00, 1087, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27552, 36, 0.00, 1087, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27553, 37, 41493.68, 1087, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27554, 38, 8366.39, 1087, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27555, 40, 2312.41, 1087, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27556, 9, 1715.21, 1087, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27557, 10, 1715.21, 1087, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27558, 11, 14293.38, 1087, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27559, 39, 2312.41, 1087, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27560, 1, 42012.00, 1088, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27561, 7, 0.00, 1088, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27562, 12, 4201.20, 1088, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27563, 4, 42012.00, 1088, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27565, 6, 31088.88, 1088, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27566, 13, 6441.84, 1088, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27569, 15, 83743.92, 1088, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27570, 17, 9211.83, 1088, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27571, 18, 2512.32, 1088, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27572, 19, 2512.32, 1088, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27573, 20, 2093.60, 1088, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27574, 21, 16330.06, 1088, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27575, 22, 67413.86, 1088, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27576, 23, 67413.86, 1088, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27577, 32, 3370.69, 1088, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27578, 24, 34339.60, 1088, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27579, 25, 6669.50, 1088, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27580, 26, 0.00, 1088, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27582, 27, 7154.08, 1088, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27583, 28, 0.00, 1088, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27585, 31, 0.00, 1088, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27586, 33, 0.00, 1088, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27587, 34, 0.00, 1088, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27588, 35, 0.00, 1088, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27589, 36, 0.00, 1088, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27590, 37, 48163.18, 1088, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27591, 38, 19250.68, 1088, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27592, 40, 64982.96, 1088, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27593, 9, 2319.06, 1088, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27594, 10, 2319.06, 1088, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27595, 11, 19325.52, 1088, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27596, 39, 64982.96, 1088, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27597, 1, 42717.50, 1089, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27598, 7, 0.00, 1089, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27599, 12, 4271.75, 1089, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27600, 4, 42717.50, 1089, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27601, 5, 0.00, 1089, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27602, 6, 7689.15, 1089, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27603, 13, 4556.53, 1089, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27606, 15, 59234.93, 1089, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27607, 17, 6515.84, 1089, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27608, 18, 1777.05, 1089, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27609, 19, 1777.05, 1089, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27610, 20, 1480.87, 1089, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27611, 21, 11550.81, 1089, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27612, 22, 47684.12, 1089, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27613, 23, 47684.12, 1089, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27614, 32, 2384.21, 1089, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27615, 24, 34339.60, 1089, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27616, 25, 6669.50, 1089, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27617, 26, 0.00, 1089, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27619, 27, 7154.08, 1089, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27620, 28, 0.00, 1089, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27622, 31, 0.00, 1089, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27623, 33, 0.00, 1089, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27624, 34, 0.00, 1089, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27625, 35, 0.00, 1089, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27626, 36, 0.00, 1089, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27627, 37, 48163.18, 1089, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27628, 38, -479.06, 1089, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27629, 40, 0.00, 1089, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27630, 9, 1640.35, 1089, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27631, 10, 1640.35, 1089, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27632, 11, 13669.60, 1089, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27633, 39, 0.00, 1089, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27634, 1, 38158.50, 1090, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27635, 7, 0.00, 1090, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27636, 12, 3815.85, 1090, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27637, 4, 38158.50, 1090, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27638, 5, 0.00, 1090, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27639, 6, 3052.68, 1090, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27640, 13, 3752.25, 1090, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27643, 15, 48779.28, 1090, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27644, 17, 5365.72, 1090, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27645, 18, 1463.38, 1090, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27646, 19, 1463.38, 1090, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27647, 20, 1219.48, 1090, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27648, 21, 9511.96, 1090, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27649, 22, 39267.32, 1090, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27650, 23, 39267.32, 1090, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27651, 32, 1963.37, 1090, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27652, 24, 34339.60, 1090, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27653, 25, 0.00, 1090, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27654, 26, 0.00, 1090, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27656, 27, 7154.08, 1090, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27657, 28, 0.00, 1090, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27659, 31, 0.00, 1090, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27660, 33, 0.00, 1090, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27661, 34, 0.00, 1090, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27662, 35, 0.00, 1090, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27663, 36, 0.00, 1090, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27664, 37, 41493.68, 1090, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27665, 38, -2226.36, 1090, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27666, 40, 0.00, 1090, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27667, 9, 1350.81, 1090, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27668, 10, 1350.81, 1090, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27669, 11, 11256.76, 1090, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27670, 39, 0.00, 1090, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27671, 1, 15764.70, 1091, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27672, 7, 0.00, 1091, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27673, 12, 1576.47, 1091, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27674, 4, 15764.70, 1091, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27675, 5, 0.00, 1091, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27676, 6, 630.59, 1091, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27677, 13, 1497.65, 1091, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27680, 15, 19469.40, 1091, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27681, 17, 2141.63, 1091, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27682, 18, 584.08, 1091, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27683, 19, 584.08, 1091, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27684, 20, 486.74, 1091, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27685, 21, 3796.53, 1091, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27686, 22, 15672.87, 1091, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27687, 23, 15672.87, 1091, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27688, 32, 783.64, 1091, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27689, 24, 34339.60, 1091, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27690, 25, 0.00, 1091, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27691, 26, 0.00, 1091, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27693, 27, 7154.08, 1091, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27694, 28, 0.00, 1091, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27696, 31, 0.00, 1091, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27697, 33, 0.00, 1091, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27698, 34, 0.00, 1091, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27699, 35, 0.00, 1091, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27700, 36, 0.00, 1091, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27701, 37, 41493.68, 1091, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27702, 38, -25820.81, 1091, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27703, 40, 0.00, 1091, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27704, 9, 539.15, 1091, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27705, 10, 539.15, 1091, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27706, 11, 4492.94, 1091, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27707, 39, 0.00, 1091, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27708, 1, 39104.00, 1092, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27709, 7, 0.00, 1092, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27710, 12, 3910.40, 1092, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27711, 4, 39104.00, 1092, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27712, 5, 0.00, 1092, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27713, 6, 8602.88, 1092, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27714, 13, 4301.44, 1092, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27717, 15, 55918.72, 1092, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27718, 17, 6151.06, 1092, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27719, 18, 1677.56, 1092, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27720, 19, 1677.56, 1092, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27721, 20, 1397.97, 1092, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27722, 21, 10904.15, 1092, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27723, 22, 45014.57, 1092, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27724, 23, 45014.57, 1092, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27725, 32, 2250.73, 1092, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27726, 24, 34339.60, 1092, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27727, 25, 0.00, 1092, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27728, 26, 0.00, 1092, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27730, 27, 7154.08, 1092, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27731, 28, 0.00, 1092, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27733, 31, 0.00, 1092, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27734, 33, 0.00, 1092, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27735, 34, 0.00, 1092, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27736, 35, 0.00, 1092, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27737, 36, 0.00, 1092, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27738, 37, 41493.68, 1092, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27739, 38, 3520.89, 1092, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27740, 40, 7045.80, 1092, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27741, 9, 1548.52, 1092, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27742, 10, 1548.52, 1092, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27743, 11, 12904.32, 1092, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27744, 39, 7045.80, 1092, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27745, 1, 45948.50, 1093, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27746, 7, 0.00, 1093, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27747, 12, 4594.85, 1093, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27748, 4, 45948.50, 1093, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27749, 5, 0.00, 1093, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27750, 6, 29407.04, 1093, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27751, 13, 6662.53, 1093, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27754, 15, 86612.92, 1093, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27755, 17, 9527.42, 1093, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27756, 18, 2598.39, 1093, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27757, 19, 2598.39, 1093, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27758, 20, 2165.32, 1093, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27759, 21, 16889.52, 1093, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27760, 22, 69723.40, 1093, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27761, 23, 69723.40, 1093, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27762, 32, 3486.17, 1093, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27763, 24, 34339.60, 1093, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27764, 25, 6669.50, 1093, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27765, 26, 0.00, 1093, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27767, 27, 7154.08, 1093, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27768, 28, 0.00, 1093, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27770, 31, 0.00, 1093, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27771, 33, 0.00, 1093, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27772, 34, 0.00, 1093, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27773, 35, 0.00, 1093, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27774, 36, 0.00, 1093, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27775, 37, 48163.18, 1093, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27776, 38, 21560.22, 1093, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27777, 40, 118102.54, 1093, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27778, 9, 2398.51, 1093, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27779, 10, 2398.51, 1093, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27780, 11, 19987.60, 1093, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27781, 39, 118102.54, 1093, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27782, 1, 34958.80, 1094, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27783, 7, 0.00, 1094, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27784, 12, 3495.88, 1094, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27785, 4, 34958.80, 1094, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27786, 5, 0.00, 1094, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27787, 6, 3495.88, 1094, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27788, 13, 3495.88, 1094, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27791, 15, 45446.44, 1094, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27792, 17, 4999.11, 1094, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27793, 18, 1363.39, 1094, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27794, 19, 1363.39, 1094, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27795, 20, 1136.16, 1094, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27796, 21, 8862.06, 1094, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27797, 22, 36584.38, 1094, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27798, 23, 36584.38, 1094, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27799, 32, 1829.22, 1094, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27800, 24, 34339.60, 1094, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27801, 25, 0.00, 1094, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27802, 26, 0.00, 1094, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27804, 27, 7154.08, 1094, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27805, 28, 0.00, 1094, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27807, 31, 0.00, 1094, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27808, 33, 0.00, 1094, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27809, 34, 0.00, 1094, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27810, 35, 0.00, 1094, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27811, 36, 0.00, 1094, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27812, 37, 41493.68, 1094, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27813, 38, -4909.30, 1094, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27814, 40, 0.00, 1094, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27815, 9, 1258.52, 1094, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27816, 10, 1258.52, 1094, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27817, 11, 10487.64, 1094, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27818, 39, 0.00, 1094, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27819, 1, 57061.70, 1095, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27820, 7, 0.00, 1095, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27821, 12, 5706.17, 1095, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27822, 4, 57061.70, 1095, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27823, 5, 0.00, 1095, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27824, 6, 36519.49, 1095, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27825, 13, 8273.95, 1095, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27828, 15, 107561.30, 1095, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27829, 17, 11831.74, 1095, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27830, 18, 3226.84, 1095, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27831, 19, 3226.84, 1095, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27832, 20, 2689.03, 1095, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27833, 21, 20974.45, 1095, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27834, 22, 86586.85, 1095, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27835, 23, 86586.85, 1095, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27836, 32, 4329.34, 1095, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27837, 24, 34339.60, 1095, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27838, 25, 0.00, 1095, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27839, 26, 0.00, 1095, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27841, 27, 7154.08, 1095, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27842, 28, 0.00, 1095, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27844, 31, 0.00, 1095, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27845, 33, 0.00, 1095, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27846, 34, 0.00, 1095, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27847, 35, 0.00, 1095, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27848, 36, 0.00, 1095, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27849, 37, 41493.68, 1095, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27850, 38, 45093.17, 1095, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27851, 40, 46232.49, 1095, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27852, 9, 2978.62, 1095, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27853, 10, 2978.62, 1095, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27854, 11, 24821.84, 1095, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27855, 39, 46232.49, 1095, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27856, 1, 34892.86, 1096, 'Sueldo Básico', '1', 'basico', 1, 'HABERES', true, true, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27857, 7, 0.00, 1096, 'Horas Extras 100%', '3', '( c1 / 200 ) * 1.5 *  hsextras', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27858, 12, 3489.29, 1096, 'Presentismo', '10', 'si( igual(inasistencias, 0) , ( basico*0.1 ) , 0 )', 1, 'HABERES', true, false, true, NULL, true, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27859, 4, 34892.86, 1096, 'Idem Sueldo Basico', '90', 'c1', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27860, 5, 0.00, 1096, 'Años Reconocimiento', '101', '0', 1, 'HABERES', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27861, 6, 697.86, 1096, 'Antiguedad', '102', 'c90 * ( antiguedad + c101 ) * 0.02', 1, 'HABERES', true, false, true, NULL, true, true);
+INSERT INTO public.historico_recibos_conceptos VALUES (27862, 13, 3256.67, 1096, 'Ganancias - SAC Devengado', '301', 'si(  calculasac  , (maxsueldo/2) - sumsac , bruto/12 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27865, 15, 42336.67, 1096, 'Ganancias - tot_rem_bruta', '309', 'bruto +  c301 + c302 + c303', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27866, 17, 4657.03, 1096, 'Retenciones - Jubilación', '310', 'c309 * 0.11', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27867, 18, 1270.10, 1096, 'Retenciones - Obra Social', '311', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27868, 19, 1270.10, 1096, 'Retenciones - INNSJP', '312', 'c309 * 0.03', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27869, 20, 1058.42, 1096, 'Retenciones - Cuota Solidaridad', '313', 'c309 * 0.025', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27870, 21, 8255.65, 1096, 'Retenciones - Total Retenciones', '320', 'c310 + c311 + c312 + c313', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27871, 22, 34081.02, 1096, 'Ganancia Neta Mensual', '321', 'c309-c320', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27872, 23, 34081.02, 1096, 'Ganancia Neta Acumulada', '322', 'c321 + ganancia_neta_acumulada', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27873, 32, 1704.05, 1096, 'Prepaga (5% del sueldo neto)', '323', 'c322 * 0.05', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27874, 24, 34339.60, 1096, 'Deducción. Especial', '330', 'tabla("especial")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27875, 25, 6669.50, 1096, 'Deduccion. Conyuge', '331', 'si( casado , tabla("conyuge") , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27876, 26, 0.00, 1096, 'Deducciones. Hijos', '332', 'si( mayor(hijos,0) , tabla("hijo") * hijos , 0 )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27878, 27, 7154.08, 1096, 'Deducciones. Ganancia no imponible', '334', 'tabla("ganancia")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27879, 28, 0.00, 1096, 'Deducciones. Intereses créditos hipotecarios', '335', 'informado("hipoteca")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27881, 31, 0.00, 1096, 'Deducciones. Prepaga', '337', 'si( igual(informado("prepaga"),0) , 0, si( menor_igual( informado("prepaga"), c323 ) , informado("prepaga"),c323))', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27882, 33, 0.00, 1096, 'Deducciones. Gastos Médicos', '338', 'informado("medico")', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27883, 34, 0.00, 1096, 'Deducciones. Seguro de Vida', '339', 'si(  igual( informado("segurovida"), 0) , 0 , si(  menor_igual(informado("segurovida"),tope("segurovida"))  , informado("segurovida") , tope("segurovida")  )  )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27884, 35, 0.00, 1096, 'Deducciones. Donaciones', '340', 'si( igual( informado("donacion"), 0) , 0 , si( menor_igual(informado("donacion"),tope("donacion")) , informado("donacion") , tope("donacion") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27885, 36, 0.00, 1096, 'Deducciones. Alquileres', '341', 'si( igual( informado("alquiler"), 0) , 0 , si( menor_igual(informado("alquiler"),tope("alquiler")) , informado("alquiler") , tope("alquiler") ) )', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27886, 37, 48163.18, 1096, 'Total Deducciones', '350', 'c330 +  c331 +  c332 + c333 + c334 + c335 + c336 + c337 + c338 + c339 + c340 + c341', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27887, 38, -14082.16, 1096, 'Ganancia neta imponible', '360', 'c322 - c350', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27888, 40, 0.00, 1096, 'Ganancia Escala', '370', 'ganancias(c360)', 4, 'CALCULO GANANCIAS', false, false, false, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27889, 9, 1172.40, 1096, 'INNSJP-LEY 1903', '501', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27890, 10, 1172.40, 1096, 'Obra Social', '502', 'bruto * 0.03', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27891, 11, 9770.00, 1096, 'Cuota solidaria Utedyc', '511', 'bruto * 0.25', 2, 'DEDUCCIONES', true, false, true, NULL, false, false);
+INSERT INTO public.historico_recibos_conceptos VALUES (27892, 39, 0.00, 1096, 'IMPUESTO A LAS GANANCIAS', '515', 'c370 - ganancia_acumulada', 2, 'DEDUCCIONES', false, false, false, NULL, false, false);
 
 
 --
@@ -3038,27 +4175,27 @@ SELECT pg_catalog.setval('public.persona_tareas_id_seq', 5, true);
 -- Data for Name: personas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.personas VALUES (2, 'Martin', 'Garay', '1989-05-11', 1, '34555008', 1, 1, false, 4611, 1, 1, 1, 1, 'martingaray_12@gmail.com', '2019-07-01', '2019-08-15', '08:00:00', '15:00:00', 1, 'San Vicente 1351', '1 ', 'D         ', '01122777025', '01122777025', 1, '23345550089', 7.00, 10000.00, 0, 8.00);
-INSERT INTO public.personas VALUES (12, 'Gisela Elizabeth', 'Dandrilli', '1984-08-04', 1, '30939944', 2, 1, true, 34, 2, 4, 1, 1, NULL, '2014-02-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27309399442', 7.00, 35226.50, 0, 8.00);
-INSERT INTO public.personas VALUES (13, 'Noemi Severa', 'Delgado', '1956-10-27', 1, '12904169', 2, 1, true, 7, 2, 2, 1, 1, NULL, '1986-07-14', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27129041698', 7.00, 48582.30, 0, 8.00);
-INSERT INTO public.personas VALUES (16, 'Rodrigo Raul', 'Ferreyra', '1989-10-10', 1, '34831908', 1, 1, true, 32, 1, 4, 1, 1, NULL, '2013-10-07', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20348319087', 7.00, 35033.10, 0, 8.00);
-INSERT INTO public.personas VALUES (17, 'Micaela Noemi', 'Frascaroli', '1982-02-27', 1, '29233345', 2, 1, true, 19, 1, 2, 1, 1, NULL, '2003-10-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27292333450', 7.00, 46839.10, 0, 8.00);
-INSERT INTO public.personas VALUES (18, 'Betiana Nazareth', 'Gallesio', '1978-01-04', 1, '26167199', 2, 1, true, 21, 1, 2, 1, 1, NULL, '2006-11-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27261671994', 7.00, 42666.80, 0, 8.00);
-INSERT INTO public.personas VALUES (20, 'Norma Elizabeth', 'Lombardo', '1960-11-25', 1, '14097779', 2, 1, true, 27, 2, 2, 1, 1, NULL, '2009-08-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27140977794', 7.00, 42717.50, 0, 8.00);
-INSERT INTO public.personas VALUES (21, 'Maria Soledad', 'Paccor', '1979-03-05', 1, '27033687', 2, 1, true, 35, 1, 3, 1, 1, NULL, '2014-11-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27270336871', 7.00, 38158.50, 0, 8.00);
-INSERT INTO public.personas VALUES (22, 'Alejandra', 'Paris', '1984-05-06', 1, '30939775', 2, 1, true, 39, 1, 3, 1, 1, NULL, '2016-07-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '23309397754', 7.00, 15764.70, 0, 8.00);
-INSERT INTO public.personas VALUES (23, 'Jorgelina', 'Parra', '1976-05-11', 1, '25048843', 2, 1, true, 23, 1, 3, 1, 1, NULL, '2007-07-02', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27250488438', 7.00, 39104.00, 0, 8.00);
-INSERT INTO public.personas VALUES (25, 'Lautaro', 'Riccardo', '1986-05-29', 1, '32378152', 1, 1, true, 33, 1, 3, 1, 1, NULL, '2013-10-07', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20323781525', 7.00, 34958.80, 0, 8.00);
-INSERT INTO public.personas VALUES (26, 'Ana Gladys', 'Romero', '1966-05-04', 1, '18148598', 2, 1, true, 3, 3, 1, 1, 1, NULL, '1986-11-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27181485987', 7.00, 57061.70, 0, 8.00);
-INSERT INTO public.personas VALUES (24, 'Norma', 'Poletti', '1967-11-07', 1, '18601061', 2, 1, true, 2, 2, 2, 1, 1, NULL, '1986-09-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27186010618', 7.00, 45948.50, 0, 8.00);
-INSERT INTO public.personas VALUES (15, 'Maria Cecilia', 'Ferrari', '1982-07-25', 1, '29594863', 2, 1, true, 26, 1, 3, 2, 1, NULL, '2008-02-20', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27295948634', 7.00, NULL, 0, 4.00);
-INSERT INTO public.personas VALUES (14, 'Cesar Anibal', 'Echenique', '1978-12-24', 1, '27113644', 1, 1, true, 37, 1, 3, 2, 1, NULL, '2015-06-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20271136448', 7.00, 17250.00, 0, 4.00);
-INSERT INTO public.personas VALUES (19, 'Claudia Fabiana', 'Herrera', '1965-04-28', 1, '16833436', 2, 1, true, 10, 2, 3, 1, 1, NULL, '1984-08-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, 1, '27168334368', 7.00, 42012.00, 0, 8.00);
-INSERT INTO public.personas VALUES (7, 'Silvio', 'Zeppa', '1978-05-20', 1, '26563056', 1, 1, true, 40, 2, 4, 1, 1, NULL, '2017-04-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20265630562', 7.00, 34892.86, 0, 8.00);
-INSERT INTO public.personas VALUES (9, 'Ivan Guillermo', 'Becaj', '1978-05-01', 1, '26583833', 1, 1, true, 31, 1, 2, 1, 1, NULL, '2013-06-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20265838333', 7.00, 41008.81, 0, 8.00);
-INSERT INTO public.personas VALUES (10, 'Silvia Marina', 'Cano', '1960-12-22', 1, '14490100', 2, 1, true, 5, 2, 2, 1, 1, NULL, '1988-12-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27144901008', 7.00, 46807.40, 0, 8.00);
-INSERT INTO public.personas VALUES (11, 'Teresita', 'Cespedes Ramirez', '1965-05-20', 1, '92727141', 2, 1, true, 8, 3, 5, 2, 1, NULL, '2010-03-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27927271414', 7.00, 24061.43, 0, 4.00);
-INSERT INTO public.personas VALUES (8, 'Claudio Daniel', 'Acosta', '1978-07-18', 1, '26823601', 1, 1, true, 29, 2, 4, 1, 1, NULL, '2011-04-06', NULL, '07:00:00', '16:00:00', 1, NULL, NULL, NULL, NULL, NULL, 1, '20268236016', 9.00, 34351.20, 0, 8.00);
+INSERT INTO public.personas VALUES (2, 'Martin', 'Garay', '1989-05-11', 1, '34555008', 1, 1, false, 4611, 1, 1, 1, 1, 'martingaray_12@gmail.com', '2019-07-01', '2019-08-15', '08:00:00', '15:00:00', 1, 'San Vicente 1351', '1 ', 'D         ', '01122777025', '01122777025', 1, '23345550089', 7.00, 10000.00, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (12, 'Gisela Elizabeth', 'Dandrilli', '1984-08-04', 1, '30939944', 2, 1, true, 34, 2, 4, 1, 1, NULL, '2014-02-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27309399442', 7.00, 35226.50, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (13, 'Noemi Severa', 'Delgado', '1956-10-27', 1, '12904169', 2, 1, true, 7, 2, 2, 1, 1, NULL, '1986-07-14', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27129041698', 7.00, 48582.30, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (16, 'Rodrigo Raul', 'Ferreyra', '1989-10-10', 1, '34831908', 1, 1, true, 32, 1, 4, 1, 1, NULL, '2013-10-07', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20348319087', 7.00, 35033.10, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (17, 'Micaela Noemi', 'Frascaroli', '1982-02-27', 1, '29233345', 2, 1, true, 19, 1, 2, 1, 1, NULL, '2003-10-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27292333450', 7.00, 46839.10, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (18, 'Betiana Nazareth', 'Gallesio', '1978-01-04', 1, '26167199', 2, 1, true, 21, 1, 2, 1, 1, NULL, '2006-11-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27261671994', 7.00, 42666.80, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (20, 'Norma Elizabeth', 'Lombardo', '1960-11-25', 1, '14097779', 2, 1, true, 27, 2, 2, 1, 1, NULL, '2009-08-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27140977794', 7.00, 42717.50, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (21, 'Maria Soledad', 'Paccor', '1979-03-05', 1, '27033687', 2, 1, true, 35, 1, 3, 1, 1, NULL, '2014-11-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27270336871', 7.00, 38158.50, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (22, 'Alejandra', 'Paris', '1984-05-06', 1, '30939775', 2, 1, true, 39, 1, 3, 1, 1, NULL, '2016-07-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '23309397754', 7.00, 15764.70, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (23, 'Jorgelina', 'Parra', '1976-05-11', 1, '25048843', 2, 1, true, 23, 1, 3, 1, 1, NULL, '2007-07-02', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27250488438', 7.00, 39104.00, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (25, 'Lautaro', 'Riccardo', '1986-05-29', 1, '32378152', 1, 1, true, 33, 1, 3, 1, 1, NULL, '2013-10-07', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20323781525', 7.00, 34958.80, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (26, 'Ana Gladys', 'Romero', '1966-05-04', 1, '18148598', 2, 1, true, 3, 3, 1, 1, 1, NULL, '1986-11-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27181485987', 7.00, 57061.70, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (24, 'Norma', 'Poletti', '1967-11-07', 1, '18601061', 2, 1, true, 2, 2, 2, 1, 1, NULL, '1986-09-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27186010618', 7.00, 45948.50, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (15, 'Maria Cecilia', 'Ferrari', '1982-07-25', 1, '29594863', 2, 1, true, 26, 1, 3, 2, 1, NULL, '2008-02-20', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27295948634', 7.00, NULL, 0, 4.00, NULL);
+INSERT INTO public.personas VALUES (14, 'Cesar Anibal', 'Echenique', '1978-12-24', 1, '27113644', 1, 1, true, 37, 1, 3, 2, 1, NULL, '2015-06-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20271136448', 7.00, 17250.00, 0, 4.00, NULL);
+INSERT INTO public.personas VALUES (19, 'Claudia Fabiana', 'Herrera', '1965-04-28', 1, '16833436', 2, 1, true, 10, 2, 3, 1, 1, NULL, '1984-08-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, 1, '27168334368', 7.00, 42012.00, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (7, 'Silvio', 'Zeppa', '1978-05-20', 1, '26563056', 1, 1, true, 40, 2, 4, 1, 1, NULL, '2017-04-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20265630562', 7.00, 34892.86, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (9, 'Ivan Guillermo', 'Becaj', '1978-05-01', 1, '26583833', 1, 1, true, 31, 1, 2, 1, 1, NULL, '2013-06-03', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '20265838333', 7.00, 41008.81, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (10, 'Silvia Marina', 'Cano', '1960-12-22', 1, '14490100', 2, 1, true, 5, 2, 2, 1, 1, NULL, '1988-12-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27144901008', 7.00, 46807.40, 0, 8.00, NULL);
+INSERT INTO public.personas VALUES (11, 'Teresita', 'Cespedes Ramirez', '1965-05-20', 1, '92727141', 2, 1, true, 8, 3, 5, 2, 1, NULL, '2010-03-01', NULL, '08:00:00', '15:00:00', 1, NULL, NULL, NULL, NULL, NULL, NULL, '27927271414', 7.00, 24061.43, 0, 4.00, NULL);
+INSERT INTO public.personas VALUES (8, 'Claudio Daniel', 'Acosta', '1978-07-18', 1, '26823601', 1, 1, true, 29, 2, 4, 1, 1, NULL, '2011-04-06', NULL, '07:00:00', '16:00:00', 1, NULL, NULL, NULL, NULL, NULL, 1, '20268236016', 9.00, 34351.20, 0, 8.00, NULL);
 
 
 --
@@ -5351,13 +6488,14 @@ SELECT pg_catalog.setval('public.tipos_documentos_id_seq', 1, false);
 -- Data for Name: tipos_empleadores; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO public.tipos_empleadores VALUES (1, 'Dec 814/01, art. 2, inc. B');
 
 
 --
 -- Name: tipos_empleadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, false);
+SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, true);
 
 
 --
@@ -5688,6 +6826,22 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
+-- Name: pk_liquidaciones_conceptos_historico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_liquidaciones_conceptos
+    ADD CONSTRAINT pk_liquidaciones_conceptos_historico PRIMARY KEY (id);
+
+
+--
+-- Name: pk_liquidaciones_historico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_liquidaciones
+    ADD CONSTRAINT pk_liquidaciones_historico PRIMARY KEY (id);
+
+
+--
 -- Name: pk_localidad; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5792,11 +6946,35 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
+-- Name: pk_recibos_acumuladores_historico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos_acumuladores
+    ADD CONSTRAINT pk_recibos_acumuladores_historico PRIMARY KEY (id);
+
+
+--
 -- Name: pk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
     ADD CONSTRAINT pk_recibos_conceptos PRIMARY KEY (id);
+
+
+--
+-- Name: pk_recibos_conceptos_historico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos_conceptos
+    ADD CONSTRAINT pk_recibos_conceptos_historico PRIMARY KEY (id);
+
+
+--
+-- Name: pk_recibos_historico; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos
+    ADD CONSTRAINT pk_recibos_historico PRIMARY KEY (id);
 
 
 --
@@ -5992,11 +7170,35 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
+-- Name: uk_recibos_acumuladoresh; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos_acumuladores
+    ADD CONSTRAINT uk_recibos_acumuladoresh UNIQUE (id_recibo, id_acumulador);
+
+
+--
 -- Name: uk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
     ADD CONSTRAINT uk_recibos_conceptos UNIQUE (id_concepto, id_recibo);
+
+
+--
+-- Name: uk_recibos_conceptosh; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos_conceptos
+    ADD CONSTRAINT uk_recibos_conceptosh UNIQUE (id_concepto, id_recibo);
+
+
+--
+-- Name: uk_recibosh; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos
+    ADD CONSTRAINT uk_recibosh UNIQUE (id_liquidacion, id_persona);
 
 
 --
@@ -6253,6 +7455,22 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
+-- Name: fk_liquidaciones_conceptos_h__liquidacionesh; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_liquidaciones_conceptos
+    ADD CONSTRAINT fk_liquidaciones_conceptos_h__liquidacionesh FOREIGN KEY (id_liquidacion) REFERENCES public.historico_liquidaciones(id);
+
+
+--
+-- Name: fk_liquidaciones_historico__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_liquidaciones
+    ADD CONSTRAINT fk_liquidaciones_historico__liquidaciones FOREIGN KEY (id) REFERENCES public.liquidaciones(id);
+
+
+--
 -- Name: fk_localidad_provincia; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6365,6 +7583,14 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
+-- Name: fk_recibos_acumuladoresh__reciboh; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos_acumuladores
+    ADD CONSTRAINT fk_recibos_acumuladoresh__reciboh FOREIGN KEY (id_recibo) REFERENCES public.historico_recibos(id);
+
+
+--
 -- Name: fk_recibos_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6378,6 +7604,22 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 ALTER TABLE ONLY public.recibos_conceptos
     ADD CONSTRAINT fk_recibos_conceptos__recibo FOREIGN KEY (id_recibo) REFERENCES public.recibos(id);
+
+
+--
+-- Name: fk_recibos_conceptos__reciboh; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos_conceptos
+    ADD CONSTRAINT fk_recibos_conceptos__reciboh FOREIGN KEY (id_recibo) REFERENCES public.historico_recibos(id);
+
+
+--
+-- Name: fk_recibos_historico__liquidacionesh; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.historico_recibos
+    ADD CONSTRAINT fk_recibos_historico__liquidacionesh FOREIGN KEY (id_liquidacion) REFERENCES public.historico_liquidaciones(id);
 
 
 --

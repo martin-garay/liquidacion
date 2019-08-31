@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[3606]--  Deducciones Informadas 
+--[3606]--  Deducciones Personal 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Deducciones Informadas', --nombre
+	'Deducciones Personal', --nombre
 	NULL, --descripcion
 	'16', --punto_montaje
 	NULL, --actividad_accion
@@ -40,7 +40,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --zona_orden
 	'0', --zona_listar
 	'apex', --imagen_recurso_origen
-	NULL, --imagen
+	'nucleo/borrar.gif', --imagen
 	NULL, --parametro_a
 	NULL, --parametro_b
 	NULL, --parametro_c

@@ -26,10 +26,10 @@ class ci_liquidacion extends asociacion_ci
 	//-----------------------------------------------------------------------------------
 
 	//pasa una liquidacion de estado PENDIENTE LIQUIDACON a LIQUIDADA
-	function evt__liquidar(){		
-		$this->ci_hijo()->liquidar();
-		$this->set_pantalla('pant_inicial');	
-	}
+	// function evt__liquidar(){		
+	// 	$this->ci_hijo()->liquidar();
+	// 	$this->set_pantalla('pant_inicial');	
+	// }
 	function evt__procesar()
 	{
 		$this->ci_hijo()->crear();
@@ -92,6 +92,18 @@ class ci_liquidacion extends asociacion_ci
 		$this->relacion()->cargar($seleccion);
 		$this->ci_hijo()->liquidar();
 	}
+	function evt__cuadro__cerrar($seleccion)
+	{
+		$this->relacion()->cargar($seleccion);
+		$this->ci_hijo()->cerrar();
+	}
+	function conf_evt__cuadro__seleccion(toba_evento_usuario $evento, $fila)
+	{
+		$datos = $this->dep('cuadro')->get_datos();
+        if( $datos[$fila]['id_estado']==3 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
+            $evento->anular();
+        }
+	}
 	function conf_evt__cuadro__borrar(toba_evento_usuario $evento, $fila)
 	{
 		$datos = $this->dep('cuadro')->get_datos();
@@ -103,6 +115,13 @@ class ci_liquidacion extends asociacion_ci
 	{
 		$datos = $this->dep('cuadro')->get_datos();
         if( $datos[$fila]['id_estado']!==1 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
+            $evento->anular();
+        }
+	}	
+	function conf_evt__cuadro__cerrar(toba_evento_usuario $evento, $fila)
+	{
+		$datos = $this->dep('cuadro')->get_datos();
+        if( $datos[$fila]['id_estado']!==2 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
             $evento->anular();
         }
 	}

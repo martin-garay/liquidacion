@@ -141,7 +141,10 @@ class ci_datos_liquidacion extends asociacion_ci
 			throw new toba_error_usuario("Solo se pueden liquidar Liquidaciones con estado: PENDIENTE LIQUIDACION");
 		}
 	}
-	
+	function cerrar(){
+		$this->tabla('liquidacion')->set_columna_valor('id_estado',3);
+		$this->guardar();
+	}
 	function ordenar_conceptos($conceptos){		
 		uasort($conceptos, function($a, $b) {
 			    if ($a['codigo'] == $b['codigo']) {
