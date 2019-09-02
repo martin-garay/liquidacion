@@ -1,9 +1,12 @@
 <?php
 class ci_liquidacion extends asociacion_ci
 {
+	const RECIBO = 1, RECIBOS=2, LIBRO_SUELDO=3;
+
 	protected $s__filtro;
 	protected $s__id_liquidacion;
 	protected $s__fila_imprimir;
+	protected $s__reporte_imprimir;
 
 	function evt__volver(){
 		$this->set_pantalla('pant_inicial');
@@ -78,13 +81,21 @@ class ci_liquidacion extends asociacion_ci
 	}
 	function ajax__imprimir_libro($fila, toba_ajax_respuesta $respuesta){
         $this->s__fila_imprimir = $fila;
+        $this->s__reporte_imprimir = self::LIBRO_SUELDO;
         $respuesta->set($fila);
     }
 
     function ajax__imprimir_recibo($fila, toba_ajax_respuesta $respuesta){
         $this->s__fila_imprimir = $fila;
+        $this->s__reporte_imprimir = self::RECIBO;
         $respuesta->set($fila);
     }
+    function ajax__imprimir_listado_recibos($fila, toba_ajax_respuesta $respuesta){
+        $this->s__fila_imprimir = $fila;
+        $this->s__reporte_imprimir = self::RECIBOS;
+        $respuesta->set($fila);
+    }
+
 
 	function extender_objeto_js()
 	{
@@ -94,6 +105,11 @@ class ci_liquidacion extends asociacion_ci
 	                this.controlador.ajax('imprimir_libro', nro_fila , this.controlador, this.controlador.respuesta);
 	                return false;
 	        };
+
+	        {$this->dep('cuadro')->objeto_js}.evt__imprimir_recibos = function(nro_fila){                        
+	                this.controlador.ajax('imprimir_listado_recibos', nro_fila , this.controlador, this.controlador.respuesta);
+	                return false;
+	        };	        
 	        
 	        {$this->objeto_js}.respuesta = function(resultado){
 	            console.log(resultado);
@@ -119,27 +135,57 @@ class ci_liquidacion extends asociacion_ci
 	}
 
 	function vista_jasperreports(toba_vista_jasperreports $report)
-    {       
+    {           	
         $fecha = date("d/m/Y");
-        if($this->get_id_pantalla=='pant_inicial'){					//libro de sueldos
+        switch ($this->s__reporte_imprimir) {
 
-        	$datos = $this->dep('cuadro')->get_datos();
-        	$liquidacion = $datos[$this->s__fila_imprimir];
+        	case self::RECIBO:
+        		$datos = $this->dep('cuadro_recibos')->get_datos();
+	        	$recibo = $datos[$this->s__fila_imprimir];
 
-        	$nombre = 'liquidacion-' . $liquidacion['anio'] . '-' . $liquidacion['mes'] . '.pdf';
-        	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/libro_sueldo_historico.jasper');
-			$report->set_parametro('id_liquidacion','E',$liquidacion['id']);        	        	
+				$nombre = 'recibo_' . $recibo['nro_recibo'] . '_' . $recibo['nro_documento'] . '.pdf';
+	        	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/recibo_historico.jasper');
+				$report->set_parametro('id_recibo','E',$recibo['id']);	
+        		break;
 
-        }else{														//recibo
+        	case self::RECIBOS:
+        		$datos = $this->dep('cuadro')->get_datos();
+	        	$liquidacion = $datos[$this->s__fila_imprimir];
 
-			$datos = $this->dep('cuadro_recibos')->get_datos();
-        	$recibo = $datos[$this->s__fila_imprimir];
+	        	$nombre = 'recibos-liquidacion-' . $liquidacion['anio'] . '-' . $liquidacion['mes'] . '.pdf';
+	        	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/liquidacion_recibos_historico.jasper');
+				$report->set_parametro('id_liquidacion','E',$liquidacion['id']);
+        		break;
+        	
+    		case self::LIBRO_SUELDO:
+    			$datos = $this->dep('cuadro')->get_datos();
+	        	$liquidacion = $datos[$this->s__fila_imprimir];
 
-			$nombre = 'recibo_' . $recibo['nro_recibo'] . '_' . $recibo['nro_documento'] . '.pdf';
-        	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/recibo_historico.jasper');
-			$report->set_parametro('id_recibo','E',$recibo['id']);
-
+	        	$nombre = 'liquidacion-' . $liquidacion['anio'] . '-' . $liquidacion['mes'] . '.pdf';
+	        	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/libro.jasper');
+				$report->set_parametro('id_liquidacion','E',$liquidacion['id']);        	        	
+    			break;
+        	
         }
+   //      if($this->get_id_pantalla=='pant_inicial'){					//libro de sueldos
+
+			// $datos = $this->dep('cuadro')->get_datos();
+			// $liquidacion = $datos[$this->s__fila_imprimir];
+
+			// $nombre = 'liquidacion-' . $liquidacion['anio'] . '-' . $liquidacion['mes'] . '.pdf';
+			// $report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/libro_sueldo_historico.jasper');
+			// $report->set_parametro('id_liquidacion','E',$liquidacion['id']);        	        	
+
+   //      }else{														//recibo
+
+   //  		$datos = $this->dep('cuadro_recibos')->get_datos();
+   //      	$recibo = $datos[$this->s__fila_imprimir];
+
+			// $nombre = 'recibo_' . $recibo['nro_recibo'] . '_' . $recibo['nro_documento'] . '.pdf';
+   //      	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/recibo_historico.jasper');
+			// $report->set_parametro('id_recibo','E',$recibo['id']);	
+			
+   //      }
         
         $report->set_nombre_archivo($nombre);               
         $report->set_parametro('proyecto_path','S',toba::proyecto()->get_path());

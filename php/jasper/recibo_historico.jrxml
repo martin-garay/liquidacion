@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="0c84e1d2-7776-4e10-b8ba-b202a37f64b8">
-	<property name="ireport.zoom" value="1.1000000000000008"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" isIgnorePagination="true" uuid="0c84e1d2-7776-4e10-b8ba-b202a37f64b8">
+	<property name="ireport.zoom" value="1.2100000000000009"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="13"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -32,9 +32,10 @@
 	l.descripcion as descripcion_liquidacion,l.periodo_depositado,mes,anio,
 	cuit,
 	actividad,
-	establecimiento, direccion_establecimiento, localidad_establecimiento,cp_establecimiento, provincia_establecimiento,
+	l.establecimiento as establecimiento_liquidacion, direccion_establecimiento, localidad_establecimiento,cp_establecimiento, provincia_establecimiento,
 	direccion_establecimiento||' '||cp_establecimiento||' - '||localidad_establecimiento as direccion_descripcion_establecimiento,
-	lugar_pago ||', '||to_char(fecha_pago , 'DD/MM/YYYY') as lugar_fechapago
+	lugar_pago ||', '||to_char(fecha_pago , 'DD/MM/YYYY') as lugar_fechapago,
+	l.banco
 from historico_liquidaciones l
 join historico_recibos r ON r.id_liquidacion=l.id
 WHERE r.id=$P{id_recibo}]]>
@@ -79,19 +80,22 @@ WHERE r.id=$P{id_recibo}]]>
 	<field name="nacionalidad" class="java.lang.String"/>
 	<field name="pais" class="java.lang.String"/>
 	<field name="provincia" class="java.lang.String"/>
+	<field name="id_establecimiento" class="java.lang.Integer"/>
+	<field name="establecimiento" class="java.lang.String"/>
 	<field name="descripcion_liquidacion" class="java.lang.String"/>
 	<field name="periodo_depositado" class="java.lang.String"/>
 	<field name="mes" class="java.lang.Integer"/>
 	<field name="anio" class="java.lang.Integer"/>
 	<field name="cuit" class="java.lang.String"/>
 	<field name="actividad" class="java.lang.String"/>
-	<field name="establecimiento" class="java.lang.String"/>
+	<field name="establecimiento_liquidacion" class="java.lang.String"/>
 	<field name="direccion_establecimiento" class="java.lang.String"/>
 	<field name="localidad_establecimiento" class="java.lang.String"/>
 	<field name="cp_establecimiento" class="java.lang.String"/>
 	<field name="provincia_establecimiento" class="java.lang.String"/>
 	<field name="direccion_descripcion_establecimiento" class="java.lang.String"/>
 	<field name="lugar_fechapago" class="java.lang.String"/>
+	<field name="banco" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -109,49 +113,34 @@ WHERE r.id=$P{id_recibo}]]>
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{establecimiento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{establecimiento_liquidacion}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="4" y="23" width="163" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a9d9c973-e012-4c30-9e6f-a7dde0559f33"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{direccion_descripcion_establecimiento}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement mode="Transparent" x="4" y="36" width="37" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="a156d492-6169-4d68-94f2-b5370381ad1e"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[CUIT:]]></text>
-			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="43" y="36" width="126" height="12" uuid="581f5a5f-e0ca-4dca-a2be-f9476d2b3ddc"/>
+				<reportElement x="4" y="36" width="163" height="12" uuid="581f5a5f-e0ca-4dca-a2be-f9476d2b3ddc"/>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cuit}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CUIT: "+$F{cuit}.substring(0,2)+"-"+$F{cuit}.substring(2,10)+"-"+$F{cuit}.substring(10)
+]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement mode="Transparent" x="4" y="49" width="55" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="0fcc9cc0-e389-4836-9375-87568624a671"/>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="4" y="51" width="163" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a0c93ae-bd76-4a6a-b757-d88ec9cef06e"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<text><![CDATA[Actividad:]]></text>
-			</staticText>
-			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="63" y="51" width="106" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a0c93ae-bd76-4a6a-b757-d88ec9cef06e"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{actividad}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Actividad: "+$F{actividad}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement mode="Transparent" x="4" y="62" width="96" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b7b0a513-6040-4a06-b09c-e211dd4def0a"/>
+				<reportElement mode="Transparent" x="4" y="63" width="96" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="b7b0a513-6040-4a06-b09c-e211dd4def0a"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -159,9 +148,9 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[PERIODO ABONADO:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="101" y="63" width="68" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ed8746c7-be8d-4734-bc96-c88fc0aa50ed"/>
+				<reportElement mode="Transparent" x="95" y="63" width="68" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ed8746c7-be8d-4734-bc96-c88fc0aa50ed"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{periodo_depositado}]]></textFieldExpression>
@@ -191,7 +180,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<reportElement x="171" y="14" width="384" height="1" uuid="77e2a3d5-1690-4bd9-a86f-67d8abd57414"/>
 			</line>
 			<staticText>
-				<reportElement mode="Transparent" x="174" y="15" width="56" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="93527df2-c518-4427-93f8-7dba0cb013a4"/>
+				<reportElement mode="Transparent" x="174" y="15" width="37" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="93527df2-c518-4427-93f8-7dba0cb013a4"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -199,7 +188,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[LEG.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="233" y="15" width="168" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="23412525-0929-4153-be01-3ec51153036b"/>
+				<reportElement mode="Transparent" x="215" y="15" width="168" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="23412525-0929-4153-be01-3ec51153036b"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -207,7 +196,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[APELLIDO Y NOMBRES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="408" y="15" width="62" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a0b9b047-c0e2-4116-87e6-7c1abacea443"/>
+				<reportElement mode="Transparent" x="390" y="15" width="78" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="a0b9b047-c0e2-4116-87e6-7c1abacea443"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -226,7 +215,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<reportElement x="171" y="26" width="384" height="1" uuid="2284b9d6-6d91-4bc6-a30b-daade36c7ec1"/>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement mode="Transparent" x="174" y="28" width="56" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="48e699d7-011d-493f-9edc-0fb837a6f5e5"/>
+				<reportElement mode="Transparent" x="174" y="28" width="37" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="48e699d7-011d-493f-9edc-0fb837a6f5e5"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -234,19 +223,20 @@ WHERE r.id=$P{id_recibo}]]>
 				<textFieldExpression><![CDATA[$F{legajo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="233" y="28" width="175" height="12" uuid="72003718-5ea3-479f-a82d-3da4e4d8dcf9"/>
+				<reportElement x="215" y="28" width="175" height="12" uuid="72003718-5ea3-479f-a82d-3da4e4d8dcf9"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{apellido} +" "+ $F{nombre}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="408" y="28" width="70" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2dac0a27-f3b4-4b90-b54c-e3850ce08546"/>
+				<reportElement mode="Transparent" x="390" y="28" width="94" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="2dac0a27-f3b4-4b90-b54c-e3850ce08546"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cuil}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cuil}.substring(0,2)+"-"+$F{cuil}.substring(2,10)+"-"+$F{cuil}.substring(10)
+]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="484" y="28" width="71" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="08beaa1d-10ab-4c50-9e44-b9bbc53ac374"/>
@@ -268,12 +258,12 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[DOMICILIO:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="242" y="44" width="100" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="84cf073f-336b-47a8-b2fa-db0c068fc763"/>
+				<reportElement mode="Transparent" x="242" y="44" width="186" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="84cf073f-336b-47a8-b2fa-db0c068fc763"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{domicilio}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{domicilio}+" - "+$F{localidad}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement mode="Transparent" x="428" y="43" width="48" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="ed167c0a-5818-4442-aa36-bc23b4d75097"/>
@@ -342,7 +332,7 @@ WHERE r.id=$P{id_recibo}]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nro_documento}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="254" y="68" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="1ab2ef0d-8dcb-4c31-a7d0-1929ad7a35e5"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -535,6 +525,36 @@ WHERE r.id=$P{id_recibo}]]>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipo_contrato}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="32" y="51" width="93" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="019db495-e8ad-42b9-9a0f-ac374c7b7d20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{banco}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="24" y="41" width="71" height="10" uuid="82461a26-83c3-43c5-8b1a-2b5174721f8c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mes}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="33" y="61" width="82" height="10" forecolor="#000000" uuid="bb23f4e4-136b-454d-b1b5-434b77589f12"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="442" y="15" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF" uuid="0d9f6b7f-2423-43aa-8349-31f2a5bbd5a6"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_neto}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

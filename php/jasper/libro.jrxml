@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="liquidacion_recibos_historico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="512eafd2-83d0-4bf7-b24e-96496df7c6de">
+	<property name="ireport.zoom" value="1.3286707500000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_liquidacion" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/martin/programas/toba_2.7.6/proyectos/asociacion/php/jasper/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT r.id as id_recibo,
+	(SELECT count(1) FROM historico_recibos WHERE id_liquidacion=$P{id_liquidacion}) as cant_recibos,
+	l.establecimiento,cuit,actividad,tipo_liquidacion,direccion_establecimiento,localidad_establecimiento,cp_establecimiento,periodo_depositado,
+	l.tipo_empleador
+FROM historico_recibos r
+JOIN historico_liquidaciones l ON l.id=r.id_liquidacion
+WHERE r.id_liquidacion=$P{id_liquidacion}]]>
+	</queryString>
+	<field name="id_recibo" class="java.lang.Integer"/>
+	<field name="cant_recibos" class="java.lang.Long"/>
+	<field name="establecimiento" class="java.lang.String"/>
+	<field name="cuit" class="java.lang.String"/>
+	<field name="actividad" class="java.lang.String"/>
+	<field name="tipo_liquidacion" class="java.lang.String"/>
+	<field name="direccion_establecimiento" class="java.lang.String"/>
+	<field name="localidad_establecimiento" class="java.lang.String"/>
+	<field name="cp_establecimiento" class="java.lang.String"/>
+	<field name="periodo_depositado" class="java.lang.String"/>
+	<field name="tipo_empleador" class="java.lang.String"/>
+	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="Page">
+		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<background>
+		<band height="802" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="555" height="802" uuid="788d5f8d-e6b3-410e-a2f1-2a221e750878"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</rectangle>
+		</band>
+	</background>
+	<pageHeader>
+		<band height="100">
+			<staticText>
+				<reportElement x="175" y="3" width="270" height="12" uuid="98c57617-0122-468b-8e1d-4faf635ab8c6"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[LIQUIDACION DE HABERES LEY 20744]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="4" y="15" width="317" height="20" uuid="c60608f3-79d7-4d71-b5ee-151c953bef05"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{establecimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4" y="35" width="125" height="20" uuid="6bd1c78b-dcaf-4703-8619-1cf8e4560622"/>
+				<textFieldExpression><![CDATA["CUIT: "+$F{cuit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="35" width="306" height="20" uuid="451a4fa8-83fc-4dbf-855e-d1f5f982b086"/>
+				<textFieldExpression><![CDATA["Tipo Empleador: "+$F{tipo_empleador}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="35" width="114" height="20" uuid="0fbeb535-7ee8-426e-9d05-a269dc2a7c5a"/>
+				<textFieldExpression><![CDATA["Actividad: "+$F{actividad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4" y="55" width="337" height="20" uuid="0485fe1d-5744-4aa4-ae70-b4f87702f927"/>
+				<textFieldExpression><![CDATA[$F{direccion_establecimiento}+" - "+$F{localidad_establecimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="55" width="90" height="20" uuid="c8d6f716-14a9-4656-bb7a-20f4fb98e577"/>
+				<textFieldExpression><![CDATA[$F{periodo_depositado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="4" y="75" width="394" height="20" uuid="bc8f3029-acb8-44b4-8777-9fefd2cb9950"/>
+				<textFieldExpression><![CDATA["Tipo de liquidación: "+$F{tipo_liquidacion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="371" y="55" width="100" height="20" uuid="e78ab743-048a-45ed-a6f0-6e236078f0c4"/>
+				<text><![CDATA[Período Abonado: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="445" y="15" width="38" height="20" uuid="6ab1a579-7c10-4ad5-9ffc-63069d95198b"/>
+				<text><![CDATA[HOJA:]]></text>
+			</staticText>
+			<textField pattern="">
+				<reportElement x="483" y="15" width="70" height="20" uuid="9b59dfb6-57f4-4077-b810-56de3e18c5a0"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="97" width="555" height="1" uuid="480964e0-3865-4de9-8d4a-c2b28c63dd20"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<printWhenExpression><![CDATA[($V{PAGE_COUNT}<=$V{REPORT_COUNT})]]></printWhenExpression>
+			<subreport>
+				<reportElement x="4" y="0" width="34" height="15" isRemoveLineWhenBlank="true" uuid="c9965e28-b79b-4ecc-b501-68d5fc83018e"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="id_recibo">
+					<subreportParameterExpression><![CDATA[$F{id_recibo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "libro_recibo.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="16" width="555" height="1" uuid="659e45eb-399e-47a9-ab25-f563b03cc335"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="50">
+			<staticText>
+				<reportElement x="4" y="3" width="100" height="20" uuid="7b426db7-51da-43f8-9280-7a4a8392f43a"/>
+				<text><![CDATA[Total Liquidación:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="23" width="100" height="20" uuid="513e81ac-52f6-4701-9fa8-2711abd6ecce"/>
+				<text><![CDATA[Remunerat.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="128" y="25" width="100" height="20" uuid="d584f9cf-bc66-410a-9b4d-9fc1a5149540"/>
+				<text><![CDATA[No Remunerat.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="254" y="27" width="100" height="20" uuid="dcf1ee54-b90e-4dbf-926f-591d0cbb0d59"/>
+				<text><![CDATA[Descuentos:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="30" width="100" height="20" uuid="56be870f-eeb1-40a2-8cc3-0e0cfe9b9535"/>
+				<text><![CDATA[Asignac Fam.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="487" y="30" width="66" height="20" uuid="f472cea1-0873-42a1-b065-378317bb4bbc"/>
+				<text><![CDATA[Neto:]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

@@ -89,4 +89,7 @@ class parametrizacion extends comunes
 	function get_tablas($where=null, $order_by=null){
 		return $this->get_generico('tabla',$where,$order_by);
 	}
+	function get_regimenes($where=null, $order_by=null){
+		return $this->get_generico('regimenes',$where,$order_by);
+	}
 }
