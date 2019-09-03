@@ -151,14 +151,14 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'18000779', --objeto
 	'liquidar', --identificador
 	'Liquidar', --etiqueta
-	'1', --maneja_datos
+	'0', --maneja_datos
 	NULL, --sobre_fila
 	'Al correr el proceso ya no se podrá modificar la liquidación. 
 Desea continuar?', --confirmacion
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
 	'calculadora.png', --imagen
-	'1', --en_botonera
+	'0', --en_botonera
 	NULL, --ayuda
 	'4', --orden
 	NULL, --ci_predep

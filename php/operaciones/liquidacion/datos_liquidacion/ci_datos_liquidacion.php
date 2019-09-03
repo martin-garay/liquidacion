@@ -89,16 +89,17 @@ class ci_datos_liquidacion extends asociacion_ci
 
 		//verifico que el estado sea PENDIENTE LIQUIDACION
 		if( $this->tabla('liquidacion')->get_columna('id_estado')==1 ){			
-			
+						
 			$id_liquidacion = $this->tabla('liquidacion')->get_columna('id');
 			$liquidador = new LiquidadorNuevo($id_liquidacion);			
 
 			Logger::titulo('Liquidacion '.$id_liquidacion);
 			//recorro cada recibo
-			$recibos = $this->tabla('recibos')->get_filas(null, true);		
+			$recibos = $this->tabla('recibos')->get_filas(null, true);
+			$nro_recibo = $this->tabla('liquidacion')->get_columna('nro_recibo_inicial');
 			foreach( $recibos as $key => $recibo ) {
-				$this->tabla('recibos')->set_cursor( $key );
-				$recibo = $this->tabla('recibos')->get();	//por las dudas
+				$this->tabla('recibos')->set_cursor( $key );				
+				$recibo = $this->tabla('recibos')->get();
 				
 				$liquidador->nuevo_recibo($recibo['id_persona']);								//se cargan las reservadas del empleado
 				Logger::separador('Generando recibo '.$recibo['id'].' persona '.$recibo['id_persona']);
@@ -116,7 +117,6 @@ class ci_datos_liquidacion extends asociacion_ci
 						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para que valla acumulando en las variables que corresponda.
 						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
 											
-						//$concepto['importe'] = $liquidador->calcular_concepto($concepto['codigo'], $concepto['formula'], $concepto['id_tipo_concepto'], $concepto['totaliza']);
 						$concepto['importe'] = $liquidador->calcular_concepto($concepto);
 						$this->tabla('recibos_conceptos')->set($concepto);					
 					}else{
@@ -128,15 +128,31 @@ class ci_datos_liquidacion extends asociacion_ci
 					}
 					Logger::info($concepto['codigo'].'='.$concepto['importe']);
 				}
-				//Guardo los acumulares totalizados
+				//Guardo los acumuladores totalizados
 				$acumuladores = $liquidador->get_acumuladores_totalizados();
 				$this->tabla('recibos_acumuladores')->procesar_filas($acumuladores);
-				
+				ei_arbol($acumuladores);
+				//actualizo los totales del recibo (aunque estan tambien en recibos_acumuladores)
+				//si el acumulador hace match con la columna piso el valor
+				$columnas_recibo = array_keys( $this->tabla('recibos')->get_columnas() );
+				foreach ($acumuladores as $key => $acumulador) {
+					//$key = array_search($nombre_columna, array_column($acumuladores, 'nombre'));		//busca la key del array acumuladores
+					if( in_array($acumulador['nombre'], $columnas_recibo) )
+						$recibo[ $acumulador['nombre'] ] = $acumulador['importe'];
+					//if($key)
+					//	$recibo[$nombre_columna] = $acumuladores[$key]['importe'];
+				}
+								
+				$recibo['json_variables'] 	= $liquidador->get_variables_json();	 	//Guardo un json con las variables del liquidador
+				$recibo['nro_recibo'] 		= $nro_recibo;								//se hacia x trg pero daba error el dt
+				$nro_recibo++;
+				$this->tabla('recibos')->set($recibo);
+
 				Logger::separador('Fin recibo persona '.$recibo['id_persona']);
 			}
 			$this->tabla('liquidacion')->set_columna_valor('id_estado',2);	//paso a liquidada
 			//$this->relacion()->dump_contenido();
-			$this->guardar();					
+			$this->guardar();
 		}else{
 			throw new toba_error_usuario("Solo se pueden liquidar Liquidaciones con estado: PENDIENTE LIQUIDACION");
 		}
@@ -154,6 +170,7 @@ class ci_datos_liquidacion extends asociacion_ci
 		});
 		return $conceptos; 
 	}
+
 
 	function conf(){
 		if( !$this->relacion()->esta_cargada() ){

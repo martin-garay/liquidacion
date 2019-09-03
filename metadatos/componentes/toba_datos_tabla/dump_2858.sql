@@ -265,6 +265,20 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'1', --externa
 	NULL  --tabla
 );
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2858', --objeto
+	'1610', --col_id
+	'json_variables', --columna
+	'X', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'0', --no_nulo_db
+	'0', --externa
+	'recibos'  --tabla
+);
 --- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------

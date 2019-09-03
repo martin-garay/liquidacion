@@ -150,7 +150,7 @@ class LiquidadorNuevo extends Evaluator
 		return toba::consulta_php('liquidacion')->get_periodo_liquidacion($this->id_liquidacion);
 	}
 
-	/* VER SI LO PUEDO CARGAN CON LAS RESERVADA. AUNQUE NO SERIA DINAMICO!!! */
+	/* VER SI LO PUEDO CARGAR CON LAS RESERVADA. AUNQUE NO SERIA DINAMICO!!! */
 	function get_deduccion_informada($id_tabla){
 		return toba::consulta_php('liquidacion')->get_deduccion_informada($id_tabla, $this->periodo, $this->id_persona);
 	}
@@ -181,5 +181,8 @@ class LiquidadorNuevo extends Evaluator
 			return 0;
 		}
 					
+	}
+	function get_variables_json(){
+		return json_encode($this->variables);
 	}
 }
