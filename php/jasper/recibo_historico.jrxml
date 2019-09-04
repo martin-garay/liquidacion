@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" isIgnorePagination="true" uuid="0c84e1d2-7776-4e10-b8ba-b202a37f64b8">
-	<property name="ireport.zoom" value="1.2100000000000009"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="recibo" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="10" bottomMargin="10" isFloatColumnFooter="true" isIgnorePagination="true" uuid="0c84e1d2-7776-4e10-b8ba-b202a37f64b8">
+	<property name="ireport.zoom" value="1.2100000000000026"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="13"/>
+	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
 			<pen lineWidth="1.0" lineColor="#000000"/>
@@ -35,7 +35,8 @@
 	l.establecimiento as establecimiento_liquidacion, direccion_establecimiento, localidad_establecimiento,cp_establecimiento, provincia_establecimiento,
 	direccion_establecimiento||' '||cp_establecimiento||' - '||localidad_establecimiento as direccion_descripcion_establecimiento,
 	lugar_pago ||', '||to_char(fecha_pago , 'DD/MM/YYYY') as lugar_fechapago,
-	l.banco
+	l.banco,
+	numero_a_letras(total_neto) as total_neto_letras
 from historico_liquidaciones l
 join historico_recibos r ON r.id_liquidacion=l.id
 WHERE r.id=$P{id_recibo}]]>
@@ -96,6 +97,7 @@ WHERE r.id=$P{id_recibo}]]>
 	<field name="direccion_descripcion_establecimiento" class="java.lang.String"/>
 	<field name="lugar_fechapago" class="java.lang.String"/>
 	<field name="banco" class="java.lang.String"/>
+	<field name="total_neto_letras" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -128,8 +130,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<textElement>
 					<font size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["CUIT: "+$F{cuit}.substring(0,2)+"-"+$F{cuit}.substring(2,10)+"-"+$F{cuit}.substring(10)
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA["CUIT: "+$F{cuit}.substring(0,2)+"-"+$F{cuit}.substring(2,10)+"-"+$F{cuit}.substring(10)]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="4" y="51" width="163" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="4a0c93ae-bd76-4a6a-b757-d88ec9cef06e"/>
@@ -235,8 +236,7 @@ WHERE r.id=$P{id_recibo}]]>
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{cuil}.substring(0,2)+"-"+$F{cuil}.substring(2,10)+"-"+$F{cuil}.substring(10)
-]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cuil}.substring(0,2)+"-"+$F{cuil}.substring(2,10)+"-"+$F{cuil}.substring(10)]]></textFieldExpression>
 			</textField>
 			<textField pattern="###0.00" isBlankWhenNull="true">
 				<reportElement mode="Transparent" x="484" y="28" width="71" height="12" forecolor="#000000" backcolor="#FFFFFF" uuid="08beaa1d-10ab-4c50-9e44-b9bbc53ac374"/>
@@ -382,9 +382,9 @@ WHERE r.id=$P{id_recibo}]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="74" splitType="Prevent">
+		<band height="89" splitType="Prevent">
 			<rectangle>
-				<reportElement x="0" y="29" width="135" height="44" uuid="1e164c4a-ca49-4b61-9c34-078fab078258"/>
+				<reportElement x="0" y="30" width="555" height="14" uuid="1e164c4a-ca49-4b61-9c34-078fab078258"/>
 			</rectangle>
 			<rectangle>
 				<reportElement mode="Transparent" x="0" y="0" width="555" height="30" uuid="4dc2b2fa-fa3d-4f69-8e4b-6fa348521f96"/>
@@ -432,7 +432,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[Neto:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="6" y="30" width="78" height="17" forecolor="#000000" backcolor="#FFFFFF" uuid="d3ee72f9-2803-4844-85e0-30f3f6f82e7e"/>
+				<reportElement mode="Transparent" x="6" y="30" width="78" height="14" forecolor="#000000" backcolor="#FFFFFF" uuid="d3ee72f9-2803-4844-85e0-30f3f6f82e7e"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -440,40 +440,40 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[SON PESOS:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="0" y="29" width="555" height="44" uuid="84f9375f-f962-46f7-b438-806c0836e497"/>
+				<reportElement x="0" y="44" width="555" height="44" uuid="84f9375f-f962-46f7-b438-806c0836e497"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="137" y="36" width="251" height="24" uuid="89bc66e8-f4b4-4c1f-a31b-14dbcb229f9b"/>
+				<reportElement x="137" y="51" width="251" height="24" uuid="89bc66e8-f4b4-4c1f-a31b-14dbcb229f9b"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Recibí conforme el importe neto de la presente liquidación y duplicado de la misma conforme a la ley vigente]]></text>
 			</staticText>
 			<line>
-				<reportElement x="390" y="59" width="161" height="1" uuid="dd0946d1-8c67-4b2b-b941-4394e9e3f23e"/>
+				<reportElement x="390" y="74" width="161" height="1" uuid="dd0946d1-8c67-4b2b-b941-4394e9e3f23e"/>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="390" y="60" width="161" height="13" uuid="cff1686f-9a9f-4371-8f36-2f172b5b690a"/>
+				<reportElement x="390" y="75" width="161" height="13" uuid="cff1686f-9a9f-4371-8f36-2f172b5b690a"/>
 				<textElement textAlignment="Center">
 					<font size="9"/>
 				</textElement>
 				<text><![CDATA[Firma]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement mode="Transparent" x="0" y="29" width="130" height="44" uuid="9e6e9063-0981-494c-a03b-89604e5ffdd3"/>
+				<reportElement mode="Transparent" x="0" y="44" width="130" height="44" uuid="9e6e9063-0981-494c-a03b-89604e5ffdd3"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="4" y="31" width="100" height="10" uuid="9e2cfb17-8e05-44dc-b279-5fe392288547"/>
+				<reportElement x="4" y="46" width="100" height="10" uuid="9e2cfb17-8e05-44dc-b279-5fe392288547"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Art. 12 Ley 17250]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="4" y="41" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="364a292e-c41e-4045-83ac-5234b31fef21"/>
+				<reportElement mode="Transparent" x="4" y="56" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="364a292e-c41e-4045-83ac-5234b31fef21"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -481,7 +481,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[Mes:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="4" y="51" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="0359b028-7bd6-48a5-a5cc-1f23aef1182b"/>
+				<reportElement mode="Transparent" x="4" y="66" width="35" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="0359b028-7bd6-48a5-a5cc-1f23aef1182b"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -489,7 +489,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[Banco:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement mode="Transparent" x="4" y="61" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="7063d17c-e8c8-4272-a302-338f47ca0f88"/>
+				<reportElement mode="Transparent" x="4" y="76" width="37" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="7063d17c-e8c8-4272-a302-338f47ca0f88"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -527,7 +527,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<textFieldExpression><![CDATA[$F{tipo_contrato}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="32" y="51" width="93" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="019db495-e8ad-42b9-9a0f-ac374c7b7d20"/>
+				<reportElement mode="Transparent" x="32" y="66" width="93" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="019db495-e8ad-42b9-9a0f-ac374c7b7d20"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
@@ -535,14 +535,14 @@ WHERE r.id=$P{id_recibo}]]>
 				<textFieldExpression><![CDATA[$F{banco}]]></textFieldExpression>
 			</textField>
 			<textField pattern="">
-				<reportElement x="24" y="41" width="71" height="10" uuid="82461a26-83c3-43c5-8b1a-2b5174721f8c"/>
+				<reportElement x="24" y="56" width="71" height="10" uuid="82461a26-83c3-43c5-8b1a-2b5174721f8c"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mes}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="33" y="61" width="82" height="10" forecolor="#000000" uuid="bb23f4e4-136b-454d-b1b5-434b77589f12"/>
+				<reportElement x="33" y="76" width="82" height="10" forecolor="#000000" uuid="bb23f4e4-136b-454d-b1b5-434b77589f12"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
@@ -555,6 +555,13 @@ WHERE r.id=$P{id_recibo}]]>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_neto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="84" y="31" width="467" height="13" uuid="8e3d7d51-b073-4c1f-9ae3-d1f4f266f607"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_neto_letras}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

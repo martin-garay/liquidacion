@@ -131,7 +131,7 @@ class ci_datos_liquidacion extends asociacion_ci
 				//Guardo los acumuladores totalizados
 				$acumuladores = $liquidador->get_acumuladores_totalizados();
 				$this->tabla('recibos_acumuladores')->procesar_filas($acumuladores);
-				ei_arbol($acumuladores);
+				//ei_arbol($acumuladores);
 				//actualizo los totales del recibo (aunque estan tambien en recibos_acumuladores)
 				//si el acumulador hace match con la columna piso el valor
 				$columnas_recibo = array_keys( $this->tabla('recibos')->get_columnas() );
@@ -146,6 +146,10 @@ class ci_datos_liquidacion extends asociacion_ci
 				$recibo['json_variables'] 	= $liquidador->get_variables_json();	 	//Guardo un json con las variables del liquidador
 				$recibo['nro_recibo'] 		= $nro_recibo;								//se hacia x trg pero daba error el dt
 				$nro_recibo++;
+
+				//total_neto
+				$recibo['total_neto'] = $recibo['total_remunerativos'] + $recibo['total_no_remunerativos'] - $recibo['total_deducciones'];
+
 				$this->tabla('recibos')->set($recibo);
 
 				Logger::separador('Fin recibo persona '.$recibo['id_persona']);

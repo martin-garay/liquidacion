@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2]--  Inicio 
+--[2]--  <p class="item-menu">Inicio</p> 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,13 +23,13 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	'0', --actividad_buffer
 	'toba', --actividad_patron_proyecto
 	'especifico', --actividad_patron
-	'Inicio', --nombre
+	'<p class="item-menu">Inicio</p>', --nombre
 	'', --descripcion
-	NULL, --punto_montaje
+	'16', --punto_montaje
 	'item_inicial.php', --actividad_accion
 	'1', --menu
 	'0', --orden
-	NULL, --solicitud_registrar
+	'0', --solicitud_registrar
 	NULL, --solicitud_obs_tipo_proyecto
 	NULL, --solicitud_obs_tipo
 	NULL, --solicitud_observacion
@@ -38,16 +38,16 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --zona_proyecto
 	NULL, --zona
 	NULL, --zona_orden
-	NULL, --zona_listar
-	NULL, --imagen_recurso_origen
-	NULL, --imagen
+	'0', --zona_listar
+	'proyecto', --imagen_recurso_origen
+	'icons8-home-48.png', --imagen
 	NULL, --parametro_a
 	NULL, --parametro_b
 	NULL, --parametro_c
-	NULL, --publico
+	'0', --publico
 	NULL, --redirecciona
 	NULL, --usuario
-	NULL, --exportable
+	'0', --exportable
 	'2019-08-11 10:52:30', --creacion
 	'0'  --retrasar_headers
 );

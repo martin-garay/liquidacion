@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[18000154]--  Liquidación 
+--[18000154]--  <p class="item-menu">Liquidación</p> 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Liquidación', --nombre
+	'<p class="item-menu">Liquidación</p>', --nombre
 	NULL, --descripcion
 	NULL, --punto_montaje
 	NULL, --actividad_accion
@@ -40,7 +40,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --zona_orden
 	NULL, --zona_listar
 	'proyecto', --imagen_recurso_origen
-	NULL, --imagen
+	'icons8-estimate-48.png', --imagen
 	NULL, --parametro_a
 	NULL, --parametro_b
 	NULL, --parametro_c

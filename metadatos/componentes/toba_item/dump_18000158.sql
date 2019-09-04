@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[18000158]--  Sistema 
+--[18000158]--  <p class="item-menu">Sistema</p> 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Sistema', --nombre
+	'<p class="item-menu">Sistema</p>', --nombre
 	'Estas opciones son administradas por sistemas', --descripcion
 	NULL, --punto_montaje
 	NULL, --actividad_accion
@@ -39,8 +39,8 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --zona
 	NULL, --zona_orden
 	NULL, --zona_listar
-	'apex', --imagen_recurso_origen
-	NULL, --imagen
+	'proyecto', --imagen_recurso_origen
+	'icons8-macbook-settings-50.png', --imagen
 	NULL, --parametro_a
 	NULL, --parametro_b
 	NULL, --parametro_c

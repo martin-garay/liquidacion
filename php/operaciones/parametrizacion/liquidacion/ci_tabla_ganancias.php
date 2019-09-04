@@ -20,9 +20,9 @@ class ci_tabla_ganancias extends asociacion_ci
 	function conf__pant_edicion(toba_ei_pantalla $pantalla)
 	{		
 		//si el formulario ya cargo la variable para cargar el ml lo oculto
-		if( count($this->nueva_tabla)>0 || $this->tabla('detalle')->get_cantidad_filas()>0){
-			$pantalla->eliminar_dep('form_generar_filas');
-		}
+		// if( count($this->nueva_tabla)>0 || $this->tabla('detalle')->get_cantidad_filas()>0){
+		// 	$pantalla->eliminar_dep('form_generar_filas');
+		// }
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -121,13 +121,16 @@ class ci_tabla_ganancias extends asociacion_ci
 	function conf__form_ml(asociacion_ei_formulario_ml $form_ml)
 	{
 		//si es edicion traigo los datos grabados
-		if( $this->es_edicion() ){			
+		if( $this->es_edicion() || $this->tabla('detalle')->get_cantidad_filas()>0 ){			
 			return $this->get_detalle();
-		}else{
-			if( $this->tabla('detalle')->get_cantidad_filas()==0 && count($this->nueva_tabla)>0 ){
-				return $this->nueva_tabla;
-			}
 		}
+		// else{
+		// 	if( $this->tabla('detalle')->get_cantidad_filas()>0 )
+
+			// if( $this->tabla('detalle')->get_cantidad_filas()==0 && count($this->nueva_tabla)>0 ){
+			// 	return $this->nueva_tabla;
+			// }
+		//}
 	}
 	function evt__form_ml__modificacion($datos)
 	{
@@ -155,17 +158,20 @@ class ci_tabla_ganancias extends asociacion_ci
 
 	function evt__form_generar_filas__generar($datos)
 	{
-		$cant_meses = $datos['meses'];
+		//$cant_meses = $datos['meses'];
+		$desde = $datos['desde'];
+		$hasta = $datos['hasta'];
 		$cant_filas = $datos['filas'];
 		$tabla = array();
 
-		for ($mes=1; $mes <=$cant_meses ; $mes++) { 
-			for ($i=0; $i <$cant_filas ; $i++) { 
+		for ($mes=$desde; $mes <=$hasta ; $mes++) {
+			for ($i=0; $i <$cant_filas ; $i++) {
 				$fila['mes'] = $mes;
 				$fila['apex_ei_analisis_fila'] = 'A';
 				$tabla[] = $fila;
 			}
 		}
+		$this->tabla('detalle')->procesar_filas($tabla);
 		return $this->nueva_tabla = $tabla;
 	}
 
