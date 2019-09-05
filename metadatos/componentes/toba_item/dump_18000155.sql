@@ -41,7 +41,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	'0', --zona_listar
 	'apex', --imagen_recurso_origen
 	'calculadora.png', --imagen
-	NULL, --parametro_a
+	'icons8-estimate-48.png', --parametro_a
 	NULL, --parametro_b
 	NULL, --parametro_c
 	'0', --publico

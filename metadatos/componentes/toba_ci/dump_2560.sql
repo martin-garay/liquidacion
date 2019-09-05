@@ -147,7 +147,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 );
 INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
 	'asociacion', --proyecto
-	'1434', --evento_id
+	'1905', --evento_id
 	'2560', --objeto
 	'imprimir', --identificador
 	'Imprimir', --etiqueta
@@ -165,7 +165,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'0', --defecto
 	NULL, --display_datos_cargados
 	NULL, --grupo
-	'F', --accion
+	'jasperreports', --accion
 	'0', --accion_imphtml_debug
 	NULL, --accion_vinculo_carpeta
 	NULL, --accion_vinculo_item
@@ -343,6 +343,6 @@ INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VAL
 INSERT INTO apex_eventos_pantalla (pantalla, objeto_ci, evento_id, proyecto) VALUES (
 	'1273', --pantalla
 	'2560', --objeto_ci
-	'1434', --evento_id
+	'1905', --evento_id
 	'asociacion'  --proyecto
 );

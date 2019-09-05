@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2]--  <p class="item-menu">Inicio</p> 
+--[2]--  Inicio 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -23,7 +23,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	'0', --actividad_buffer
 	'toba', --actividad_patron_proyecto
 	'especifico', --actividad_patron
-	'<p class="item-menu">Inicio</p>', --nombre
+	'Inicio', --nombre
 	'', --descripcion
 	'16', --punto_montaje
 	'item_inicial.php', --actividad_accion

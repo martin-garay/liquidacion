@@ -58,6 +58,15 @@ INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, arc
 	NULL, --descripcion
 	'16'  --punto_montaje
 );
+INSERT INTO apex_consulta_php (proyecto, consulta_php, clase, archivo_clase, archivo, descripcion, punto_montaje) VALUES (
+	'asociacion', --proyecto
+	'28', --consulta_php
+	'menu', --clase
+	'menu', --archivo_clase
+	'lib/menu.php', --archivo
+	'Datos de Menu de la base de toba', --descripcion
+	'16'  --punto_montaje
+);
 --- FIN Grupo de desarrollo 0
 
 --- INICIO Grupo de desarrollo 18

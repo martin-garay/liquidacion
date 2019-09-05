@@ -95,7 +95,22 @@ class ci_datos_persona extends asociacion_ci
 		return $this->tabla('personas')->get();
 	}
 	/* ------------------------------- FIN API --------------------------------- */	
+	
 
+    function vista_jasperreports(toba_vista_jasperreports $report)
+    {           	
+        $persona = $this->tabla("personas")->get();
+		$nombre = 'legajo_' . $persona['legajo'] . '.pdf';
+    	$report->set_path_reporte(toba::proyecto()->get_path_php().'/jasper/datos_persona.jasper');
+		$report->set_parametro('id_persona','E',$persona['id']);			               
+        $report->set_parametro('proyecto_path','S',toba::proyecto()->get_path());
+        
+        $report->set_nombre_archivo($nombre);
+        $report->set_tipo_descarga('browser');  
+        $db = toba::db('asociacion','asociacion');
+        $report->set_conexion($db);
+        		
+	}
 	
 }
 ?>
