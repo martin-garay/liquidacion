@@ -15,9 +15,9 @@
 	$menu->set_datos_opcion('3520', $datos);
 	$menu->mostrar();
 	*/
-	// echo '<div class="logo">';
-	// echo toba_recurso::imagen_proyecto('logo_grande2.png', true);
-	// echo '</div>';
+	echo '<div class="logo">';
+	echo toba_recurso::imagen_proyecto('logo_grande2.png', true);
+	echo '</div>';
 	
 	// $id_menu = 'test';
 	// $items = toba::consulta_php('menu')->get_menu($id_menu);
