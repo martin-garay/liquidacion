@@ -49,5 +49,16 @@ class ci_planilla_personal extends asociacion_ci
 		$this->dep('personas')->procesar_filas($datos);
 	}
 
+	    //-----------------------------------------------------------------------------------
+    //---- Exportacion ------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------    
+    function vista_excel(toba_vista_excel $salida){
+        
+        //ob_clean();        
+        //$salida->set_hoja_nombre('Informe');
+        //$salida->set_nombre_archivo('informe.xls');
+        $this->dep('form_ml')->vista_excel($salida);
+    }	
+
 }
 ?>

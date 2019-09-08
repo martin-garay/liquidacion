@@ -140,11 +140,21 @@ class LiquidadorNuevo extends Evaluator
 
 	//devuelve el valor de la tabla dinamica de deducciones
 	function get_valor_tabla($id_tabla){
-		return toba::consulta_php('liquidacion')->get_valor_tabla($id_tabla, $this->periodo);
+		$valor = toba::consulta_php('liquidacion')->get_valor_tabla($id_tabla, $this->periodo);
+		if(isset($valor) && !empty($valor))
+			return $valor;
+		else
+			throw new Exception('No se definio el valor de la tabla en el perídodo. Tabla : '.$id_tabla);
+		
 	}
 	//devuelve el tope de la tabla dinamica de deducciones
 	function get_tope_tabla($id_tabla){
-		return toba::consulta_php('liquidacion')->get_tope_tabla($id_tabla, $this->periodo);	
+		//return toba::consulta_php('liquidacion')->get_tope_tabla($id_tabla, $this->periodo);	
+		$tope = toba::consulta_php('liquidacion')->get_tope_tabla($id_tabla, $this->periodo);		
+		if(isset($tope) && !empty($tope))
+			return $tope;
+		else
+			throw new Exception('No se definio el tope de la tabla en el perídodo. Tabla : '.$id_tabla);
 	}	
 	function get_periodo(){
 		return toba::consulta_php('liquidacion')->get_periodo_liquidacion($this->id_liquidacion);

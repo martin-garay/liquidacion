@@ -69,7 +69,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2860', --objeto_consumidor
 	'2857', --objeto_proveedor
 	'liquidacion', --identificador
-	'1', --parametros_a
+	'0', --parametros_a
 	'1', --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
@@ -81,7 +81,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2860', --objeto_consumidor
 	'2862', --objeto_proveedor
 	'liquidacion_conceptos', --identificador
-	'1', --parametros_a
+	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar
@@ -93,7 +93,7 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	'2860', --objeto_consumidor
 	'2858', --objeto_proveedor
 	'recibos', --identificador
-	'1', --parametros_a
+	NULL, --parametros_a
 	NULL, --parametros_b
 	NULL, --parametros_c
 	NULL, --inicializar

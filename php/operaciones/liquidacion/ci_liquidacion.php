@@ -107,7 +107,8 @@ class ci_liquidacion extends asociacion_ci
 	function conf_evt__cuadro__borrar(toba_evento_usuario $evento, $fila)
 	{
 		$datos = $this->dep('cuadro')->get_datos();
-        if( $datos[$fila]['id_estado']!==1 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
+		//si el estado es distinto del estado inicial PENDIENTE LIQUIDACION o LIQUIDADA
+        if( $datos[$fila]['id_estado']!==1 && $datos[$fila]['id_estado']!==2){
             $evento->anular();
         }
 	}
@@ -121,23 +122,10 @@ class ci_liquidacion extends asociacion_ci
 	function conf_evt__cuadro__cerrar(toba_evento_usuario $evento, $fila)
 	{
 		$datos = $this->dep('cuadro')->get_datos();
-        if( $datos[$fila]['id_estado']!==2 ){   //si el estado es distinto del estado inicial PENDIENTE LIQUIDACION
+        if( $datos[$fila]['id_estado']!==2 ){   //si el estado es distinto del estado LIQUIDADA
             $evento->anular();
         }
 	}
-
-	//-----------------------------------------------------------------------------------
-	//---- Configuraciones --------------------------------------------------------------
-	//-----------------------------------------------------------------------------------
-
-	// function conf__pant_edicion(toba_ei_pantalla $pantalla)
-	// {
-	// 	$descripcion = $t
-	// 	$anio =  
-	// 	$mes = 
-	// 	$descripcion_liquidacion = $this->relacion()
-	// 	$pantalla->set_descripcion();
-	// }
 
 }
 ?>

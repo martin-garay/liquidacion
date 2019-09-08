@@ -71,15 +71,16 @@ class ci_datos_liquidacion extends asociacion_ci
 		try{
 			$this->relacion()->eliminar_todo();
 			$this->relacion()->sincronizar();
-			toba::notificacion()->agregar('La liquidacion fue eliminada correctamente!');
+			toba::notificacion()->info('La liquidacion fue eliminada correctamente!');
 		}catch(toba_error_db $e){
 			if($e->get_sqlstate()=="db_23503"){
-				toba::notificacion()->agregar('ATENCION! El registro esta siendo utilizado');
+				toba::notificacion()->error('ATENCION! El registro esta siendo utilizado');
 			}else{
-				toba::notificacion()->agregar('ERROR! El registro No puede eliminarse');
+				throw new toba_error_usuario($e->get_mensaje_motor());
+				toba::notificacion()->error('ERROR! El registro No puede eliminarse');
 			}
 		}
-		$this->relacion()->resetear();
+		//$this->relacion()->resetear();
 	}
 	function desactivar_edicion(){
 		$this->desactivar_edicion = true;

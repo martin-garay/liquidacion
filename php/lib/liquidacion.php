@@ -35,11 +35,13 @@ class liquidacion extends comunes
 	}
 	function get_valor_tabla($id_tabla, $periodo){
 		$datos = $this->get_generico('v_tabla_detalle',"clave='$id_tabla' AND periodo='$periodo'");
-		return (isset($datos[0]['valor'])) ? $datos[0]['valor'] : 0;
+		//return (isset($datos[0]['valor'])) ? $datos[0]['valor'] : 0;
+		return (isset($datos[0]['valor'])) ? $datos[0]['valor'] : null;
 	}
 	function get_tope_tabla($id_tabla, $periodo){
 		$datos = $this->get_generico('v_tabla_detalle',"clave='$id_tabla' AND periodo='$periodo'");
-		return (isset($datos[0]['tope'])) ? $datos[0]['tope'] : 0;
+		//return (isset($datos[0]['tope'])) ? $datos[0]['tope'] : 0;
+		return (isset($datos[0]['tope'])) ? $datos[0]['tope'] : null;
 	}
 	function get_periodo_liquidacion($id_liquidacion){
 		$sql = "SELECT periodo FROM liquidaciones WHERE id=$id_liquidacion";

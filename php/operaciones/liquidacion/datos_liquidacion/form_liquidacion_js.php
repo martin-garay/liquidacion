@@ -8,6 +8,8 @@ class form_liquidacion_js extends asociacion_ei_formulario
 	function extender_objeto_js()
 	{
 		echo "
+		const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
 		//---- Procesamiento de EFs --------------------------------
 		
 		{$this->objeto_js}.evt__mes__procesar = function(es_inicial)
@@ -40,14 +42,14 @@ class form_liquidacion_js extends asociacion_ei_formulario
 						var lastDay = new Date(anio, mes + 1, 0); 	//ver que le paso  mes y no mes-1 por que es el mes siguiente						
 						this.ef('fecha_hasta').set_fecha(lastDay);
 					}
-					if(!this.ef('fecha_pago').tiene_estado()){
-						var firstDayNextMonth = new Date(anio, mes + 1, 1); 	//ver que le paso  mes y no mes-1 por que es el mes siguiente			
-						this.ef('fecha_pago').set_fecha(firstDayNextMonth);
-					}
-					if(!this.ef('fecha_deposito').tiene_estado()){
-						var firstDayNextMonth = new Date(anio, mes + 1, 1); 	//ver que le paso  mes y no mes-1 por que es el mes siguiente			
-						this.ef('fecha_deposito').set_fecha(firstDayNextMonth);
-					}
+					// if(!this.ef('fecha_pago').tiene_estado()){
+					// 	var firstDayNextMonth = new Date(anio, mes + 1, 1); 	//ver que le paso  mes y no mes-1 por que es el mes siguiente			
+					// 	this.ef('fecha_pago').set_fecha(firstDayNextMonth);
+					// }
+					// if(!this.ef('fecha_deposito').tiene_estado()){
+					// 	var firstDayNextMonth = new Date(anio, mes + 1, 1); 	//ver que le paso  mes y no mes-1 por que es el mes siguiente			
+					// 	this.ef('fecha_deposito').set_fecha(firstDayNextMonth);
+					// }
 					if(!this.ef('periodo_depositado').tiene_estado()){
 						var mes2 = this.ef('mes').get_estado();						
 						if( mes2<10 ){
@@ -57,6 +59,16 @@ class form_liquidacion_js extends asociacion_ei_formulario
 					}
 					
 				}
+			}
+		}
+		{$this->objeto_js}.evt__fecha_carga_social__procesar = function(es_inicial)
+		{
+			if(!es_inicial){
+				if(this.ef('fecha_carga_social').tiene_estado()){
+					var fecha = this.ef('fecha_carga_social').fecha();
+					var nombreMes = meses[fecha.getMonth()];
+					this.ef('mes_carga_social').set_estado(nombreMes);
+				}				
 			}
 		}
 
