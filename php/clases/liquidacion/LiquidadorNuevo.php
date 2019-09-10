@@ -180,13 +180,13 @@ class LiquidadorNuevo extends Evaluator
 			foreach ($this->tabla_ganancias as $key => $value) {
 				if( $valor >= $value['desde'] && $valor <= $value['hasta']){
 					$rango = $value;
-					Logger::info( 'Rango Ganancias =' . ($key+1) );
+					Logger::info( 'Rango Ganancias =' . ($key+1) . ' fijo='.$rango['fijo'] .' porcentaje='.$rango['porcentaje']);
 					break;
 				}
 			}				
 			
-			//calculo con el rango correspondiente		
-			return (count($rango)>0) ?  $rango['fijo'] + ( ($valor-$rango['desde']) * $rango['porcentaje'] )  :  0;	
+			//calculo con el rango correspondiente			
+			return (count($rango)>0) ?  $rango['fijo'] + ( ($valor-$rango['desde']) * ($rango['porcentaje']/100) )  :  0;	
 		}else{
 			return 0;
 		}
