@@ -145,21 +145,6 @@ INSERT INTO apex_objeto_cuadro_cc (objeto_cuadro_proyecto, objeto_cuadro, objeto
 	NULL, --imp_paginar
 	'0'  --modo_inicio_colapsado
 );
-INSERT INTO apex_objeto_cuadro_cc (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_cc, identificador, descripcion, orden, columnas_id, columnas_descripcion, pie_contar_filas, pie_mostrar_titular, pie_mostrar_titulos, imp_paginar, modo_inicio_colapsado) VALUES (
-	'asociacion', --objeto_cuadro_proyecto
-	'2913', --objeto_cuadro
-	'82', --objeto_cuadro_cc
-	'corte_persona', --identificador
-	'Persona', --descripcion
-	'2', --orden
-	'id_persona', --columnas_id
-	'persona_descripcion', --columnas_descripcion
-	'0', --pie_contar_filas
-	'0', --pie_mostrar_titular
-	'0', --pie_mostrar_titulos
-	NULL, --imp_paginar
-	'0'  --modo_inicio_colapsado
-);
 --- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
@@ -172,10 +157,10 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'2913', --objeto_cuadro
 	'1296', --objeto_cuadro_col
 	'clave', --clave
-	'1', --orden
+	'2', --orden
 	'Clave', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
-	'col-cen-s4', --estilo
+	'col-cen-s2', --estilo
 	NULL, --ancho
 	'1', --formateo
 	NULL, --vinculo_indice
@@ -203,7 +188,7 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'2913', --objeto_cuadro
 	'1297', --objeto_cuadro_col
 	'tabla', --clave
-	'2', --orden
+	'3', --orden
 	'Tabla', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'4', --estilo
@@ -234,12 +219,43 @@ INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro
 	'2913', --objeto_cuadro
 	'1298', --objeto_cuadro_col
 	'valor', --clave
-	'3', --orden
+	'4', --orden
 	'Valor', --titulo
 	'ei-cuadro-col-tit', --estilo_titulo
 	'0', --estilo
 	NULL, --ancho
 	'2', --formateo
+	NULL, --vinculo_indice
+	NULL, --no_ordenar
+	NULL, --mostrar_xls
+	NULL, --mostrar_pdf
+	NULL, --pdf_propiedades
+	NULL, --desabilitado
+	NULL, --total
+	NULL, --total_cc
+	NULL, --usar_vinculo
+	NULL, --vinculo_carpeta
+	NULL, --vinculo_item
+	NULL, --vinculo_popup
+	NULL, --vinculo_popup_param
+	NULL, --vinculo_target
+	NULL, --vinculo_celda
+	NULL, --vinculo_servicio
+	'0', --permitir_html
+	NULL, --grupo
+	NULL  --evento_asociado
+);
+INSERT INTO apex_objeto_ei_cuadro_columna (objeto_cuadro_proyecto, objeto_cuadro, objeto_cuadro_col, clave, orden, titulo, estilo_titulo, estilo, ancho, formateo, vinculo_indice, no_ordenar, mostrar_xls, mostrar_pdf, pdf_propiedades, desabilitado, total, total_cc, usar_vinculo, vinculo_carpeta, vinculo_item, vinculo_popup, vinculo_popup_param, vinculo_target, vinculo_celda, vinculo_servicio, permitir_html, grupo, evento_asociado) VALUES (
+	'asociacion', --objeto_cuadro_proyecto
+	'2913', --objeto_cuadro
+	'1329', --objeto_cuadro_col
+	'persona_descripcion', --clave
+	'1', --orden
+	'Empleado', --titulo
+	'ei-cuadro-col-tit', --estilo_titulo
+	'4', --estilo
+	NULL, --ancho
+	'1', --formateo
 	NULL, --vinculo_indice
 	NULL, --no_ordenar
 	NULL, --mostrar_xls

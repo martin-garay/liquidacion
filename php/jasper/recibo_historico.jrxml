@@ -367,7 +367,7 @@ WHERE r.id=$P{id_recibo}]]>
 		</band>
 	</title>
 	<detail>
-		<band height="111" splitType="Stretch">
+		<band height="112" splitType="Stretch">
 			<rectangle>
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="0" y="0" width="555" height="110" uuid="c14a9d57-edaf-4693-86ac-5f88f1fb5eba"/>
 			</rectangle>
@@ -397,22 +397,14 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[LUGAR Y FECHA DE PAGO:]]></text>
 			</staticText>
 			<rectangle>
-				<reportElement x="196" y="0" width="359" height="13" uuid="fb8ff7c0-bee3-4ad8-a396-749a6225d4d0"/>
+				<reportElement x="183" y="0" width="372" height="13" uuid="fb8ff7c0-bee3-4ad8-a396-749a6225d4d0"/>
 			</rectangle>
 			<staticText>
-				<reportElement x="200" y="0" width="57" height="13" uuid="9d46632b-f9b8-4b75-bffd-6fbebda4b5a5"/>
+				<reportElement x="185" y="0" width="54" height="13" uuid="9d46632b-f9b8-4b75-bffd-6fbebda4b5a5"/>
 				<textElement verticalAlignment="Middle">
-					<font size="9" isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Hab. Rem.:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement mode="Transparent" x="331" y="0" width="77" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ce041125-5945-41e1-96b6-023699b51b38"/>
-				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-					<paragraph lineSpacing="Single"/>
-				</textElement>
-				<text><![CDATA[Hab. No Rem.:]]></text>
 			</staticText>
 			<rectangle>
 				<reportElement mode="Transparent" x="405" y="13" width="150" height="17" uuid="fb8d0daf-b9b0-4953-bfb4-cc3a87cb815c"/>
@@ -497,17 +489,17 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[Fecha:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="257" y="0" width="71" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="26052aec-5240-4682-967a-77b135c610b5"/>
+				<reportElement mode="Transparent" x="235" y="0" width="47" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="26052aec-5240-4682-967a-77b135c610b5"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_remunerativos}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="408" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ae66e9ec-1f1b-47b8-99e4-9d55bf45c7b0"/>
+				<reportElement mode="Transparent" x="351" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ae66e9ec-1f1b-47b8-99e4-9d55bf45c7b0"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
-					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_no_remunerativos}]]></textFieldExpression>
@@ -520,7 +512,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[Mod. Cont:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="53" y="0" width="135" height="12" uuid="8aaf5fbf-a01f-48c9-8218-65e074b33919"/>
+				<reportElement x="48" y="0" width="135" height="12" uuid="8aaf5fbf-a01f-48c9-8218-65e074b33919"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
@@ -562,6 +554,22 @@ WHERE r.id=$P{id_recibo}]]>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_neto_letras}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement mode="Transparent" x="285" y="0" width="70" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="ce041125-5945-41e1-96b6-023699b51b38"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Hab. No Rem.:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="422" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="97030d8b-4b35-456e-b885-df9ff05d011a"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_deducciones}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

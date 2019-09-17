@@ -123,8 +123,11 @@ class ci_datos_liquidacion extends asociacion_ci
 					}else{
 
 						//si existe un importe fijo igual tengo que cargar el concepto como una variable del liquidador para los siguientes calculos
-						$nombre_variable = 'c'.$concepto['codigo'];
-						$liquidador->agregar_variable($nombre_variable, $concepto['importe']);
+						//$nombre_variable = 'c'.$concepto['codigo'];
+						//$liquidador->agregar_variable($nombre_variable, $concepto['importe']);
+						$concepto['formula'] = $concepto['importe'];
+						$concepto['importe'] = $liquidador->calcular_concepto($concepto);
+						$this->tabla('recibos_conceptos')->set($concepto);
 						
 					}
 					Logger::info($concepto['codigo'].'='.$concepto['importe']);
