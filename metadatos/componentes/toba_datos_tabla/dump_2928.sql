@@ -1,5 +1,5 @@
 ------------------------------------------------------------
---[2925]--  DT - recibos_variables 
+--[2928]--  DT - historico_sueldo_basico 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
@@ -9,7 +9,7 @@
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, clase_proyecto, clase, punto_montaje, subclase, subclase_archivo, objeto_categoria_proyecto, objeto_categoria, nombre, titulo, colapsable, descripcion, fuente_datos_proyecto, fuente_datos, solicitud_registrar, solicitud_obj_obs_tipo, solicitud_obj_observacion, parametro_a, parametro_b, parametro_c, parametro_d, parametro_e, parametro_f, usuario, creacion, posicion_botonera) VALUES (
 	'asociacion', --proyecto
-	'2925', --objeto
+	'2928', --objeto
 	NULL, --anterior
 	NULL, --identificador
 	NULL, --reflexivo
@@ -20,7 +20,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --subclase_archivo
 	NULL, --objeto_categoria_proyecto
 	NULL, --objeto_categoria
-	'DT - recibos_variables', --nombre
+	'DT - historico_sueldo_basico', --nombre
 	NULL, --titulo
 	NULL, --colapsable
 	NULL, --descripcion
@@ -36,7 +36,7 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 	NULL, --parametro_e
 	NULL, --parametro_f
 	NULL, --usuario
-	'2019-09-08 01:43:27', --creacion
+	'2019-10-05 00:05:16', --creacion
 	NULL  --posicion_botonera
 );
 --- FIN Grupo de desarrollo 0
@@ -46,14 +46,14 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 ------------------------------------------------------------
 INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, min_registros, punto_montaje, ap, ap_clase, ap_archivo, tabla, tabla_ext, alias, modificar_claves, fuente_datos_proyecto, fuente_datos, permite_actualizacion_automatica, esquema, esquema_ext) VALUES (
 	'asociacion', --objeto_proyecto
-	'2925', --objeto
+	'2928', --objeto
 	NULL, --max_registros
 	NULL, --min_registros
 	'16', --punto_montaje
 	'1', --ap
 	NULL, --ap_clase
 	NULL, --ap_archivo
-	'recibos_variables', --tabla
+	'historico_sueldo_basico', --tabla
 	NULL, --tabla_ext
 	NULL, --alias
 	'0', --modificar_claves
@@ -71,23 +71,23 @@ INSERT INTO apex_objeto_db_registros (objeto_proyecto, objeto, max_registros, mi
 --- INICIO Grupo de desarrollo 0
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2925', --objeto
-	'1618', --col_id
+	'2928', --objeto
+	'1622', --col_id
 	'id', --columna
 	'E', --tipo
 	'1', --pk
-	'recibos_variables_id_seq', --secuencia
+	'historico_sueldo_basico_id_seq', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
 	'1', --no_nulo_db
 	'0', --externa
-	'recibos_variables'  --tabla
+	'historico_sueldo_basico'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2925', --objeto
-	'1619', --col_id
-	'id_recibo', --columna
+	'2928', --objeto
+	'1623', --col_id
+	'mes', --columna
 	'E', --tipo
 	'0', --pk
 	'', --secuencia
@@ -95,20 +95,48 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	NULL, --no_nulo
 	'1', --no_nulo_db
 	'0', --externa
-	'recibos_variables'  --tabla
+	'historico_sueldo_basico'  --tabla
 );
 INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
 	'asociacion', --objeto_proyecto
-	'2925', --objeto
-	'1620', --col_id
-	'json_variables', --columna
-	'X', --tipo
+	'2928', --objeto
+	'1624', --col_id
+	'anio', --columna
+	'E', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo
 	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'historico_sueldo_basico'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2928', --objeto
+	'1625', --col_id
+	'fecha', --columna
+	'T', --tipo
+	'0', --pk
+	'', --secuencia
+	NULL, --largo
+	NULL, --no_nulo
+	'1', --no_nulo_db
+	'0', --externa
+	'historico_sueldo_basico'  --tabla
+);
+INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, columna, tipo, pk, secuencia, largo, no_nulo, no_nulo_db, externa, tabla) VALUES (
+	'asociacion', --objeto_proyecto
+	'2928', --objeto
+	'1630', --col_id
+	'descripcion', --columna
+	'C', --tipo
+	'0', --pk
+	'', --secuencia
+	'255', --largo
+	NULL, --no_nulo
 	'0', --no_nulo_db
 	'0', --externa
-	'recibos_variables'  --tabla
+	'historico_sueldo_basico'  --tabla
 );
 --- FIN Grupo de desarrollo 0

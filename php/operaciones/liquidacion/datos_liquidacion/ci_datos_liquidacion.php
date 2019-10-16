@@ -113,7 +113,8 @@ class ci_datos_liquidacion extends asociacion_ci
 					$concepto = $this->tabla('recibos_conceptos')->get();
 
 					//si el usuario le puso un valor al concepto le dejo ese, sino lo calcula el liquidador
-					if( !isset($concepto['importe']) ){
+					//if( !isset($concepto['importe']) ){
+					if( !isset($concepto['importe_fijo']) ){
 
 						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para que valla acumulando en las variables que corresponda.
 						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
@@ -125,7 +126,7 @@ class ci_datos_liquidacion extends asociacion_ci
 						//si existe un importe fijo igual tengo que cargar el concepto como una variable del liquidador para los siguientes calculos
 						//$nombre_variable = 'c'.$concepto['codigo'];
 						//$liquidador->agregar_variable($nombre_variable, $concepto['importe']);
-						$concepto['formula'] = $concepto['importe'];
+						$concepto['formula'] = $concepto['importe_fijo'];
 						$concepto['importe'] = $liquidador->calcular_concepto($concepto);
 						$this->tabla('recibos_conceptos')->set($concepto);
 						
@@ -315,9 +316,16 @@ class ci_datos_liquidacion extends asociacion_ci
 		if($this->get_id_pantalla()=='pant_recibos'){
 			$form_ml_conceptos_recibo = $this->dep('form_ml_conceptos_recibo')->get_id_objeto_js();
 			if( !$this->tabla('recibos')->hay_cursor() ){				
-				echo "$form_ml_conceptos_recibo.ocultar();";
+				echo "$form_ml_conceptos_recibo.ocultar();";				
 			}else{
 				echo "$form_ml_conceptos_recibo.mostrar();";
+
+				//si el estado de la liquidacion es INICIAL muestro el campo importe_fijo y oculto importe(que es el dato que calcula el liquidador)
+				if( $this->tabla('liquidacion')->get_columna('id_estado')==1 )
+					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_reciboimporte\"').hide();";	
+				else //sino muestro importe
+					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_reciboimporte_fijo\"').hide();";
+				
 			}			
 		}
 

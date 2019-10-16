@@ -19,5 +19,8 @@ class personas extends comunes
 		$sql = "SELECT *,id as id_persona,'A' as apex_ei_analisis_fila FROM v_personas";
 		return $this->get_generico_sql($sql,$where,$order_by);
 	}
+	function get_historico_sueldo_basico($where=null, $order_by=null){
+		return $this->get_generico('historico_sueldo_basico',$where,$order_by);	
+	}
 }
 ?>
