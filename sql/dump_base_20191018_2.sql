@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.19
--- Dumped by pg_dump version 9.5.19
+-- Dumped from database version 11.5 (Ubuntu 11.5-3.pgdg18.04+1)
+-- Dumped by pg_dump version 11.5 (Ubuntu 11.5-3.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -26,6 +27,7 @@ CREATE DATABASE asociacion WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLAT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -39,20 +41,6 @@ SET row_security = off;
 --
 
 CREATE SCHEMA sistema;
-
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
@@ -3021,336 +3009,336 @@ CREATE VIEW sistema.v_reservadas AS
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: acumuladores id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.acumuladores ALTER COLUMN id SET DEFAULT nextval('public.acumuladores_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: bancos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bancos ALTER COLUMN id SET DEFAULT nextval('public.bancos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: categorias id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categorias ALTER COLUMN id SET DEFAULT nextval('public.categorias_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos ALTER COLUMN id SET DEFAULT nextval('public.conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: datos_actuales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales ALTER COLUMN id SET DEFAULT nextval('public.datos_actuales_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: datos_laborales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales ALTER COLUMN id SET DEFAULT nextval('public.datos_laborales_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: datos_salud id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud ALTER COLUMN id SET DEFAULT nextval('public.datos_salud_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: establecimientos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos ALTER COLUMN id SET DEFAULT nextval('public.establecimientos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: estados_civiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_civiles ALTER COLUMN id SET DEFAULT nextval('public.estados_civiles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: estados_liquidacion id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_liquidacion ALTER COLUMN id SET DEFAULT nextval('public.estados_liquidacion_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: feriados id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.feriados ALTER COLUMN id SET DEFAULT nextval('public.feriados_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: fichajes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fichajes ALTER COLUMN id SET DEFAULT nextval('public.fichajes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: generos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generos ALTER COLUMN id SET DEFAULT nextval('public.generos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: historico_sueldo_basico id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_sueldo_basico ALTER COLUMN id SET DEFAULT nextval('public.historico_sueldo_basico_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: historico_sueldo_basico_detalle id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_sueldo_basico_detalle ALTER COLUMN id SET DEFAULT nextval('public.historico_sueldo_basico_detalle_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: liquidaciones id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones ALTER COLUMN id SET DEFAULT nextval('public.liquidaciones_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos ALTER COLUMN id SET DEFAULT nextval('public.liquidaciones_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: localidades id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.localidades ALTER COLUMN id SET DEFAULT nextval('public.localidades_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: nacionalidades id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.nacionalidades ALTER COLUMN id SET DEFAULT nextval('public.nacionalidades_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: obras_sociales id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.obras_sociales ALTER COLUMN id SET DEFAULT nextval('public.obras_sociales_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: paises id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.paises ALTER COLUMN id SET DEFAULT nextval('public.paises_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: periodos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos ALTER COLUMN id SET DEFAULT nextval('public.periodos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: periodos_detalle id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle ALTER COLUMN id SET DEFAULT nextval('public.periodos_detalle_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: persona_tareas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas ALTER COLUMN id SET DEFAULT nextval('public.persona_tareas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: personas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas ALTER COLUMN id SET DEFAULT nextval('public.personas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: personas_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_conceptos ALTER COLUMN id SET DEFAULT nextval('public.personas_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: personas_jornadas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_jornadas ALTER COLUMN id SET DEFAULT nextval('public.personas_jornadas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: provincias id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.provincias ALTER COLUMN id SET DEFAULT nextval('public.provincias_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recibos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos ALTER COLUMN id SET DEFAULT nextval('public.recibos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recibos_acumuladores id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_acumuladores ALTER COLUMN id SET DEFAULT nextval('public.recibos_acumuladores_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recibos_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos ALTER COLUMN id SET DEFAULT nextval('public.recibos_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: regimenes id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.regimenes ALTER COLUMN id SET DEFAULT nextval('public.regimenes_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla ALTER COLUMN id SET DEFAULT nextval('public.tabla_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla_detalle id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_detalle ALTER COLUMN id SET DEFAULT nextval('public.tabla_detalle_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla_ganancias id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias ALTER COLUMN id SET DEFAULT nextval('public.tabla_ganancias_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla_ganancias_detalle id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias_detalle ALTER COLUMN id SET DEFAULT nextval('public.tabla_ganancias_detalle_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tabla_personas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_personas ALTER COLUMN id SET DEFAULT nextval('public.tabla_personas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tareas id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tareas ALTER COLUMN id SET DEFAULT nextval('public.tareas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos ALTER COLUMN id SET DEFAULT nextval('public.tipo_liquidacion_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_conceptos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_conceptos ALTER COLUMN id SET DEFAULT nextval('public.tipos_conceptos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_contratos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_contratos ALTER COLUMN id SET DEFAULT nextval('public.tipos_contratos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_documentos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_documentos ALTER COLUMN id SET DEFAULT nextval('public.tipos_documentos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_empleadores id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_empleadores ALTER COLUMN id SET DEFAULT nextval('public.tipos_empleadores_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tipos_liquidaciones id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_liquidaciones ALTER COLUMN id SET DEFAULT nextval('public.tipos_liquidaciones_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: vacaciones id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vacaciones ALTER COLUMN id SET DEFAULT nextval('public.vacaciones_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: sistema; Owner: -
+-- Name: reservadas id; Type: DEFAULT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas ALTER COLUMN id SET DEFAULT nextval('sistema.reservadas_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: sistema; Owner: -
+-- Name: tipos_datos id; Type: DEFAULT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_datos ALTER COLUMN id SET DEFAULT nextval('sistema.tipos_datos_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: sistema; Owner: -
+-- Name: tipos_reservadas id; Type: DEFAULT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_reservadas ALTER COLUMN id SET DEFAULT nextval('sistema.tipos_reservadas_id_seq'::regclass);
@@ -3365,13 +3353,6 @@ INSERT INTO public.acumuladores VALUES (2, 'total_no_remunerativos', 'Acumula lo
 INSERT INTO public.acumuladores VALUES (3, 'bruto', 'Sueldo Bruto', 1, true, 0.00);
 INSERT INTO public.acumuladores VALUES (4, 'total_haberes', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 1, false, 0.00);
 INSERT INTO public.acumuladores VALUES (5, 'total_deducciones', 'Solo los que se muestran en el reciboNo puedo hacer este calculo. corregir', 2, false, 0.00);
-
-
---
--- Name: acumuladores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.acumuladores_id_seq', 5, true);
 
 
 --
@@ -3409,13 +3390,6 @@ INSERT INTO public.bancos VALUES (1, 'Galicia');
 
 
 --
--- Name: bancos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.bancos_id_seq', 1, true);
-
-
---
 -- Data for Name: categorias; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3424,13 +3398,6 @@ INSERT INTO public.categorias VALUES (2, '2DA.SUPERV', 40000.00, NULL, '2');
 INSERT INTO public.categorias VALUES (3, '1RA.ADM', 60000.00, NULL, '3');
 INSERT INTO public.categorias VALUES (4, '2DA.ADM', 50000.00, NULL, '4');
 INSERT INTO public.categorias VALUES (5, 'Maestranza', 35000.00, NULL, '5');
-
-
---
--- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.categorias_id_seq', 5, false);
 
 
 --
@@ -3490,23 +3457,16 @@ INSERT INTO public.conceptos VALUES (42, 'Horas Extras 50%', '4', 1, '( c1 / 200
 INSERT INTO public.conceptos VALUES (7, 'Horas Extras 100%', '3', 1, '( c1 / 200 ) * 2 *  hsextras100', true, true, false, NULL, NULL, true, false);
 INSERT INTO public.conceptos VALUES (43, '5% Remuneracion Abril', '50', 1, NULL, true, true, false, NULL, 0.00, true, false);
 INSERT INTO public.conceptos VALUES (11, 'Cuota solidaria Utedyc', '511', 2, 'bruto * 0.025', true, true, false, NULL, NULL, false, false);
-INSERT INTO public.conceptos VALUES (1, 'Sueldo Básico', '1', 1, 'si(  igual(diasvacac,0)  , basico , si( igual(diasmes,diasvacac), basico, basico/ diasmes * (diasmes-diasvacac) ))', true, true, true, 'Si se toma vacaciones calculo el proporcional a los dias trabajados.
-En el caso de que se tome todos los dias del mes devueve el basico.', NULL, true, false);
 INSERT INTO public.conceptos VALUES (46, 'Vacaciones', '200', 1, 'si(igual(diasvacac,0) ,0, (c199/25*diasvacac)-bruto)', true, true, false, 'Plus Vacacional.
 En bruto tengo el proporcional y tengo que calcular el total del sueldo bruto sin el proporcional a los dias trabajados (basico/diasmes*diastrab).', NULL, true, false);
 INSERT INTO public.conceptos VALUES (48, 'A cuenta de futuros aumentos', '30', 1, NULL, true, true, false, 'Es un valor agregado por el operador', NULL, true, false);
-INSERT INTO public.conceptos VALUES (47, 'Bruto Sin Proporcional', '199', 1, 'si( igual(diasvacac,0) , bruto , bruto/ si( igual(diasmes,diasvacac),diasmes, diasmes-diasvacac)*diasmes )', false, false, false, 'Si hay vacaciones se calcula un proporcional. Este concepto muestra el total sin tener en cuenta el proporcional. VER c1', NULL, false, false);
 INSERT INTO public.conceptos VALUES (49, 'Asig. Decreto 1043/2018', '60', 1, NULL, true, true, false, 'Valor ingresado por el operador', NULL, false, true);
 INSERT INTO public.conceptos VALUES (50, 'Vacaciones', '201', 1, NULL, true, true, false, 'El valor de este concepto es ingresado por el usuario', NULL, false, false);
 INSERT INTO public.conceptos VALUES (51, 'Adicional 51860', '5', 1, NULL, true, true, false, NULL, NULL, true, false);
 INSERT INTO public.conceptos VALUES (39, 'IMPUESTO A LAS GANANCIAS', '515', 2, 'c370 - ganancia_acumulada', true, true, false, 'c370: Valor Final del calculo de ganancia mensual - el acumulado del año hasta el periodo de la liquidacion', NULL, false, false);
-
-
---
--- Name: conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.conceptos_id_seq', 51, true);
+INSERT INTO public.conceptos VALUES (47, 'Bruto Sin Proporcional', '199', 1, 'si( igual(diasvacac,0) , bruto , bruto/ ( (30-diasvacac)*30) )', false, false, false, 'Si hay vacaciones se calcula un proporcional. Este concepto muestra el total sin tener en cuenta el proporcional. VER c1', NULL, false, false);
+INSERT INTO public.conceptos VALUES (1, 'Sueldo Básico', '1', 1, 'si(  igual(diasvacac,0)  , basico , si( igual(diasmes,diasvacac), basico, basico/ 30 * (30-diasvacac) ))', true, true, true, 'Si se toma vacaciones calculo el proporcional a los dias trabajados.
+En el caso de que se tome todos los dias del mes devueve el basico.', NULL, true, false);
 
 
 --
@@ -3522,23 +3482,9 @@ SELECT pg_catalog.setval('public.conceptos_id_seq', 51, true);
 
 
 --
--- Name: datos_actuales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.datos_actuales_id_seq', 1, true);
-
-
---
 -- Data for Name: datos_laborales; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: datos_laborales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
 
 
 --
@@ -3548,24 +3494,10 @@ SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
 
 
 --
--- Name: datos_salud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.datos_salud_id_seq', 1, true);
-
-
---
 -- Data for Name: establecimientos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.establecimientos VALUES (1, 'Asociación Médica de Luján', 'Mariano Moreno 1460', 1, '33539819769', '911200', 1);
-
-
---
--- Name: establecimientos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.establecimientos_id_seq', 1, false);
 
 
 --
@@ -3578,13 +3510,6 @@ INSERT INTO public.estados_civiles VALUES (3, 'Divorciado/a');
 
 
 --
--- Name: estados_civiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.estados_civiles_id_seq', 1, false);
-
-
---
 -- Data for Name: estados_liquidacion; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3594,23 +3519,9 @@ INSERT INTO public.estados_liquidacion VALUES (3, 'CERRADA');
 
 
 --
--- Name: estados_liquidacion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.estados_liquidacion_id_seq', 1, false);
-
-
---
 -- Data for Name: feriados; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: feriados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.feriados_id_seq', 1, false);
 
 
 --
@@ -3620,25 +3531,11 @@ SELECT pg_catalog.setval('public.feriados_id_seq', 1, false);
 
 
 --
--- Name: fichajes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.fichajes_id_seq', 1, false);
-
-
---
 -- Data for Name: generos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.generos VALUES (1, 'Masculino');
 INSERT INTO public.generos VALUES (2, 'Femenino');
-
-
---
--- Name: generos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.generos_id_seq', 1, false);
 
 
 --
@@ -3772,26 +3669,12 @@ INSERT INTO public.historico_sueldo_basico_detalle VALUES (201, 18, 32407.03, 20
 
 
 --
--- Name: historico_sueldo_basico_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.historico_sueldo_basico_detalle_id_seq', 201, true);
-
-
---
--- Name: historico_sueldo_basico_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.historico_sueldo_basico_id_seq', 20, true);
-
-
---
 -- Data for Name: liquidaciones; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.liquidaciones VALUES (112, 'Liquidacion Febrero 2019', '2019-02-01', '2019-02-01', '2019-02-28', 1, 1, 1, '2019-02-01', '02 2019', 'Luján', '2019-02-01', 1, 2, 2019, 21, '2019-01-29', 'Enero');
 INSERT INTO public.liquidaciones VALUES (113, 'Liquidacion Marzo 2019', '2019-03-01', '2019-03-01', '2019-03-31', 1, 1, 1, '2019-02-01', '03 2019', 'Luján', '2019-02-01', 1, 3, 2019, 41, '2019-09-04', 'Septiembre');
-INSERT INTO public.liquidaciones VALUES (111, 'Liquidacion Enero 2019', '2019-01-01', '2019-01-01', '2019-01-31', 1, 1, 1, '2019-02-01', '01 2019', 'Luján', '2019-02-01', 1, 1, 2019, 1, '2019-01-29', 'Enero');
+INSERT INTO public.liquidaciones VALUES (111, 'Liquidacion Enero 2019', '2019-01-01', '2019-01-01', '2019-01-31', 1, 1, 1, '2019-02-01', '01 2019', 'Luján', '2019-02-01', 2, 1, 2019, 1, '2019-01-29', 'Enero');
 
 
 --
@@ -3925,20 +3808,6 @@ INSERT INTO public.liquidaciones_conceptos VALUES (2831, 39, 113, NULL);
 
 
 --
--- Name: liquidaciones_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.liquidaciones_conceptos_id_seq', 2831, true);
-
-
---
--- Name: liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.liquidaciones_id_seq', 113, true);
-
-
---
 -- Data for Name: localidades; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3946,24 +3815,10 @@ INSERT INTO public.localidades VALUES (1, 'LUJAN', 3450, 7);
 
 
 --
--- Name: localidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.localidades_id_seq', 1, true);
-
-
---
 -- Data for Name: nacionalidades; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.nacionalidades VALUES (1, 'Argentino');
-
-
---
--- Name: nacionalidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.nacionalidades_id_seq', 1, false);
 
 
 --
@@ -3981,24 +3836,10 @@ INSERT INTO public.obras_sociales VALUES (8, '3801', 'osde inmigrantes españole
 
 
 --
--- Name: obras_sociales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.obras_sociales_id_seq', 1, false);
-
-
---
 -- Data for Name: paises; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.paises VALUES (1, 'Argentina', 'Argentino');
-
-
---
--- Name: paises_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.paises_id_seq', 1, true);
 
 
 --
@@ -4077,20 +3918,6 @@ INSERT INTO public.periodos_detalle VALUES (15, 9, NULL, NULL, NULL, 22, 3, NULL
 
 
 --
--- Name: periodos_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.periodos_detalle_id_seq', 62, true);
-
-
---
--- Name: periodos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.periodos_id_seq', 5, true);
-
-
---
 -- Data for Name: persona_tareas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -4133,13 +3960,6 @@ INSERT INTO public.persona_tareas VALUES (38, 26, 12);
 
 
 --
--- Name: persona_tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.persona_tareas_id_seq', 38, true);
-
-
---
 -- Data for Name: personas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -4174,30 +3994,9 @@ INSERT INTO public.personas_conceptos VALUES (1, 5, 3.00, 19);
 
 
 --
--- Name: personas_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.personas_conceptos_id_seq', 1, true);
-
-
---
--- Name: personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.personas_id_seq', 26, true);
-
-
---
 -- Data for Name: personas_jornadas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: personas_jornadas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.personas_jornadas_id_seq', 1, false);
 
 
 --
@@ -4231,13 +4030,6 @@ INSERT INTO public.provincias VALUES (24, 'Tucumán', 1);
 
 
 --
--- Name: provincias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.provincias_id_seq', 24, true);
-
-
---
 -- Data for Name: recibos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -4260,26 +4052,6 @@ INSERT INTO public.recibos VALUES (1832, 36, 23, NULL, NULL, NULL, NULL, NULL, 1
 INSERT INTO public.recibos VALUES (1833, 37, 24, NULL, NULL, NULL, NULL, NULL, 112, NULL);
 INSERT INTO public.recibos VALUES (1834, 38, 25, NULL, NULL, NULL, NULL, NULL, 112, NULL);
 INSERT INTO public.recibos VALUES (1835, 39, 26, NULL, NULL, NULL, NULL, NULL, 112, NULL);
-INSERT INTO public.recibos VALUES (1805, 9, 16, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1806, 10, 17, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1807, 11, 18, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1808, 12, 19, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1809, 13, 20, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1810, 14, 21, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1811, 15, 22, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1812, 16, 23, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1813, 17, 24, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1814, 18, 25, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1815, 19, 26, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1816, 20, 7, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1797, 1, 8, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1798, 2, 9, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1799, 3, 10, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1800, 4, 11, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1801, 5, 12, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1802, 6, 13, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1803, 7, 14, NULL, NULL, NULL, NULL, NULL, 111, NULL);
-INSERT INTO public.recibos VALUES (1804, 8, 15, NULL, NULL, NULL, NULL, NULL, 111, NULL);
 INSERT INTO public.recibos VALUES (1836, 40, 7, NULL, NULL, NULL, NULL, NULL, 112, NULL);
 INSERT INTO public.recibos VALUES (1839, 42, 10, NULL, NULL, NULL, NULL, NULL, 113, NULL);
 INSERT INTO public.recibos VALUES (1840, 43, 11, NULL, NULL, NULL, NULL, NULL, 113, NULL);
@@ -4301,30 +4073,143 @@ INSERT INTO public.recibos VALUES (1855, 58, 26, NULL, NULL, NULL, NULL, NULL, 1
 INSERT INTO public.recibos VALUES (1856, 59, 7, NULL, NULL, NULL, NULL, NULL, 113, NULL);
 INSERT INTO public.recibos VALUES (1837, 60, 8, NULL, NULL, NULL, NULL, NULL, 113, NULL);
 INSERT INTO public.recibos VALUES (1838, 41, 9, NULL, NULL, NULL, NULL, NULL, 113, NULL);
+INSERT INTO public.recibos VALUES (1800, 18, 11, 24920.83, -1700.00, 2118.27, 21102.56, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1801, 19, 12, 36891.92, -2500.00, 3135.81, 31256.11, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1802, 20, 13, 74634.16, -2500.00, 9397.45, 62736.70, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1803, 1, 14, 16050.83, -1125.00, 1364.32, 13561.51, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1804, 2, 15, 28481.44, -1400.00, 2420.92, 24660.52, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1805, 3, 16, 40027.91, -2500.00, 3402.37, 34125.54, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1806, 4, 17, 63020.79, -2500.00, 6441.29, 54079.50, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1807, 5, 18, 57313.70, -2500.00, 5315.07, 49498.63, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1808, 6, 19, 59879.31, -2500.00, 5344.70, 52034.60, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1809, 7, 20, 49518.70, -2500.00, 4209.09, 42809.61, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1810, 8, 21, 38062.27, -2500.00, 3235.29, 32326.98, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1811, 9, 22, 37997.43, -2500.00, 3229.78, 32267.65, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1812, 10, 23, 46604.68, -2500.00, 3961.40, 40143.29, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1813, 11, 24, 62610.94, -2500.00, 5468.92, 54642.03, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1814, 12, 25, 34439.68, -2500.00, 2927.37, 29012.31, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1815, 13, 26, 97033.56, -2500.00, 16478.69, 78054.87, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1816, 14, 7, 33355.18, -2500.00, 2835.19, 28019.99, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1797, 15, 8, 39741.54, -2500.00, 3378.03, 33863.51, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1798, 16, 9, 51.98, -2500.00, 4.42, -2452.44, NULL, 111, NULL);
+INSERT INTO public.recibos VALUES (1799, 17, 10, 62575.73, -2500.00, 5691.53, 54384.20, NULL, 111, NULL);
 
 
 --
 -- Data for Name: recibos_acumuladores; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: recibos_acumuladores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.recibos_acumuladores_id_seq', 7560, true);
+INSERT INTO public.recibos_acumuladores VALUES (7761, 1, 16050.83, 1803);
+INSERT INTO public.recibos_acumuladores VALUES (7762, 2, -1125.00, 1803);
+INSERT INTO public.recibos_acumuladores VALUES (7763, 3, 16050.83, 1803);
+INSERT INTO public.recibos_acumuladores VALUES (7764, 4, -1125.00, 1803);
+INSERT INTO public.recibos_acumuladores VALUES (7765, 5, 1364.32, 1803);
+INSERT INTO public.recibos_acumuladores VALUES (7766, 1, 28481.44, 1804);
+INSERT INTO public.recibos_acumuladores VALUES (7767, 2, -1400.00, 1804);
+INSERT INTO public.recibos_acumuladores VALUES (7768, 3, 28481.44, 1804);
+INSERT INTO public.recibos_acumuladores VALUES (7769, 4, -1400.00, 1804);
+INSERT INTO public.recibos_acumuladores VALUES (7770, 5, 2420.92, 1804);
+INSERT INTO public.recibos_acumuladores VALUES (7771, 1, 40027.91, 1805);
+INSERT INTO public.recibos_acumuladores VALUES (7772, 2, -2500.00, 1805);
+INSERT INTO public.recibos_acumuladores VALUES (7773, 3, 40027.91, 1805);
+INSERT INTO public.recibos_acumuladores VALUES (7774, 4, -2500.00, 1805);
+INSERT INTO public.recibos_acumuladores VALUES (7775, 5, 3402.37, 1805);
+INSERT INTO public.recibos_acumuladores VALUES (7776, 1, 63020.79, 1806);
+INSERT INTO public.recibos_acumuladores VALUES (7777, 2, -2500.00, 1806);
+INSERT INTO public.recibos_acumuladores VALUES (7778, 3, 63020.79, 1806);
+INSERT INTO public.recibos_acumuladores VALUES (7779, 4, -2500.00, 1806);
+INSERT INTO public.recibos_acumuladores VALUES (7780, 5, 6441.29, 1806);
+INSERT INTO public.recibos_acumuladores VALUES (7781, 1, 57313.70, 1807);
+INSERT INTO public.recibos_acumuladores VALUES (7782, 2, -2500.00, 1807);
+INSERT INTO public.recibos_acumuladores VALUES (7783, 3, 57313.70, 1807);
+INSERT INTO public.recibos_acumuladores VALUES (7784, 4, -2500.00, 1807);
+INSERT INTO public.recibos_acumuladores VALUES (7785, 5, 5315.07, 1807);
+INSERT INTO public.recibos_acumuladores VALUES (7786, 1, 59879.31, 1808);
+INSERT INTO public.recibos_acumuladores VALUES (7787, 2, -2500.00, 1808);
+INSERT INTO public.recibos_acumuladores VALUES (7788, 3, 59879.31, 1808);
+INSERT INTO public.recibos_acumuladores VALUES (7789, 4, -2500.00, 1808);
+INSERT INTO public.recibos_acumuladores VALUES (7790, 5, 5344.70, 1808);
+INSERT INTO public.recibos_acumuladores VALUES (7791, 1, 49518.70, 1809);
+INSERT INTO public.recibos_acumuladores VALUES (7792, 2, -2500.00, 1809);
+INSERT INTO public.recibos_acumuladores VALUES (7793, 3, 49518.70, 1809);
+INSERT INTO public.recibos_acumuladores VALUES (7794, 4, -2500.00, 1809);
+INSERT INTO public.recibos_acumuladores VALUES (7795, 5, 4209.09, 1809);
+INSERT INTO public.recibos_acumuladores VALUES (7796, 1, 38062.27, 1810);
+INSERT INTO public.recibos_acumuladores VALUES (7797, 2, -2500.00, 1810);
+INSERT INTO public.recibos_acumuladores VALUES (7798, 3, 38062.27, 1810);
+INSERT INTO public.recibos_acumuladores VALUES (7799, 4, -2500.00, 1810);
+INSERT INTO public.recibos_acumuladores VALUES (7800, 5, 3235.29, 1810);
+INSERT INTO public.recibos_acumuladores VALUES (7801, 1, 37997.43, 1811);
+INSERT INTO public.recibos_acumuladores VALUES (7802, 2, -2500.00, 1811);
+INSERT INTO public.recibos_acumuladores VALUES (7803, 3, 37997.43, 1811);
+INSERT INTO public.recibos_acumuladores VALUES (7804, 4, -2500.00, 1811);
+INSERT INTO public.recibos_acumuladores VALUES (7805, 5, 3229.78, 1811);
+INSERT INTO public.recibos_acumuladores VALUES (7806, 1, 46604.68, 1812);
+INSERT INTO public.recibos_acumuladores VALUES (7807, 2, -2500.00, 1812);
+INSERT INTO public.recibos_acumuladores VALUES (7808, 3, 46604.68, 1812);
+INSERT INTO public.recibos_acumuladores VALUES (7809, 4, -2500.00, 1812);
+INSERT INTO public.recibos_acumuladores VALUES (7810, 5, 3961.40, 1812);
+INSERT INTO public.recibos_acumuladores VALUES (7811, 1, 62610.94, 1813);
+INSERT INTO public.recibos_acumuladores VALUES (7812, 2, -2500.00, 1813);
+INSERT INTO public.recibos_acumuladores VALUES (7813, 3, 62610.94, 1813);
+INSERT INTO public.recibos_acumuladores VALUES (7814, 4, -2500.00, 1813);
+INSERT INTO public.recibos_acumuladores VALUES (7815, 5, 5468.92, 1813);
+INSERT INTO public.recibos_acumuladores VALUES (7816, 1, 34439.68, 1814);
+INSERT INTO public.recibos_acumuladores VALUES (7817, 2, -2500.00, 1814);
+INSERT INTO public.recibos_acumuladores VALUES (7818, 3, 34439.68, 1814);
+INSERT INTO public.recibos_acumuladores VALUES (7819, 4, -2500.00, 1814);
+INSERT INTO public.recibos_acumuladores VALUES (7820, 5, 2927.37, 1814);
+INSERT INTO public.recibos_acumuladores VALUES (7821, 1, 97033.56, 1815);
+INSERT INTO public.recibos_acumuladores VALUES (7822, 2, -2500.00, 1815);
+INSERT INTO public.recibos_acumuladores VALUES (7823, 3, 97033.56, 1815);
+INSERT INTO public.recibos_acumuladores VALUES (7824, 4, -2500.00, 1815);
+INSERT INTO public.recibos_acumuladores VALUES (7825, 5, 16478.69, 1815);
+INSERT INTO public.recibos_acumuladores VALUES (7826, 1, 33355.18, 1816);
+INSERT INTO public.recibos_acumuladores VALUES (7827, 2, -2500.00, 1816);
+INSERT INTO public.recibos_acumuladores VALUES (7828, 3, 33355.18, 1816);
+INSERT INTO public.recibos_acumuladores VALUES (7829, 4, -2500.00, 1816);
+INSERT INTO public.recibos_acumuladores VALUES (7830, 5, 2835.19, 1816);
+INSERT INTO public.recibos_acumuladores VALUES (7831, 1, 39741.54, 1797);
+INSERT INTO public.recibos_acumuladores VALUES (7832, 2, -2500.00, 1797);
+INSERT INTO public.recibos_acumuladores VALUES (7833, 3, 39741.54, 1797);
+INSERT INTO public.recibos_acumuladores VALUES (7834, 4, -2500.00, 1797);
+INSERT INTO public.recibos_acumuladores VALUES (7835, 5, 3378.03, 1797);
+INSERT INTO public.recibos_acumuladores VALUES (7836, 1, 51.98, 1798);
+INSERT INTO public.recibos_acumuladores VALUES (7837, 2, -2500.00, 1798);
+INSERT INTO public.recibos_acumuladores VALUES (7838, 3, 51.98, 1798);
+INSERT INTO public.recibos_acumuladores VALUES (7839, 4, -2500.00, 1798);
+INSERT INTO public.recibos_acumuladores VALUES (7840, 5, 4.42, 1798);
+INSERT INTO public.recibos_acumuladores VALUES (7841, 1, 62575.73, 1799);
+INSERT INTO public.recibos_acumuladores VALUES (7842, 2, -2500.00, 1799);
+INSERT INTO public.recibos_acumuladores VALUES (7843, 3, 62575.73, 1799);
+INSERT INTO public.recibos_acumuladores VALUES (7844, 4, -2500.00, 1799);
+INSERT INTO public.recibos_acumuladores VALUES (7845, 5, 5691.53, 1799);
+INSERT INTO public.recibos_acumuladores VALUES (7846, 1, 24920.83, 1800);
+INSERT INTO public.recibos_acumuladores VALUES (7847, 2, -1700.00, 1800);
+INSERT INTO public.recibos_acumuladores VALUES (7848, 3, 24920.83, 1800);
+INSERT INTO public.recibos_acumuladores VALUES (7849, 4, -1700.00, 1800);
+INSERT INTO public.recibos_acumuladores VALUES (7850, 5, 2118.27, 1800);
+INSERT INTO public.recibos_acumuladores VALUES (7851, 1, 36891.92, 1801);
+INSERT INTO public.recibos_acumuladores VALUES (7852, 2, -2500.00, 1801);
+INSERT INTO public.recibos_acumuladores VALUES (7853, 3, 36891.92, 1801);
+INSERT INTO public.recibos_acumuladores VALUES (7854, 4, -2500.00, 1801);
+INSERT INTO public.recibos_acumuladores VALUES (7855, 5, 3135.81, 1801);
+INSERT INTO public.recibos_acumuladores VALUES (7856, 1, 74634.16, 1802);
+INSERT INTO public.recibos_acumuladores VALUES (7857, 2, -2500.00, 1802);
+INSERT INTO public.recibos_acumuladores VALUES (7858, 3, 74634.16, 1802);
+INSERT INTO public.recibos_acumuladores VALUES (7859, 4, -2500.00, 1802);
+INSERT INTO public.recibos_acumuladores VALUES (7860, 5, 9397.45, 1802);
 
 
 --
 -- Data for Name: recibos_conceptos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.recibos_conceptos VALUES (54364, 47, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54365, 46, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54366, 13, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54381, 29, NULL, 1798, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54382, 27, NULL, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54497, 18, 1198.99, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54498, 19, 1198.99, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54527, 42, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54528, 12, 3815.09, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54529, 4, 38150.89, 1802, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56774, 42, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56775, 12, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56776, 4, NULL, 1856, NULL);
@@ -4332,18 +4217,18 @@ INSERT INTO public.recibos_conceptos VALUES (56777, 5, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56778, 6, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56779, 47, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56780, 46, NULL, 1856, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54400, 7, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54477, 9, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54478, 10, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54479, 11, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54480, 39, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54483, 1, NULL, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54530, 5, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54531, 6, 24416.57, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54532, 47, 74634.16, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54533, 46, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54534, 13, 6219.51, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54535, 14, 0.00, 1802, 0.00);
 INSERT INTO public.recibos_conceptos VALUES (56003, 14, NULL, 1837, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56781, 13, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56784, 15, NULL, 1856, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54484, 7, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54485, 42, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54486, 12, NULL, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54536, 16, 0.00, 1802, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54537, 15, 80853.67, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54538, 17, 8893.90, 1802, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56004, 16, NULL, 1837, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56785, 17, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56786, 18, NULL, 1856, NULL);
@@ -4352,27 +4237,23 @@ INSERT INTO public.recibos_conceptos VALUES (56063, 33, NULL, 1838, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56064, 34, NULL, 1838, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56065, 35, NULL, 1838, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56066, 36, NULL, 1838, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54346, 35, NULL, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54539, 18, 2425.61, 1802, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56017, 29, NULL, 1837, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56067, 37, NULL, 1838, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56068, 38, NULL, 1838, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56069, 40, NULL, 1838, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54487, 4, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54488, 5, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54489, 6, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54490, 47, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54491, 46, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54492, 13, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54493, 14, NULL, 1801, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54494, 16, NULL, 1801, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54495, 15, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54496, 17, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54497, 18, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54498, 19, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54499, 20, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54506, 26, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54507, 29, NULL, 1801, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54501, 22, NULL, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54540, 19, 2425.61, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54541, 20, 2021.34, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54542, 21, 15766.47, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54543, 22, 65087.21, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54544, 23, 65087.21, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54545, 32, 3254.36, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54546, 24, 34339.60, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54547, 25, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54548, 26, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54549, 29, 0.00, 1802, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54550, 27, 7154.08, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54551, 28, 0.00, 1802, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56020, 30, NULL, 1837, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56070, 8, NULL, 1838, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56071, 9, NULL, 1838, NULL);
@@ -4546,22 +4427,20 @@ INSERT INTO public.recibos_conceptos VALUES (56236, 10, NULL, 1842, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56237, 11, NULL, 1842, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56238, 39, NULL, 1842, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56239, 1, NULL, 1843, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54502, 23, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54503, 32, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54504, 24, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54505, 25, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54508, 27, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54509, 28, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54510, 30, NULL, 1801, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54511, 31, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54512, 33, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54513, 34, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54514, 35, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54515, 36, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54516, 37, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54517, 38, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54518, 40, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54519, 9, NULL, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54552, 30, 0.00, 1802, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54553, 31, 3254.36, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54554, 33, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54555, 34, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54556, 35, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54557, 36, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54558, 37, 44748.04, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54559, 38, 20339.17, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54560, 40, 3053.55, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54561, 9, 2239.02, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54562, 10, 2239.02, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54563, 11, 1865.85, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54564, 39, 3053.55, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54567, 1, 13537.16, 1803, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56222, 29, NULL, 1842, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56225, 30, NULL, 1842, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56249, 14, NULL, 1843, NULL);
@@ -4713,21 +4592,19 @@ INSERT INTO public.recibos_conceptos VALUES (56387, 27, NULL, 1846, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56388, 28, NULL, 1846, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56390, 31, NULL, 1846, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56391, 33, NULL, 1846, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54520, 10, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54521, 11, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54522, 39, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54525, 1, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54526, 7, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54527, 42, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54528, 12, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54529, 4, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54530, 5, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54531, 6, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54532, 47, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54533, 46, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54534, 13, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54535, 14, NULL, 1802, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54536, 16, NULL, 1802, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54568, 7, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54569, 42, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54570, 12, 1353.72, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54571, 4, 13537.16, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54572, 5, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54573, 6, 812.23, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54575, 46, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54576, 13, 1337.57, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54577, 14, 0.00, 1803, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54578, 16, 0.00, 1803, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54579, 15, 17388.39, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54580, 17, 1912.72, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54581, 18, 521.65, 1803, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56386, 29, NULL, 1846, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56389, 30, NULL, 1846, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56413, 14, NULL, 1847, NULL);
@@ -4879,21 +4756,21 @@ INSERT INTO public.recibos_conceptos VALUES (56535, 13, NULL, 1850, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56538, 15, NULL, 1850, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56539, 17, NULL, 1850, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56540, 18, NULL, 1850, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54537, 15, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54538, 17, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54539, 18, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54540, 19, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54541, 20, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54542, 21, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54543, 22, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54544, 23, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54545, 32, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54546, 24, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54547, 25, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54548, 26, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54549, 29, NULL, 1802, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54550, 27, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54551, 28, NULL, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54582, 19, 521.65, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54583, 20, 434.71, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54584, 21, 3390.74, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54585, 22, 13997.66, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54586, 23, 13997.66, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54587, 32, 699.88, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54588, 24, 34339.60, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54589, 25, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54590, 26, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54591, 29, 0.00, 1803, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54592, 27, 7154.08, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54593, 28, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54594, 30, 0.00, 1803, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54595, 31, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54596, 33, 0.00, 1803, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56550, 29, NULL, 1850, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56553, 30, NULL, 1850, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56577, 14, NULL, 1851, NULL);
@@ -5015,202 +4892,189 @@ INSERT INTO public.recibos_conceptos VALUES (56689, 39, NULL, 1853, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56690, 1, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56691, 7, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56692, 42, NULL, 1854, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54552, 30, NULL, 1802, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54553, 31, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54554, 33, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54555, 34, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54556, 35, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54557, 36, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54558, 37, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54559, 38, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54560, 40, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54561, 9, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54562, 10, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54563, 11, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54564, 39, NULL, 1802, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54567, 1, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54568, 7, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54569, 42, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54570, 12, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54571, 4, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54572, 5, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54573, 6, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54574, 47, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54575, 46, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54576, 13, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54577, 14, NULL, 1803, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54578, 16, NULL, 1803, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54579, 15, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54580, 17, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54581, 18, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54582, 19, NULL, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54597, 34, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54598, 35, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54599, 36, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54600, 37, 41493.68, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54601, 38, -27496.02, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54602, 40, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54603, 9, 481.52, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54604, 10, 481.52, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54605, 11, 401.27, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54606, 39, 0.00, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54609, 1, 20037.91, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54610, 7, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54611, 42, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54612, 12, 2003.79, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54613, 4, 20037.91, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54614, 5, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54615, 6, 4007.58, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54616, 47, 28481.44, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54617, 46, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54618, 13, 2373.45, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54619, 14, 0.00, 1804, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54620, 16, 0.00, 1804, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54621, 15, 30854.90, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54622, 17, 3394.04, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54623, 18, 925.65, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54624, 19, 925.65, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54625, 20, 771.37, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54626, 21, 6016.70, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54627, 22, 24838.19, 1804, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56693, 12, NULL, 1854, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54583, 20, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54584, 21, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54585, 22, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54586, 23, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54587, 32, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54588, 24, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54589, 25, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54590, 26, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54591, 29, NULL, 1803, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54592, 27, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54593, 28, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54594, 30, NULL, 1803, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54595, 31, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54596, 33, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54597, 34, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54598, 35, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54599, 36, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54600, 37, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54601, 38, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54602, 40, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54603, 9, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54604, 10, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54605, 11, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54606, 39, NULL, 1803, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54609, 1, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54610, 7, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54611, 42, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54612, 12, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54613, 4, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54614, 5, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54615, 6, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54616, 47, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54617, 46, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54618, 13, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54619, 14, NULL, 1804, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54620, 16, NULL, 1804, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54621, 15, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54622, 17, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54623, 18, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54624, 19, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54625, 20, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54626, 21, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54627, 22, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54628, 23, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54629, 32, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54630, 24, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54500, 21, NULL, 1801, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54631, 25, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54632, 26, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54633, 29, NULL, 1804, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54634, 27, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54635, 28, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54636, 30, NULL, 1804, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54637, 31, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54638, 33, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54639, 34, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54640, 35, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54641, 36, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54642, 37, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54643, 38, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54644, 40, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54645, 9, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54646, 10, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54647, 11, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54648, 39, NULL, 1804, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54651, 1, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54652, 7, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54653, 42, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54654, 12, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54655, 4, NULL, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54628, 23, 24838.19, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54629, 32, 1241.91, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54630, 24, 34339.60, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54500, 21, 7793.42, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54631, 25, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54632, 26, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54633, 29, 0.00, 1804, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54634, 27, 7154.08, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54635, 28, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54636, 30, 0.00, 1804, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54637, 31, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54638, 33, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54639, 34, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54640, 35, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54641, 36, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54642, 37, 41493.68, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54643, 38, -16655.49, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54644, 40, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54645, 9, 854.44, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54646, 10, 854.44, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54647, 11, 712.04, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54648, 39, 0.00, 1804, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54651, 1, 27965.08, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54652, 7, 5416.84, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54653, 42, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54654, 12, 2796.51, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54655, 4, 27965.08, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54656, 5, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54657, 6, 2796.51, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54658, 47, 40027.91, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54659, 46, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54660, 13, 3335.66, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54661, 14, 0.00, 1805, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54662, 16, 0.00, 1805, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54663, 15, 43363.57, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54664, 17, 4769.99, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54665, 18, 1300.91, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54666, 19, 1300.91, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54686, 40, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54687, 9, 1200.84, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54688, 10, 1200.84, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54689, 11, 1000.70, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54690, 39, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54693, 1, 39134.63, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54694, 7, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54695, 42, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54667, 20, 1084.09, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54668, 21, 8455.90, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54669, 22, 34907.67, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54670, 23, 34907.67, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54671, 32, 1745.38, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54672, 24, 34339.60, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54673, 25, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54674, 26, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54675, 29, 0.00, 1805, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54676, 27, 7154.08, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54677, 28, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54678, 30, 0.00, 1805, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54679, 31, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54680, 33, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54681, 34, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54682, 35, 0.00, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54683, 36, 0.00, 1805, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56700, 14, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56694, 4, NULL, 1854, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54656, 5, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54657, 6, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54658, 47, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54659, 46, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54660, 13, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54661, 14, NULL, 1805, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54662, 16, NULL, 1805, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54663, 15, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54664, 17, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54665, 18, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54666, 19, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54686, 40, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54687, 9, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54688, 10, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54689, 11, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54690, 39, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54693, 1, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54694, 7, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54695, 42, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54667, 20, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54668, 21, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54669, 22, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54670, 23, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54671, 32, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54672, 24, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54673, 25, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54674, 26, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54675, 29, NULL, 1805, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54676, 27, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54677, 28, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54678, 30, NULL, 1805, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54679, 31, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54680, 33, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54681, 34, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54682, 35, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54683, 36, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54684, 37, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54650, 49, NULL, 1804, -1400.00);
-INSERT INTO public.recibos_conceptos VALUES (54696, 12, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54697, 4, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54698, 5, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54699, 6, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54700, 47, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54701, 46, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54702, 13, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54703, 14, NULL, 1806, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54704, 16, NULL, 1806, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54705, 15, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54706, 17, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54707, 18, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54708, 19, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54709, 20, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54710, 21, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54711, 22, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54712, 23, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54713, 32, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54714, 24, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54715, 25, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54716, 26, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54717, 29, NULL, 1806, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54718, 27, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54719, 28, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54720, 30, NULL, 1806, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54721, 31, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54722, 33, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54723, 34, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54724, 35, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54725, 36, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54726, 37, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54727, 38, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54728, 40, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54729, 9, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54730, 10, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54731, 11, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54732, 39, NULL, 1806, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54735, 1, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54736, 7, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54737, 42, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54738, 12, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54739, 4, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54740, 5, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54741, 6, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54742, 47, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54743, 46, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54744, 13, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54745, 14, NULL, 1807, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54746, 16, NULL, 1807, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54747, 15, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54748, 17, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54749, 18, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54750, 19, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54751, 20, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54752, 21, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54753, 22, NULL, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54684, 37, 41493.68, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54650, 49, -1400.00, 1804, -1400.00);
+INSERT INTO public.recibos_conceptos VALUES (54696, 12, 3913.46, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54697, 4, 39134.63, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54698, 5, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54699, 6, 11740.39, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54700, 47, 63020.79, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54701, 46, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54702, 13, 5251.73, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54703, 14, 0.00, 1806, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54704, 16, 0.00, 1806, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54705, 15, 68272.52, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54706, 17, 7509.98, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54707, 18, 2048.18, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54708, 19, 2048.18, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54709, 20, 1706.81, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54710, 21, 13313.14, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54711, 22, 54959.38, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54712, 23, 54959.38, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54713, 32, 2747.97, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54714, 24, 34339.60, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54715, 25, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54716, 26, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54717, 29, 0.00, 1806, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54718, 27, 7154.08, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54719, 28, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54720, 30, 0.00, 1806, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54721, 31, 2747.97, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54722, 33, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54723, 34, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54724, 35, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54725, 36, 0.00, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54726, 37, 44241.65, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54727, 38, 10717.73, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54728, 40, 1084.53, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54729, 9, 1890.62, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54730, 10, 1890.62, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54731, 11, 1575.52, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54732, 39, 1084.53, 1806, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54735, 1, 32407.03, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54736, 7, 7453.62, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54737, 42, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54738, 12, 3240.70, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54739, 4, 32407.03, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54740, 5, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54741, 6, 7777.69, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54742, 47, 57313.70, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54743, 46, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54744, 13, 4776.14, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54745, 14, 0.00, 1807, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54746, 16, 0.00, 1807, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54747, 15, 62089.84, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54748, 17, 6829.88, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54749, 18, 1862.70, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54750, 19, 1862.70, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54751, 20, 1552.25, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54752, 21, 12107.52, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54753, 22, 49982.32, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54754, 23, 49982.32, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54755, 32, 2499.12, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54756, 24, 34339.60, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54757, 25, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54758, 26, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54759, 29, 0.00, 1807, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54760, 27, 7154.08, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54761, 28, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54762, 30, 0.00, 1807, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54763, 31, 2499.12, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54764, 33, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54765, 34, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54766, 35, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54767, 36, 0.00, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54768, 37, 43992.80, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54769, 38, 5989.52, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54770, 40, 443.41, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54771, 9, 1719.41, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54772, 10, 1719.41, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54773, 11, 1432.84, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54774, 39, 443.41, 1807, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54777, 1, 33068.34, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54778, 7, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54779, 42, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54780, 12, 3306.83, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54781, 4, 33068.34, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54782, 5, 3.00, 1808, 3.00);
+INSERT INTO public.recibos_conceptos VALUES (54783, 6, 17856.90, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54784, 47, 59879.31, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54785, 46, 0.00, 1808, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56695, 5, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56696, 6, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56697, 47, NULL, 1854, NULL);
@@ -5229,534 +5093,456 @@ INSERT INTO public.recibos_conceptos VALUES (56709, 23, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56710, 32, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56711, 24, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56712, 25, NULL, 1854, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54754, 23, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54755, 32, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54756, 24, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54757, 25, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54758, 26, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54759, 29, NULL, 1807, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54760, 27, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54761, 28, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54762, 30, NULL, 1807, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54763, 31, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54764, 33, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54765, 34, NULL, 1807, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56701, 16, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56713, 26, NULL, 1854, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54766, 35, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54767, 36, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54768, 37, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54769, 38, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54770, 40, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54771, 9, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54772, 10, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54773, 11, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54774, 39, NULL, 1807, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54777, 1, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54778, 7, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54779, 42, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54780, 12, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54781, 4, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54782, 5, NULL, 1808, 3.00);
-INSERT INTO public.recibos_conceptos VALUES (54783, 6, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54784, 47, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54785, 46, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54786, 13, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54787, 14, NULL, 1808, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54788, 16, NULL, 1808, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54789, 15, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54790, 17, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54791, 18, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54685, 38, NULL, 1805, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54792, 19, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54793, 20, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54794, 21, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54795, 22, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54796, 23, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54797, 32, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54798, 24, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54799, 25, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54800, 26, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54801, 29, NULL, 1808, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54802, 27, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54803, 28, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54804, 30, NULL, 1808, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54805, 31, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54806, 33, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54807, 34, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54808, 35, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54809, 36, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54810, 37, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54811, 38, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54812, 40, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54813, 9, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54814, 10, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54815, 11, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54816, 39, NULL, 1808, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54819, 1, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54820, 7, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54821, 42, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54822, 12, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54823, 4, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54824, 5, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54825, 6, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54826, 47, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54870, 13, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54871, 14, NULL, 1810, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54872, 16, NULL, 1810, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54873, 15, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54874, 17, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54875, 18, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54876, 19, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54827, 46, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54828, 13, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54829, 14, NULL, 1809, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54830, 16, NULL, 1809, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54831, 15, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54832, 17, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54833, 18, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54834, 19, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54835, 20, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54836, 21, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54837, 22, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54838, 23, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54839, 32, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54840, 24, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54841, 25, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54842, 26, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54843, 29, NULL, 1809, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54844, 27, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54845, 28, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54846, 30, NULL, 1809, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54847, 31, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54848, 33, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54849, 34, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54850, 35, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54851, 36, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54852, 37, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54853, 38, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54854, 40, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54855, 9, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54856, 10, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54857, 11, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54858, 39, NULL, 1809, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54861, 1, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54862, 7, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54863, 42, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54864, 12, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54865, 4, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54866, 5, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54867, 6, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54868, 47, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54869, 46, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54877, 20, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54878, 21, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54879, 22, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54880, 23, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54881, 32, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54882, 24, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54883, 25, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54884, 26, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54885, 29, NULL, 1810, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54886, 27, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54887, 28, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54888, 30, NULL, 1810, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54889, 31, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54890, 33, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54891, 34, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54892, 35, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54893, 36, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54894, 37, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54895, 38, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54896, 40, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54897, 9, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54898, 10, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54899, 11, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54900, 39, NULL, 1810, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54903, 1, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54904, 7, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54905, 42, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54906, 12, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54907, 4, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54908, 5, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54909, 6, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54910, 47, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54911, 46, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54912, 13, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54913, 14, NULL, 1811, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54914, 16, NULL, 1811, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54915, 15, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54916, 17, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54917, 18, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54918, 19, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54919, 20, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54920, 21, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54921, 22, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54922, 23, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54923, 32, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54924, 24, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54925, 25, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54926, 26, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54927, 29, NULL, 1811, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54928, 27, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54929, 28, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54930, 30, NULL, 1811, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54931, 31, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54932, 33, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54933, 34, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54934, 35, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54935, 36, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54936, 37, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54937, 38, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54938, 40, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54939, 9, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54940, 10, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54941, 11, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54942, 39, NULL, 1811, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54945, 1, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54946, 7, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54947, 42, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54948, 12, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54949, 4, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54950, 5, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54951, 6, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54952, 47, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54953, 46, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54954, 13, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54955, 14, NULL, 1812, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54956, 16, NULL, 1812, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54957, 15, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54958, 17, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54959, 18, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54960, 19, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54961, 20, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54962, 21, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54963, 22, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54964, 23, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54965, 32, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54966, 24, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54967, 25, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54968, 26, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54969, 29, NULL, 1812, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54970, 27, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54971, 28, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54972, 30, NULL, 1812, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54973, 31, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54974, 33, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54975, 34, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54976, 35, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54977, 36, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54978, 37, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54979, 38, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54980, 40, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54981, 9, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54982, 10, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54983, 11, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54984, 39, NULL, 1812, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54987, 1, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54988, 7, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54989, 42, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54990, 12, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54323, 46, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54324, 13, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54325, 14, NULL, 1797, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54326, 16, NULL, 1797, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54327, 15, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54328, 17, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54329, 18, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54330, 19, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54331, 20, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54332, 21, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54333, 22, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54334, 23, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54335, 32, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54336, 24, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54337, 25, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54338, 26, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54339, 29, NULL, 1797, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54340, 27, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54341, 28, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54342, 30, NULL, 1797, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54343, 31, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54344, 33, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54345, 34, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55055, 28, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55056, 30, NULL, 1814, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55057, 31, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55058, 33, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55059, 34, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54991, 4, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54992, 5, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54993, 6, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54994, 47, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54995, 46, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54996, 13, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54997, 14, NULL, 1813, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54998, 16, NULL, 1813, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54999, 15, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55000, 17, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55001, 18, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55002, 19, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55003, 20, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55004, 21, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55005, 22, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55006, 23, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55007, 32, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55008, 24, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55009, 25, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55010, 26, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55011, 29, NULL, 1813, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55012, 27, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55013, 28, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55014, 30, NULL, 1813, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55015, 31, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55016, 33, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55017, 34, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55018, 35, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55019, 36, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55020, 37, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55021, 38, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55022, 40, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55023, 9, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55024, 10, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55025, 11, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55026, 39, NULL, 1813, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55027, 48, NULL, 1813, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55029, 1, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55030, 7, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55031, 42, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55032, 12, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55033, 4, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55034, 5, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55035, 6, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55036, 47, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55037, 46, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55038, 13, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55039, 14, NULL, 1814, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55040, 16, NULL, 1814, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55041, 15, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55042, 17, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55043, 18, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55044, 19, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55045, 20, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55046, 21, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55047, 22, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55048, 23, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55049, 32, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55050, 24, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55051, 25, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55052, 26, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55053, 29, NULL, 1814, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55054, 27, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55060, 35, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55061, 36, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55062, 37, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55063, 38, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55064, 40, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55065, 9, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55066, 10, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55067, 11, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55068, 39, NULL, 1814, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55071, 1, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55072, 7, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55073, 42, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55074, 12, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55075, 4, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55076, 5, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55077, 6, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55078, 47, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55079, 46, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55080, 13, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55081, 14, NULL, 1815, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55082, 16, NULL, 1815, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55083, 15, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55084, 17, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55085, 18, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55086, 19, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55087, 20, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55088, 21, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54322, 47, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55089, 22, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55090, 23, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55091, 32, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55092, 24, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55093, 25, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55094, 26, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55095, 29, NULL, 1815, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55096, 27, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55097, 28, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55098, 30, NULL, 1815, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55099, 31, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55100, 33, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55101, 34, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55102, 35, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55103, 36, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55104, 37, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55105, 38, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55106, 40, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55107, 9, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55108, 10, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55109, 11, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55110, 39, NULL, 1815, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55113, 1, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55114, 7, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55115, 42, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55116, 12, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55117, 4, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55118, 5, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55119, 6, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55120, 47, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55121, 46, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55122, 13, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55123, 14, NULL, 1816, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55124, 16, NULL, 1816, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55125, 15, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55126, 17, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55127, 18, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55128, 19, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55129, 20, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55130, 21, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55131, 22, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55132, 23, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55133, 32, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55134, 24, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55135, 25, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55136, 26, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55137, 29, NULL, 1816, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55138, 27, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55139, 28, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55140, 30, NULL, 1816, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (55141, 31, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55142, 33, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55143, 34, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55144, 35, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55145, 36, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55146, 37, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55147, 38, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55148, 40, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55149, 9, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55150, 10, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55151, 11, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55152, 39, NULL, 1816, NULL);
-INSERT INTO public.recibos_conceptos VALUES (55155, 45, NULL, 1802, 3376.41);
-INSERT INTO public.recibos_conceptos VALUES (54355, 48, NULL, 1797, 1108.96);
-INSERT INTO public.recibos_conceptos VALUES (54356, 49, NULL, 1797, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54397, 48, NULL, 1798, 333.14);
-INSERT INTO public.recibos_conceptos VALUES (54398, 49, NULL, 1798, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54440, 49, NULL, 1799, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54481, 48, NULL, 1800, 809.33);
-INSERT INTO public.recibos_conceptos VALUES (54482, 49, NULL, 1800, -1700.00);
-INSERT INTO public.recibos_conceptos VALUES (54523, 48, NULL, 1801, 1140.80);
-INSERT INTO public.recibos_conceptos VALUES (54524, 49, NULL, 1801, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54565, 48, NULL, 1802, 2225.40);
-INSERT INTO public.recibos_conceptos VALUES (54566, 49, NULL, 1802, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54607, 48, NULL, 1803, 347.72);
-INSERT INTO public.recibos_conceptos VALUES (54608, 49, NULL, 1803, -1125.00);
-INSERT INTO public.recibos_conceptos VALUES (54649, 48, NULL, 1804, 948.83);
-INSERT INTO public.recibos_conceptos VALUES (55153, 48, NULL, 1816, 979.66);
-INSERT INTO public.recibos_conceptos VALUES (55154, 49, NULL, 1816, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (55156, 51, NULL, 1804, 1483.33);
-INSERT INTO public.recibos_conceptos VALUES (55157, 45, NULL, 1806, 3748.16);
-INSERT INTO public.recibos_conceptos VALUES (55158, 45, NULL, 1807, 4858.79);
-INSERT INTO public.recibos_conceptos VALUES (55159, 45, NULL, 1808, 1166.48);
-INSERT INTO public.recibos_conceptos VALUES (55160, 44, NULL, 1808, 2649.80);
-INSERT INTO public.recibos_conceptos VALUES (55161, 45, NULL, 1809, 4600.00);
-INSERT INTO public.recibos_conceptos VALUES (55162, 45, NULL, 1810, 1236.63);
-INSERT INTO public.recibos_conceptos VALUES (55163, 44, NULL, 1812, 2649.80);
-INSERT INTO public.recibos_conceptos VALUES (55164, 45, NULL, 1815, 13955.00);
-INSERT INTO public.recibos_conceptos VALUES (55165, 44, NULL, 1815, 2649.80);
-INSERT INTO public.recibos_conceptos VALUES (54691, 48, NULL, 1805, 1052.98);
-INSERT INTO public.recibos_conceptos VALUES (54692, 49, NULL, 1805, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54733, 48, NULL, 1806, 1834.35);
-INSERT INTO public.recibos_conceptos VALUES (54734, 49, NULL, 1806, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54775, 48, NULL, 1807, 1575.87);
-INSERT INTO public.recibos_conceptos VALUES (54776, 49, NULL, 1807, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54817, 48, NULL, 1808, 1830.95);
-INSERT INTO public.recibos_conceptos VALUES (54818, 49, NULL, 1808, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54859, 48, NULL, 1809, 1509.30);
-INSERT INTO public.recibos_conceptos VALUES (54860, 49, NULL, 1809, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54901, 48, NULL, 1810, 1121.28);
-INSERT INTO public.recibos_conceptos VALUES (54902, 49, NULL, 1810, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54943, 48, NULL, 1811, 1039.45);
-INSERT INTO public.recibos_conceptos VALUES (54944, 49, NULL, 1811, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (54985, 48, NULL, 1812, 1372.70);
-INSERT INTO public.recibos_conceptos VALUES (54986, 49, NULL, 1812, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (55028, 49, NULL, 1813, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (55069, 48, NULL, 1814, 280.19);
-INSERT INTO public.recibos_conceptos VALUES (55070, 49, NULL, 1814, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (55111, 48, NULL, 1815, 2970.05);
-INSERT INTO public.recibos_conceptos VALUES (55112, 49, NULL, 1815, -2500.00);
-INSERT INTO public.recibos_conceptos VALUES (55166, 45, NULL, 1798, 873.04);
-INSERT INTO public.recibos_conceptos VALUES (55167, 44, NULL, 1801, 2649.80);
-INSERT INTO public.recibos_conceptos VALUES (55168, 44, NULL, 1802, 2649.80);
-INSERT INTO public.recibos_conceptos VALUES (55169, 44, NULL, 1806, 2649.80);
-INSERT INTO public.recibos_conceptos VALUES (54347, 36, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54348, 37, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54349, 38, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54350, 40, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54351, 9, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54352, 10, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54353, 11, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54354, 39, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54357, 1, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54358, 7, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54359, 42, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54360, 12, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54361, 4, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54362, 5, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54363, 6, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54367, 14, NULL, 1798, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54368, 16, NULL, 1798, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54369, 15, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54370, 17, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54371, 18, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54372, 19, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54373, 20, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54374, 21, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54375, 22, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54376, 23, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54377, 32, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54378, 24, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54379, 25, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54380, 26, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54383, 28, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54384, 30, NULL, 1798, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54385, 31, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54386, 33, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54387, 34, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54388, 35, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54389, 36, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54390, 37, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54391, 38, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54392, 40, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54393, 9, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54394, 10, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54395, 11, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54396, 39, NULL, 1798, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54399, 1, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54401, 42, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54402, 12, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54403, 4, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54404, 5, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54405, 6, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54406, 47, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54407, 46, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54408, 13, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54409, 14, NULL, 1799, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54410, 16, NULL, 1799, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54411, 15, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54412, 17, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54413, 18, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54414, 19, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54415, 20, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54416, 21, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54315, 1, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54316, 7, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54317, 42, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54318, 12, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54319, 4, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54320, 5, NULL, 1797, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54321, 6, NULL, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54786, 13, 4989.94, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54787, 14, 0.00, 1808, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54788, 16, 0.00, 1808, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54789, 15, 64869.25, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54790, 17, 7135.62, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54791, 18, 1946.08, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54685, 38, -6586.01, 1805, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54792, 19, 1946.08, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54793, 20, 1621.73, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54794, 21, 12649.50, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54795, 22, 52219.75, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54796, 23, 52219.75, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54797, 32, 2610.99, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54798, 24, 34339.60, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54799, 25, 6669.50, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54800, 26, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54801, 29, 0.00, 1808, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54802, 27, 7154.08, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54803, 28, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54804, 30, 0.00, 1808, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54805, 31, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54806, 33, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54807, 34, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54808, 35, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54809, 36, 0.00, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54810, 37, 48163.18, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54811, 38, 4056.57, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54812, 40, 254.96, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54813, 9, 1796.38, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54814, 10, 1796.38, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54815, 11, 1496.98, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54816, 39, 254.96, 1808, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54819, 1, 33913.59, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54820, 7, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54821, 42, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54822, 12, 3391.36, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54823, 4, 33913.59, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54824, 5, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54825, 6, 6104.45, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54826, 47, 49518.70, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54870, 13, 3171.86, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54871, 14, 0.00, 1810, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54872, 16, 0.00, 1810, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54873, 15, 41234.13, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54874, 17, 4535.75, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54875, 18, 1237.02, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54876, 19, 1237.02, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54827, 46, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54828, 13, 4126.56, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54829, 14, 0.00, 1809, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54830, 16, 0.00, 1809, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54831, 15, 53645.25, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54832, 17, 5900.98, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54833, 18, 1609.36, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54834, 19, 1609.36, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54835, 20, 1341.13, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54836, 21, 10460.82, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54837, 22, 43184.43, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54838, 23, 43184.43, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54839, 32, 2159.22, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54840, 24, 34339.60, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54841, 25, 6669.50, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54842, 26, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54843, 29, 0.00, 1809, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54844, 27, 7154.08, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54845, 28, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54846, 30, 0.00, 1809, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54847, 31, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54848, 33, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54849, 34, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54850, 35, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54851, 36, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54852, 37, 48163.18, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54853, 38, -4978.75, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54854, 40, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54855, 9, 1485.56, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54856, 10, 1485.56, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54857, 11, 1237.97, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54858, 39, 0.00, 1809, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54861, 1, 29170.23, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54862, 7, 1283.49, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54863, 42, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54864, 12, 2917.02, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54865, 4, 29170.23, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54866, 5, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54867, 6, 2333.62, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54868, 47, 38062.27, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54869, 46, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54877, 20, 1030.85, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54878, 21, 8040.65, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54879, 22, 33193.47, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54880, 23, 33193.47, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54881, 32, 1659.67, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54882, 24, 34339.60, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54883, 25, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54884, 26, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54885, 29, 0.00, 1810, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54886, 27, 7154.08, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54887, 28, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54888, 30, 0.00, 1810, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54889, 31, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54890, 33, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54891, 34, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54892, 35, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54893, 36, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54894, 37, 41493.68, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54895, 38, -8300.21, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54896, 40, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54897, 9, 1141.87, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54898, 10, 1141.87, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54899, 11, 951.56, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54900, 39, 0.00, 1810, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54903, 1, 29084.74, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54904, 7, 3801.38, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54905, 42, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54906, 12, 2908.47, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54907, 4, 29084.74, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54908, 5, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54909, 6, 1163.39, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54910, 47, 37997.43, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54911, 46, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54912, 13, 3166.45, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54913, 14, 0.00, 1811, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54914, 16, 0.00, 1811, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54915, 15, 41163.88, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54916, 17, 4528.03, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54917, 18, 1234.92, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54918, 19, 1234.92, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54919, 20, 1029.10, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54920, 21, 8026.96, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54921, 22, 33136.92, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54922, 23, 33136.92, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54923, 32, 1656.85, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54924, 24, 34339.60, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54925, 25, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54926, 26, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54927, 29, 0.00, 1811, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54928, 27, 7154.08, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54929, 28, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54930, 30, 0.00, 1811, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54931, 31, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54932, 33, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54933, 34, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54934, 35, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54935, 36, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54936, 37, 41493.68, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54937, 38, -8356.76, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54938, 40, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54939, 9, 1139.92, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54940, 10, 1139.92, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54941, 11, 949.94, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54942, 39, 0.00, 1811, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54945, 1, 31052.42, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54946, 7, 1592.99, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54947, 42, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54948, 12, 3105.24, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54949, 4, 31052.42, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54950, 5, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54951, 6, 6831.53, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54952, 47, 46604.68, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54953, 46, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54954, 13, 3883.72, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54955, 14, 0.00, 1812, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54956, 16, 0.00, 1812, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54957, 15, 50488.41, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54958, 17, 5553.72, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54959, 18, 1514.65, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54960, 19, 1514.65, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54961, 20, 1262.21, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54962, 21, 9845.24, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54963, 22, 40643.17, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54964, 23, 40643.17, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54965, 32, 2032.16, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54966, 24, 34339.60, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54967, 25, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54968, 26, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54969, 29, 0.00, 1812, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54970, 27, 7154.08, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54971, 28, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54972, 30, 0.00, 1812, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54973, 31, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54974, 33, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54975, 34, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54976, 35, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54977, 36, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54978, 37, 41493.68, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54979, 38, -850.51, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54980, 40, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54981, 9, 1398.14, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54982, 10, 1398.14, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54983, 11, 1165.12, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54984, 39, 0.00, 1812, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54987, 1, 35983.30, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54988, 7, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54989, 42, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54990, 12, 3598.33, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54323, 46, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54324, 13, 3311.80, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54325, 14, 0.00, 1797, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54326, 16, 0.00, 1797, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54327, 15, 43053.34, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54328, 17, 4735.87, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54329, 18, 1291.60, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54330, 19, 1291.60, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54331, 20, 1076.33, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54332, 21, 8395.40, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54333, 22, 34657.94, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54334, 23, 34657.94, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54335, 32, 1732.90, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54336, 24, 34339.60, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54337, 25, 6669.50, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54338, 26, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54339, 29, 0.00, 1797, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54340, 27, 7154.08, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54341, 28, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54342, 30, 0.00, 1797, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54343, 31, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54344, 33, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54345, 34, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55055, 28, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55056, 30, 0.00, 1814, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55057, 31, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55058, 33, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55059, 34, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54991, 4, 35983.30, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54992, 5, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54993, 6, 23029.31, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54994, 47, 62610.94, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54995, 46, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54996, 13, 5217.58, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54997, 14, 0.00, 1813, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54998, 16, 0.00, 1813, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54999, 15, 67828.52, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55000, 17, 7461.14, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55001, 18, 2034.86, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55002, 19, 2034.86, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55003, 20, 1695.71, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55004, 21, 13226.56, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55005, 22, 54601.96, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55006, 23, 54601.96, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55007, 32, 2730.10, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55008, 24, 34339.60, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55009, 25, 6669.50, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55010, 26, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55011, 29, 0.00, 1813, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55012, 27, 7154.08, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55013, 28, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55014, 30, 0.00, 1813, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55015, 31, 2730.10, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55016, 33, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55017, 34, 851.84, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55018, 35, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55019, 36, 0.00, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55020, 37, 51745.12, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55021, 38, 2856.84, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55022, 40, 146.99, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55023, 9, 1878.33, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55024, 10, 1878.33, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55025, 11, 1565.27, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55026, 39, 146.99, 1813, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55027, 48, 0.00, 1813, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55029, 1, 27905.80, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55030, 7, 672.53, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55031, 42, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55032, 12, 2790.58, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55033, 4, 27905.80, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55034, 5, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55035, 6, 2790.58, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55036, 47, 34439.68, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55037, 46, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55038, 13, 2869.97, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55039, 14, 0.00, 1814, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55040, 16, 0.00, 1814, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55041, 15, 37309.65, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55042, 17, 4104.06, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55043, 18, 1119.29, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55044, 19, 1119.29, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55045, 20, 932.74, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55046, 21, 7275.38, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55047, 22, 30034.27, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55048, 23, 30034.27, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55049, 32, 1501.71, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55050, 24, 34339.60, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55051, 25, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55052, 26, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55053, 29, 0.00, 1814, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55054, 27, 7154.08, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55060, 35, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55061, 36, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55063, 38, -11459.41, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55064, 40, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55065, 9, 1033.19, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55066, 10, 1033.19, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55067, 11, 860.99, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55068, 39, 0.00, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55071, 1, 44516.50, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55072, 7, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55073, 42, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55074, 12, 4451.65, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55075, 4, 44516.50, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55076, 5, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55077, 6, 28490.56, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55078, 47, 97033.56, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55079, 46, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55080, 13, 8086.13, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55081, 14, 0.00, 1815, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55082, 16, 0.00, 1815, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55083, 15, 105119.69, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55084, 17, 11563.17, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55085, 18, 3153.59, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55086, 19, 3153.59, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55087, 20, 2627.99, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55088, 21, 20498.34, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54322, 47, 39741.54, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55089, 22, 84621.35, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55090, 23, 84621.35, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55091, 32, 4231.07, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55092, 24, 34339.60, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55093, 25, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55094, 26, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55095, 29, 0.00, 1815, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55096, 27, 7154.08, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55097, 28, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55098, 30, 0.00, 1815, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55099, 31, 4231.07, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55100, 33, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55101, 34, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55102, 35, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55103, 36, 0.00, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55104, 37, 45724.75, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55105, 38, 38896.60, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55106, 40, 8230.84, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55107, 9, 2911.01, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55108, 10, 2911.01, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55109, 11, 2425.84, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55110, 39, 8230.84, 1815, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55113, 1, 27909.93, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55114, 7, 1116.40, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55115, 42, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55116, 12, 2790.99, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55117, 4, 27909.93, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55118, 5, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55119, 6, 558.20, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55120, 47, 33355.18, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55121, 46, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55122, 13, 2779.60, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55123, 14, 0.00, 1816, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55124, 16, 0.00, 1816, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55125, 15, 36134.78, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55126, 17, 3974.83, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55127, 18, 1084.04, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55128, 19, 1084.04, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55129, 20, 903.37, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55130, 21, 7046.28, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55131, 22, 29088.50, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55132, 23, 29088.50, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55133, 32, 1454.42, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55134, 24, 34339.60, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55135, 25, 6669.50, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55136, 26, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55137, 29, 0.00, 1816, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55138, 27, 7154.08, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55139, 28, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55140, 30, 0.00, 1816, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (55141, 31, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55142, 33, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55143, 34, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55144, 35, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55145, 36, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55146, 37, 48163.18, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55147, 38, -19074.68, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55148, 40, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55149, 9, 1000.66, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55150, 10, 1000.66, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55151, 11, 833.88, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55152, 39, 0.00, 1816, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55155, 45, 3376.41, 1802, 3376.41);
+INSERT INTO public.recibos_conceptos VALUES (54355, 48, 1108.96, 1797, 1108.96);
+INSERT INTO public.recibos_conceptos VALUES (54356, 49, -2500.00, 1797, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54397, 48, 333.14, 1798, 333.14);
+INSERT INTO public.recibos_conceptos VALUES (54398, 49, -2500.00, 1798, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54440, 49, -2500.00, 1799, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54481, 48, 809.33, 1800, 809.33);
+INSERT INTO public.recibos_conceptos VALUES (54482, 49, -1700.00, 1800, -1700.00);
+INSERT INTO public.recibos_conceptos VALUES (54523, 48, 1140.80, 1801, 1140.80);
+INSERT INTO public.recibos_conceptos VALUES (54524, 49, -2500.00, 1801, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54565, 48, 2225.40, 1802, 2225.40);
+INSERT INTO public.recibos_conceptos VALUES (54566, 49, -2500.00, 1802, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54607, 48, 347.72, 1803, 347.72);
+INSERT INTO public.recibos_conceptos VALUES (54608, 49, -1125.00, 1803, -1125.00);
+INSERT INTO public.recibos_conceptos VALUES (54649, 48, 948.83, 1804, 948.83);
+INSERT INTO public.recibos_conceptos VALUES (55153, 48, 979.66, 1816, 979.66);
+INSERT INTO public.recibos_conceptos VALUES (55154, 49, -2500.00, 1816, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (55156, 51, 1483.33, 1804, 1483.33);
+INSERT INTO public.recibos_conceptos VALUES (55157, 45, 3748.16, 1806, 3748.16);
+INSERT INTO public.recibos_conceptos VALUES (55158, 45, 4858.79, 1807, 4858.79);
+INSERT INTO public.recibos_conceptos VALUES (55159, 45, 1166.48, 1808, 1166.48);
+INSERT INTO public.recibos_conceptos VALUES (55160, 44, 2649.80, 1808, 2649.80);
+INSERT INTO public.recibos_conceptos VALUES (55161, 45, 4600.00, 1809, 4600.00);
+INSERT INTO public.recibos_conceptos VALUES (55162, 45, 1236.63, 1810, 1236.63);
+INSERT INTO public.recibos_conceptos VALUES (55163, 44, 2649.80, 1812, 2649.80);
+INSERT INTO public.recibos_conceptos VALUES (55164, 45, 13955.00, 1815, 13955.00);
+INSERT INTO public.recibos_conceptos VALUES (55165, 44, 2649.80, 1815, 2649.80);
+INSERT INTO public.recibos_conceptos VALUES (54691, 48, 1052.98, 1805, 1052.98);
+INSERT INTO public.recibos_conceptos VALUES (54692, 49, -2500.00, 1805, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54733, 48, 1834.35, 1806, 1834.35);
+INSERT INTO public.recibos_conceptos VALUES (54734, 49, -2500.00, 1806, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54775, 48, 1575.87, 1807, 1575.87);
+INSERT INTO public.recibos_conceptos VALUES (54776, 49, -2500.00, 1807, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54817, 48, 1830.95, 1808, 1830.95);
+INSERT INTO public.recibos_conceptos VALUES (54818, 49, -2500.00, 1808, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54859, 48, 1509.30, 1809, 1509.30);
+INSERT INTO public.recibos_conceptos VALUES (54860, 49, -2500.00, 1809, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54901, 48, 1121.28, 1810, 1121.28);
+INSERT INTO public.recibos_conceptos VALUES (54902, 49, -2500.00, 1810, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54943, 48, 1039.45, 1811, 1039.45);
+INSERT INTO public.recibos_conceptos VALUES (54944, 49, -2500.00, 1811, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (54985, 48, 1372.70, 1812, 1372.70);
+INSERT INTO public.recibos_conceptos VALUES (54370, 17, 6.19, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54371, 18, 1.69, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54372, 19, 1.69, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54373, 20, 1.41, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54374, 21, 10.98, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54375, 22, 45.33, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54376, 23, 45.33, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54377, 32, 2.27, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54378, 24, 34339.60, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54379, 25, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54380, 26, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54383, 28, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54384, 30, 0.00, 1798, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54385, 31, 2.27, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54386, 33, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54387, 34, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54388, 35, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54389, 36, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54390, 37, 41495.95, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54391, 38, -41450.62, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54392, 40, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54393, 9, 1.56, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54394, 10, 1.56, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54395, 11, 1.30, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54396, 39, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54423, 29, 0.00, 1799, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54424, 27, 7154.08, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54425, 28, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54426, 30, 0.00, 1799, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54427, 31, 1044.52, 1799, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56714, 29, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56717, 30, NULL, 1854, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56741, 14, NULL, 1855, NULL);
@@ -5800,65 +5586,32 @@ INSERT INTO public.recibos_conceptos VALUES (56812, 39, NULL, 1856, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56813, 45, NULL, 1846, 3960.32);
 INSERT INTO public.recibos_conceptos VALUES (56814, 48, NULL, 1846, 1834.35);
 INSERT INTO public.recibos_conceptos VALUES (56815, 44, NULL, 1846, 2799.77);
-INSERT INTO public.recibos_conceptos VALUES (54417, 22, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54418, 23, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54419, 32, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54420, 24, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54421, 25, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54422, 26, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54423, 29, NULL, 1799, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54424, 27, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54425, 28, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54426, 30, NULL, 1799, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54427, 31, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54428, 33, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54429, 34, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54430, 35, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54431, 36, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54432, 37, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54433, 38, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54434, 40, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54435, 9, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54436, 10, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54437, 11, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54438, 39, NULL, 1799, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54439, 48, NULL, 1799, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54441, 1, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54442, 7, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54443, 42, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54444, 12, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54445, 4, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54446, 5, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54447, 6, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54448, 47, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54449, 46, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54450, 13, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54451, 14, NULL, 1800, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54452, 16, NULL, 1800, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54453, 15, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54454, 17, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54455, 18, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54456, 19, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54457, 20, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54458, 21, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54459, 22, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54460, 23, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54461, 32, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54462, 24, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54463, 25, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54464, 26, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54465, 29, NULL, 1800, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54466, 27, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54467, 28, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54468, 30, NULL, 1800, 0.00);
-INSERT INTO public.recibos_conceptos VALUES (54469, 31, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54470, 33, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54471, 34, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54472, 35, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54473, 36, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54474, 37, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54475, 38, NULL, 1800, NULL);
-INSERT INTO public.recibos_conceptos VALUES (54476, 40, NULL, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54364, 47, 59.06, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54365, 46, -14123.23, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54366, 13, 4.33, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54381, 29, 0.00, 1798, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54382, 27, 7154.08, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54400, 7, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54477, 9, 747.62, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54478, 10, 747.62, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54479, 11, 623.02, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54480, 39, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54483, 1, 28051.97, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54484, 7, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54485, 42, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54486, 12, 2805.20, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54346, 35, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54487, 4, 28051.97, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54488, 5, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54489, 6, 2244.16, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54490, 47, 36891.92, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54491, 46, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54492, 13, 3074.33, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54493, 14, 0.00, 1801, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54494, 16, 0.00, 1801, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54495, 15, 39966.25, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54496, 17, 4396.29, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54428, 33, 0.00, 1799, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56755, 29, NULL, 1855, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56758, 30, NULL, 1855, NULL);
 INSERT INTO public.recibos_conceptos VALUES (56782, 14, NULL, 1856, NULL);
@@ -6821,20 +6574,138 @@ INSERT INTO public.recibos_conceptos VALUES (55359, 27, NULL, 1821, NULL);
 INSERT INTO public.recibos_conceptos VALUES (55360, 28, NULL, 1821, NULL);
 INSERT INTO public.recibos_conceptos VALUES (55362, 31, NULL, 1821, NULL);
 INSERT INTO public.recibos_conceptos VALUES (55363, 33, NULL, 1821, NULL);
-
-
---
--- Name: recibos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.recibos_conceptos_id_seq', 56825, true);
-
-
---
--- Name: recibos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.recibos_id_seq', 1856, true);
+INSERT INTO public.recibos_conceptos VALUES (54429, 34, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54430, 35, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54431, 36, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54432, 37, 49207.70, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54433, 38, 5363.55, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54434, 40, 372.59, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54435, 9, 1877.27, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54436, 10, 1877.27, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54437, 11, 1564.39, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54438, 39, 372.59, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54439, 48, 0.00, 1799, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54441, 1, 19136.11, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54442, 7, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54443, 42, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54444, 12, 1913.61, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54445, 4, 19136.11, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54446, 5, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54447, 6, 3061.78, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54448, 47, 24920.83, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54449, 46, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54450, 13, 2076.74, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54451, 14, 0.00, 1800, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54452, 16, 0.00, 1800, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54453, 15, 26997.56, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54454, 17, 2969.73, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54455, 18, 809.93, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54456, 19, 809.93, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54457, 20, 674.94, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54458, 21, 5264.53, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54459, 22, 21733.04, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54460, 23, 21733.04, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54461, 32, 1086.65, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54462, 24, 34339.60, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54463, 25, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54464, 26, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54465, 29, 0.00, 1800, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54466, 27, 7154.08, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54574, 47, 16050.83, 1803, NULL);
+INSERT INTO public.recibos_conceptos VALUES (55062, 37, 41493.68, 1814, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54399, 1, 36809.25, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54401, 42, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54402, 12, 3680.93, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54403, 4, 36809.25, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54404, 5, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54405, 6, 22085.55, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54406, 47, 62575.73, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54407, 46, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54408, 13, 5214.64, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54409, 14, 0.00, 1799, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54410, 16, 0.00, 1799, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54411, 15, 67790.37, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54412, 17, 7456.94, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54413, 18, 2033.71, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54414, 19, 2033.71, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54415, 20, 1694.76, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54416, 21, 13219.12, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54315, 1, 28027.12, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54316, 7, 3878.95, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54317, 42, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54318, 12, 2802.71, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54319, 4, 28027.12, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54320, 5, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54321, 6, 3923.80, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54417, 22, 54571.25, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54418, 23, 54571.25, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54419, 32, 2728.56, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54420, 24, 34339.60, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54499, 20, 999.16, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54506, 26, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54507, 29, 0.00, 1801, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54501, 22, 32172.83, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54502, 23, 32172.83, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54503, 32, 1608.64, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54504, 24, 34339.60, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54505, 25, 6669.50, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54508, 27, 7154.08, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54509, 28, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54510, 30, 0.00, 1801, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54511, 31, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54512, 33, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54513, 34, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54514, 35, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54515, 36, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54516, 37, 48163.18, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54517, 38, -15990.35, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54518, 40, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54519, 9, 1106.76, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54520, 10, 1106.76, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54521, 11, 922.30, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54522, 39, 0.00, 1801, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54525, 1, 38150.89, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54526, 7, 0.00, 1802, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54421, 25, 6669.50, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54422, 26, 0.00, 1799, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54467, 28, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54468, 30, 0.00, 1800, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54469, 31, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54470, 33, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54471, 34, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54472, 35, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54473, 36, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54474, 37, 41493.68, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54475, 38, -19760.64, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54476, 40, 0.00, 1800, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54986, 49, -2500.00, 1812, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (55028, 49, -2500.00, 1813, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (55069, 48, 280.19, 1814, 280.19);
+INSERT INTO public.recibos_conceptos VALUES (55070, 49, -2500.00, 1814, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (55111, 48, 2970.05, 1815, 2970.05);
+INSERT INTO public.recibos_conceptos VALUES (55112, 49, -2500.00, 1815, -2500.00);
+INSERT INTO public.recibos_conceptos VALUES (55166, 45, 873.04, 1798, 873.04);
+INSERT INTO public.recibos_conceptos VALUES (55167, 44, 2649.80, 1801, 2649.80);
+INSERT INTO public.recibos_conceptos VALUES (55168, 44, 2649.80, 1802, 2649.80);
+INSERT INTO public.recibos_conceptos VALUES (55169, 44, 2649.80, 1806, 2649.80);
+INSERT INTO public.recibos_conceptos VALUES (54347, 36, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54348, 37, 48163.18, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54349, 38, -13505.24, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54350, 40, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54351, 9, 1192.25, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54352, 10, 1192.25, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54353, 11, 993.54, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54354, 39, 0.00, 1797, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54357, 1, 8725.71, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54358, 7, 98.60, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54359, 42, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54360, 12, 3272.14, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54361, 4, 8725.71, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54362, 5, 0.00, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54363, 6, 872.57, 1798, NULL);
+INSERT INTO public.recibos_conceptos VALUES (54367, 14, 0.00, 1798, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54368, 16, 0.00, 1798, 0.00);
+INSERT INTO public.recibos_conceptos VALUES (54369, 15, 56.31, 1798, NULL);
 
 
 --
@@ -6844,13 +6715,6 @@ SELECT pg_catalog.setval('public.recibos_id_seq', 1856, true);
 INSERT INTO public.regimenes VALUES (1, 'Reparto');
 INSERT INTO public.regimenes VALUES (2, 'Sipa');
 INSERT INTO public.regimenes VALUES (3, 'Capitalización');
-
-
---
--- Name: regimenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.regimenes_id_seq', 1, false);
 
 
 --
@@ -6997,13 +6861,6 @@ INSERT INTO public.tabla_detalle VALUES (3, 2019, 3, '2019-03-01', 103018.79, 0.
 
 
 --
--- Name: tabla_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_detalle_id_seq', 120, true);
-
-
---
 -- Data for Name: tabla_ganancias; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -7044,27 +6901,6 @@ INSERT INTO public.tabla_ganancias_detalle VALUES (34, 3, 132159.23, 999999.00, 
 
 
 --
--- Name: tabla_ganancias_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_ganancias_detalle_id_seq', 34, true);
-
-
---
--- Name: tabla_ganancias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_ganancias_id_seq', 2, true);
-
-
---
--- Name: tabla_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_id_seq', 11, true);
-
-
---
 -- Data for Name: tabla_personas; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -7082,13 +6918,6 @@ INSERT INTO public.tabla_personas VALUES (20, 2019, 1, '2019-01-01', 851.84, 24,
 INSERT INTO public.tabla_personas VALUES (21, 2019, 1, '2019-01-01', 5838.00, 26, 8);
 INSERT INTO public.tabla_personas VALUES (22, 2019, 2, '2019-02-01', 5838.00, 17, 8);
 INSERT INTO public.tabla_personas VALUES (24, 2019, 3, '2019-03-01', 6129.00, 17, 8);
-
-
---
--- Name: tabla_personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tabla_personas_id_seq', 24, true);
 
 
 --
@@ -7128,13 +6957,6 @@ INSERT INTO public.tareas VALUES (9, 'Area Contable');
 INSERT INTO public.tareas VALUES (10, 'Secretaria');
 INSERT INTO public.tareas VALUES (11, 'Responsable');
 INSERT INTO public.tareas VALUES (12, 'Ad./Jefa de Personal');
-
-
---
--- Name: tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tareas_id_seq', 1, false);
 
 
 --
@@ -7269,13 +7091,6 @@ INSERT INTO public.tipo_liquidacion_conceptos VALUES (132, 8, 4);
 
 
 --
--- Name: tipo_liquidacion_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipo_liquidacion_conceptos_id_seq', 132, true);
-
-
---
 -- Data for Name: tipos_conceptos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -7286,25 +7101,11 @@ INSERT INTO public.tipos_conceptos VALUES (2, 'DEDUCCIONES', 500, 599);
 
 
 --
--- Name: tipos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_conceptos_id_seq', 4, true);
-
-
---
 -- Data for Name: tipos_contratos; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.tipos_contratos VALUES (1, 'a tiempo comp.', NULL);
 INSERT INTO public.tipos_contratos VALUES (2, 'a tiempo parcial', NULL);
-
-
---
--- Name: tipos_contratos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_contratos_id_seq', 1, false);
 
 
 --
@@ -7318,24 +7119,10 @@ INSERT INTO public.tipos_documentos VALUES (4, 'LC');
 
 
 --
--- Name: tipos_documentos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_documentos_id_seq', 1, false);
-
-
---
 -- Data for Name: tipos_empleadores; Type: TABLE DATA; Schema: public; Owner: -
 --
 
 INSERT INTO public.tipos_empleadores VALUES (1, 'Dec 814/01, art. 2, inc. B');
-
-
---
--- Name: tipos_empleadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, true);
 
 
 --
@@ -7351,23 +7138,9 @@ INSERT INTO public.tipos_liquidaciones VALUES (2, 'Vacaciones', false);
 
 
 --
--- Name: tipos_liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.tipos_liquidaciones_id_seq', 6, true);
-
-
---
 -- Data for Name: vacaciones; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-
-
---
--- Name: vacaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
---
-
-SELECT pg_catalog.setval('public.vacaciones_id_seq', 1, false);
 
 
 --
@@ -7487,13 +7260,6 @@ AND id_persona={ID_PERSONA};', NULL, 2, 4, '0');
 
 
 --
--- Name: reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
---
-
-SELECT pg_catalog.setval('sistema.reservadas_id_seq', 27, true);
-
-
---
 -- Data for Name: tipos_datos; Type: TABLE DATA; Schema: sistema; Owner: -
 --
 
@@ -7501,13 +7267,6 @@ INSERT INTO sistema.tipos_datos VALUES (1, 'INTEGER');
 INSERT INTO sistema.tipos_datos VALUES (2, 'BOOLEAN');
 INSERT INTO sistema.tipos_datos VALUES (3, 'TEXT');
 INSERT INTO sistema.tipos_datos VALUES (4, 'NUMERIC');
-
-
---
--- Name: tipos_datos_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
---
-
-SELECT pg_catalog.setval('sistema.tipos_datos_id_seq', 1, false);
 
 
 --
@@ -7519,6 +7278,335 @@ INSERT INTO sistema.tipos_reservadas VALUES (2, 'PERSONA');
 
 
 --
+-- Name: acumuladores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.acumuladores_id_seq', 5, true);
+
+
+--
+-- Name: bancos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.bancos_id_seq', 1, true);
+
+
+--
+-- Name: categorias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.categorias_id_seq', 5, false);
+
+
+--
+-- Name: conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.conceptos_id_seq', 51, true);
+
+
+--
+-- Name: datos_actuales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.datos_actuales_id_seq', 1, true);
+
+
+--
+-- Name: datos_laborales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.datos_laborales_id_seq', 1, true);
+
+
+--
+-- Name: datos_salud_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.datos_salud_id_seq', 1, true);
+
+
+--
+-- Name: establecimientos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.establecimientos_id_seq', 1, false);
+
+
+--
+-- Name: estados_civiles_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.estados_civiles_id_seq', 1, false);
+
+
+--
+-- Name: estados_liquidacion_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.estados_liquidacion_id_seq', 1, false);
+
+
+--
+-- Name: feriados_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.feriados_id_seq', 1, false);
+
+
+--
+-- Name: fichajes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.fichajes_id_seq', 1, false);
+
+
+--
+-- Name: generos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.generos_id_seq', 1, false);
+
+
+--
+-- Name: historico_sueldo_basico_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.historico_sueldo_basico_detalle_id_seq', 201, true);
+
+
+--
+-- Name: historico_sueldo_basico_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.historico_sueldo_basico_id_seq', 20, true);
+
+
+--
+-- Name: liquidaciones_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.liquidaciones_conceptos_id_seq', 2831, true);
+
+
+--
+-- Name: liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.liquidaciones_id_seq', 113, true);
+
+
+--
+-- Name: localidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.localidades_id_seq', 1, true);
+
+
+--
+-- Name: nacionalidades_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.nacionalidades_id_seq', 1, false);
+
+
+--
+-- Name: obras_sociales_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.obras_sociales_id_seq', 1, false);
+
+
+--
+-- Name: paises_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.paises_id_seq', 1, true);
+
+
+--
+-- Name: periodos_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.periodos_detalle_id_seq', 62, true);
+
+
+--
+-- Name: periodos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.periodos_id_seq', 5, true);
+
+
+--
+-- Name: persona_tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.persona_tareas_id_seq', 38, true);
+
+
+--
+-- Name: personas_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.personas_conceptos_id_seq', 1, true);
+
+
+--
+-- Name: personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.personas_id_seq', 26, true);
+
+
+--
+-- Name: personas_jornadas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.personas_jornadas_id_seq', 1, false);
+
+
+--
+-- Name: provincias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.provincias_id_seq', 24, true);
+
+
+--
+-- Name: recibos_acumuladores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.recibos_acumuladores_id_seq', 7860, true);
+
+
+--
+-- Name: recibos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.recibos_conceptos_id_seq', 56825, true);
+
+
+--
+-- Name: recibos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.recibos_id_seq', 1856, true);
+
+
+--
+-- Name: regimenes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.regimenes_id_seq', 1, false);
+
+
+--
+-- Name: tabla_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_detalle_id_seq', 120, true);
+
+
+--
+-- Name: tabla_ganancias_detalle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_ganancias_detalle_id_seq', 34, true);
+
+
+--
+-- Name: tabla_ganancias_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_ganancias_id_seq', 2, true);
+
+
+--
+-- Name: tabla_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_id_seq', 11, true);
+
+
+--
+-- Name: tabla_personas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tabla_personas_id_seq', 24, true);
+
+
+--
+-- Name: tareas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tareas_id_seq', 1, false);
+
+
+--
+-- Name: tipo_liquidacion_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipo_liquidacion_conceptos_id_seq', 132, true);
+
+
+--
+-- Name: tipos_conceptos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_conceptos_id_seq', 4, true);
+
+
+--
+-- Name: tipos_contratos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_contratos_id_seq', 1, false);
+
+
+--
+-- Name: tipos_documentos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_documentos_id_seq', 1, false);
+
+
+--
+-- Name: tipos_empleadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_empleadores_id_seq', 1, true);
+
+
+--
+-- Name: tipos_liquidaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.tipos_liquidaciones_id_seq', 6, true);
+
+
+--
+-- Name: vacaciones_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.vacaciones_id_seq', 1, false);
+
+
+--
+-- Name: reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
+--
+
+SELECT pg_catalog.setval('sistema.reservadas_id_seq', 27, true);
+
+
+--
+-- Name: tipos_datos_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
+--
+
+SELECT pg_catalog.setval('sistema.tipos_datos_id_seq', 1, false);
+
+
+--
 -- Name: tipos_reservadas_id_seq; Type: SEQUENCE SET; Schema: sistema; Owner: -
 --
 
@@ -7526,7 +7614,7 @@ SELECT pg_catalog.setval('sistema.tipos_reservadas_id_seq', 1, false);
 
 
 --
--- Name: persona_tareas_id_persona_id_tarea_unique; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: persona_tareas persona_tareas_id_persona_id_tarea_unique; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas
@@ -7534,7 +7622,7 @@ ALTER TABLE ONLY public.persona_tareas
 
 
 --
--- Name: pk_acumuladores; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: acumuladores pk_acumuladores; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.acumuladores
@@ -7542,7 +7630,7 @@ ALTER TABLE ONLY public.acumuladores
 
 
 --
--- Name: pk_bancos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: bancos pk_bancos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.bancos
@@ -7550,7 +7638,7 @@ ALTER TABLE ONLY public.bancos
 
 
 --
--- Name: pk_categorias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: categorias pk_categorias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.categorias
@@ -7558,7 +7646,7 @@ ALTER TABLE ONLY public.categorias
 
 
 --
--- Name: pk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos pk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos
@@ -7566,7 +7654,7 @@ ALTER TABLE ONLY public.conceptos
 
 
 --
--- Name: pk_conceptos_personas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas pk_conceptos_personas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos_personas
@@ -7574,7 +7662,7 @@ ALTER TABLE ONLY public.conceptos_personas
 
 
 --
--- Name: pk_datos_actuales; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_actuales pk_datos_actuales; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -7582,7 +7670,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: pk_datos_laborales; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales pk_datos_laborales; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -7590,7 +7678,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: pk_datos_salud; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_salud pk_datos_salud; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud
@@ -7598,7 +7686,7 @@ ALTER TABLE ONLY public.datos_salud
 
 
 --
--- Name: pk_establecimientos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: establecimientos pk_establecimientos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos
@@ -7606,7 +7694,7 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
--- Name: pk_estados_civiles; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: estados_civiles pk_estados_civiles; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_civiles
@@ -7614,7 +7702,7 @@ ALTER TABLE ONLY public.estados_civiles
 
 
 --
--- Name: pk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: estados_liquidacion pk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_liquidacion
@@ -7622,7 +7710,7 @@ ALTER TABLE ONLY public.estados_liquidacion
 
 
 --
--- Name: pk_feriados; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: feriados pk_feriados; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.feriados
@@ -7630,7 +7718,7 @@ ALTER TABLE ONLY public.feriados
 
 
 --
--- Name: pk_fichajes; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: fichajes pk_fichajes; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fichajes
@@ -7638,7 +7726,7 @@ ALTER TABLE ONLY public.fichajes
 
 
 --
--- Name: pk_generos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: generos pk_generos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.generos
@@ -7646,7 +7734,7 @@ ALTER TABLE ONLY public.generos
 
 
 --
--- Name: pk_historico_sueldo_basico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_sueldo_basico pk_historico_sueldo_basico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_sueldo_basico
@@ -7654,7 +7742,7 @@ ALTER TABLE ONLY public.historico_sueldo_basico
 
 
 --
--- Name: pk_historico_sueldo_basico_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_sueldo_basico_detalle pk_historico_sueldo_basico_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_sueldo_basico_detalle
@@ -7662,7 +7750,7 @@ ALTER TABLE ONLY public.historico_sueldo_basico_detalle
 
 
 --
--- Name: pk_liquidaciones; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_liquidaciones pk_liquidaciones; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_liquidaciones
@@ -7670,7 +7758,7 @@ ALTER TABLE ONLY public.tipos_liquidaciones
 
 
 --
--- Name: pk_liquidaciones2; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones pk_liquidaciones2; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -7678,7 +7766,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: pk_liquidaciones_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos pk_liquidaciones_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -7686,7 +7774,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: pk_liquidaciones_conceptos_historico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_liquidaciones_conceptos pk_liquidaciones_conceptos_historico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_liquidaciones_conceptos
@@ -7694,7 +7782,7 @@ ALTER TABLE ONLY public.historico_liquidaciones_conceptos
 
 
 --
--- Name: pk_liquidaciones_historico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_liquidaciones pk_liquidaciones_historico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_liquidaciones
@@ -7702,7 +7790,7 @@ ALTER TABLE ONLY public.historico_liquidaciones
 
 
 --
--- Name: pk_localidad; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: localidades pk_localidad; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.localidades
@@ -7710,7 +7798,7 @@ ALTER TABLE ONLY public.localidades
 
 
 --
--- Name: pk_nacionalidades; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: nacionalidades pk_nacionalidades; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.nacionalidades
@@ -7718,7 +7806,7 @@ ALTER TABLE ONLY public.nacionalidades
 
 
 --
--- Name: pk_obras_sociales; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: obras_sociales pk_obras_sociales; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.obras_sociales
@@ -7726,7 +7814,7 @@ ALTER TABLE ONLY public.obras_sociales
 
 
 --
--- Name: pk_paises; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: paises pk_paises; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.paises
@@ -7734,7 +7822,7 @@ ALTER TABLE ONLY public.paises
 
 
 --
--- Name: pk_periodo_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos_detalle pk_periodo_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle
@@ -7742,7 +7830,7 @@ ALTER TABLE ONLY public.periodos_detalle
 
 
 --
--- Name: pk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos pk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos
@@ -7750,7 +7838,7 @@ ALTER TABLE ONLY public.periodos
 
 
 --
--- Name: pk_persona_tareas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: persona_tareas pk_persona_tareas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas
@@ -7758,7 +7846,7 @@ ALTER TABLE ONLY public.persona_tareas
 
 
 --
--- Name: pk_personas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas pk_personas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -7766,7 +7854,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: pk_personas_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_conceptos pk_personas_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_conceptos
@@ -7774,7 +7862,7 @@ ALTER TABLE ONLY public.personas_conceptos
 
 
 --
--- Name: pk_personas_jornadas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_jornadas pk_personas_jornadas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_jornadas
@@ -7782,7 +7870,7 @@ ALTER TABLE ONLY public.personas_jornadas
 
 
 --
--- Name: pk_provincias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: provincias pk_provincias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.provincias
@@ -7790,7 +7878,7 @@ ALTER TABLE ONLY public.provincias
 
 
 --
--- Name: pk_recibos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos pk_recibos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -7798,7 +7886,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: pk_recibos_acumuladores; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_acumuladores pk_recibos_acumuladores; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_acumuladores
@@ -7806,7 +7894,7 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
--- Name: pk_recibos_acumuladores_historico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos_acumuladores pk_recibos_acumuladores_historico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos_acumuladores
@@ -7814,7 +7902,7 @@ ALTER TABLE ONLY public.historico_recibos_acumuladores
 
 
 --
--- Name: pk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos pk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -7822,7 +7910,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: pk_recibos_conceptos_historico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos_conceptos pk_recibos_conceptos_historico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos_conceptos
@@ -7830,7 +7918,7 @@ ALTER TABLE ONLY public.historico_recibos_conceptos
 
 
 --
--- Name: pk_recibos_historico; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos pk_recibos_historico; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos
@@ -7838,7 +7926,7 @@ ALTER TABLE ONLY public.historico_recibos
 
 
 --
--- Name: pk_regimenes; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: regimenes pk_regimenes; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.regimenes
@@ -7846,7 +7934,7 @@ ALTER TABLE ONLY public.regimenes
 
 
 --
--- Name: pk_tabla; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla pk_tabla; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla
@@ -7854,7 +7942,7 @@ ALTER TABLE ONLY public.tabla
 
 
 --
--- Name: pk_tabla_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_detalle pk_tabla_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_detalle
@@ -7862,7 +7950,7 @@ ALTER TABLE ONLY public.tabla_detalle
 
 
 --
--- Name: pk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias pk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias
@@ -7870,7 +7958,7 @@ ALTER TABLE ONLY public.tabla_ganancias
 
 
 --
--- Name: pk_tabla_ganancias_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias_detalle pk_tabla_ganancias_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias_detalle
@@ -7878,7 +7966,7 @@ ALTER TABLE ONLY public.tabla_ganancias_detalle
 
 
 --
--- Name: pk_tabla_personas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_personas pk_tabla_personas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_personas
@@ -7886,7 +7974,7 @@ ALTER TABLE ONLY public.tabla_personas
 
 
 --
--- Name: pk_tabla_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_vacaciones pk_tabla_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_vacaciones
@@ -7894,7 +7982,7 @@ ALTER TABLE ONLY public.tabla_vacaciones
 
 
 --
--- Name: pk_tabla_vacaciones_dias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_vacaciones_dias pk_tabla_vacaciones_dias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_vacaciones_dias
@@ -7902,7 +7990,7 @@ ALTER TABLE ONLY public.tabla_vacaciones_dias
 
 
 --
--- Name: pk_tareas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tareas pk_tareas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tareas
@@ -7910,7 +7998,7 @@ ALTER TABLE ONLY public.tareas
 
 
 --
--- Name: pk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos pk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -7918,7 +8006,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: pk_tipos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_conceptos pk_tipos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_conceptos
@@ -7926,7 +8014,7 @@ ALTER TABLE ONLY public.tipos_conceptos
 
 
 --
--- Name: pk_tipos_documentos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_documentos pk_tipos_documentos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_documentos
@@ -7934,7 +8022,7 @@ ALTER TABLE ONLY public.tipos_documentos
 
 
 --
--- Name: pk_tipos_empleadores; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_empleadores pk_tipos_empleadores; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_empleadores
@@ -7942,7 +8030,7 @@ ALTER TABLE ONLY public.tipos_empleadores
 
 
 --
--- Name: pk_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: vacaciones pk_vacaciones; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vacaciones
@@ -7950,7 +8038,7 @@ ALTER TABLE ONLY public.vacaciones
 
 
 --
--- Name: tipos_contratos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipos_contratos tipos_contratos_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipos_contratos
@@ -7958,7 +8046,7 @@ ALTER TABLE ONLY public.tipos_contratos
 
 
 --
--- Name: uk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos uk_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos
@@ -7966,7 +8054,7 @@ ALTER TABLE ONLY public.conceptos
 
 
 --
--- Name: uk_conceptos_personas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas uk_conceptos_personas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos_personas
@@ -7974,7 +8062,7 @@ ALTER TABLE ONLY public.conceptos_personas
 
 
 --
--- Name: uk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: estados_liquidacion uk_estados_liquidacion; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.estados_liquidacion
@@ -7982,7 +8070,7 @@ ALTER TABLE ONLY public.estados_liquidacion
 
 
 --
--- Name: uk_liquidaciones_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos uk_liquidaciones_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -7990,7 +8078,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: uk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos uk_periodos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos
@@ -7998,7 +8086,7 @@ ALTER TABLE ONLY public.periodos
 
 
 --
--- Name: uk_personas_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_conceptos uk_personas_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_conceptos
@@ -8006,7 +8094,7 @@ ALTER TABLE ONLY public.personas_conceptos
 
 
 --
--- Name: uk_personas_dni; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: personas uk_personas_dni; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -8014,7 +8102,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: uk_recibos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos uk_recibos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -8022,7 +8110,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: uk_recibos_acumuladores; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_acumuladores uk_recibos_acumuladores; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_acumuladores
@@ -8030,7 +8118,7 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
--- Name: uk_recibos_acumuladoresh; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos_acumuladores uk_recibos_acumuladoresh; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos_acumuladores
@@ -8038,7 +8126,7 @@ ALTER TABLE ONLY public.historico_recibos_acumuladores
 
 
 --
--- Name: uk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos uk_recibos_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -8046,7 +8134,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: uk_recibos_conceptosh; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos_conceptos uk_recibos_conceptosh; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos_conceptos
@@ -8054,7 +8142,7 @@ ALTER TABLE ONLY public.historico_recibos_conceptos
 
 
 --
--- Name: uk_recibosh; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos uk_recibosh; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos
@@ -8062,7 +8150,7 @@ ALTER TABLE ONLY public.historico_recibos
 
 
 --
--- Name: uk_tabla; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla uk_tabla; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla
@@ -8070,7 +8158,7 @@ ALTER TABLE ONLY public.tabla
 
 
 --
--- Name: uk_tabla_detalle; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_detalle uk_tabla_detalle; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_detalle
@@ -8078,7 +8166,7 @@ ALTER TABLE ONLY public.tabla_detalle
 
 
 --
--- Name: uk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias uk_tabla_ganancias; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias
@@ -8086,7 +8174,7 @@ ALTER TABLE ONLY public.tabla_ganancias
 
 
 --
--- Name: uk_tabla_personas; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_personas uk_tabla_personas; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_personas
@@ -8094,7 +8182,7 @@ ALTER TABLE ONLY public.tabla_personas
 
 
 --
--- Name: uk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos uk_tipo_liquidacion_conceptos; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -8102,7 +8190,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: pk_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
+-- Name: reservadas pk_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas
@@ -8110,7 +8198,7 @@ ALTER TABLE ONLY sistema.reservadas
 
 
 --
--- Name: pk_tipos_datos; Type: CONSTRAINT; Schema: sistema; Owner: -
+-- Name: tipos_datos pk_tipos_datos; Type: CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_datos
@@ -8118,7 +8206,7 @@ ALTER TABLE ONLY sistema.tipos_datos
 
 
 --
--- Name: pk_tipos_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
+-- Name: tipos_reservadas pk_tipos_reservadas; Type: CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.tipos_reservadas
@@ -8126,28 +8214,28 @@ ALTER TABLE ONLY sistema.tipos_reservadas
 
 
 --
--- Name: trg_ai_liquidaciones_conceptos; Type: TRIGGER; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos trg_ai_liquidaciones_conceptos; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trg_ai_liquidaciones_conceptos AFTER INSERT ON public.liquidaciones_conceptos FOR EACH ROW EXECUTE PROCEDURE public.sp_trg_ai_liquidaciones_conceptos();
 
 
 --
--- Name: trg_ai_recibos; Type: TRIGGER; Schema: public; Owner: -
+-- Name: recibos trg_ai_recibos; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trg_ai_recibos AFTER INSERT ON public.recibos FOR EACH ROW EXECUTE PROCEDURE public.sp_trg_ai_recibos();
 
 
 --
--- Name: trg_au_liquidaciones; Type: TRIGGER; Schema: public; Owner: -
+-- Name: liquidaciones trg_au_liquidaciones; Type: TRIGGER; Schema: public; Owner: -
 --
 
 CREATE TRIGGER trg_au_liquidaciones AFTER UPDATE ON public.liquidaciones FOR EACH ROW EXECUTE PROCEDURE public.sp_trg_au_liquidaciones();
 
 
 --
--- Name: conceptos_id_tipo_concepto_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos conceptos_id_tipo_concepto_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos
@@ -8155,7 +8243,7 @@ ALTER TABLE ONLY public.conceptos
 
 
 --
--- Name: establecimientos_id_localidad_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: establecimientos establecimientos_id_localidad_foreign; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos
@@ -8163,7 +8251,7 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
--- Name: fk_acumuladores__tipo_concepto; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: acumuladores fk_acumuladores__tipo_concepto; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.acumuladores
@@ -8171,7 +8259,7 @@ ALTER TABLE ONLY public.acumuladores
 
 
 --
--- Name: fk_conceptos_personas__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas fk_conceptos_personas__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos_personas
@@ -8179,7 +8267,7 @@ ALTER TABLE ONLY public.conceptos_personas
 
 
 --
--- Name: fk_conceptos_personas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: conceptos_personas fk_conceptos_personas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.conceptos_personas
@@ -8187,7 +8275,7 @@ ALTER TABLE ONLY public.conceptos_personas
 
 
 --
--- Name: fk_datos_actuales__estado_civil; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_actuales fk_datos_actuales__estado_civil; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -8195,7 +8283,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: fk_datos_actuales__peresona; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_actuales fk_datos_actuales__peresona; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -8203,7 +8291,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: fk_datos_actuales_localidades; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_actuales fk_datos_actuales_localidades; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_actuales
@@ -8211,7 +8299,7 @@ ALTER TABLE ONLY public.datos_actuales
 
 
 --
--- Name: fk_datos_laborales__categorias; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__categorias; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -8219,7 +8307,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_laborales__establecimiento; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__establecimiento; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -8227,7 +8315,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_laborales__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -8235,7 +8323,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_laborales__tipos_contratos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_laborales fk_datos_laborales__tipos_contratos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_laborales
@@ -8243,7 +8331,7 @@ ALTER TABLE ONLY public.datos_laborales
 
 
 --
--- Name: fk_datos_salud__obra_social; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_salud fk_datos_salud__obra_social; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud
@@ -8251,7 +8339,7 @@ ALTER TABLE ONLY public.datos_salud
 
 
 --
--- Name: fk_datos_salud__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: datos_salud fk_datos_salud__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.datos_salud
@@ -8259,7 +8347,7 @@ ALTER TABLE ONLY public.datos_salud
 
 
 --
--- Name: fk_establecimientos__tipo_empleador; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: establecimientos fk_establecimientos__tipo_empleador; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.establecimientos
@@ -8267,7 +8355,7 @@ ALTER TABLE ONLY public.establecimientos
 
 
 --
--- Name: fk_fichajes__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: fichajes fk_fichajes__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.fichajes
@@ -8275,7 +8363,7 @@ ALTER TABLE ONLY public.fichajes
 
 
 --
--- Name: fk_historico_sueldo_basico_detalle__cabecera; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_sueldo_basico_detalle fk_historico_sueldo_basico_detalle__cabecera; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_sueldo_basico_detalle
@@ -8283,7 +8371,7 @@ ALTER TABLE ONLY public.historico_sueldo_basico_detalle
 
 
 --
--- Name: fk_liquidacion__estado; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones fk_liquidacion__estado; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -8291,7 +8379,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: fk_liquidaciones__bancos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones fk_liquidaciones__bancos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -8299,7 +8387,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: fk_liquidaciones__tipos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones fk_liquidaciones__tipos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones
@@ -8307,7 +8395,7 @@ ALTER TABLE ONLY public.liquidaciones
 
 
 --
--- Name: fk_liquidaciones_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos fk_liquidaciones_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -8315,7 +8403,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: fk_liquidaciones_conceptos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: liquidaciones_conceptos fk_liquidaciones_conceptos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.liquidaciones_conceptos
@@ -8323,7 +8411,7 @@ ALTER TABLE ONLY public.liquidaciones_conceptos
 
 
 --
--- Name: fk_liquidaciones_conceptos_h__liquidacionesh; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_liquidaciones_conceptos fk_liquidaciones_conceptos_h__liquidacionesh; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_liquidaciones_conceptos
@@ -8331,7 +8419,7 @@ ALTER TABLE ONLY public.historico_liquidaciones_conceptos
 
 
 --
--- Name: fk_liquidaciones_historico__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_liquidaciones fk_liquidaciones_historico__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_liquidaciones
@@ -8339,7 +8427,7 @@ ALTER TABLE ONLY public.historico_liquidaciones
 
 
 --
--- Name: fk_localidad_provincia; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: localidades fk_localidad_provincia; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.localidades
@@ -8347,7 +8435,7 @@ ALTER TABLE ONLY public.localidades
 
 
 --
--- Name: fk_periodo_detalle__periodo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos_detalle fk_periodo_detalle__periodo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle
@@ -8355,7 +8443,7 @@ ALTER TABLE ONLY public.periodos_detalle
 
 
 --
--- Name: fk_periodo_detalle__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: periodos_detalle fk_periodo_detalle__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.periodos_detalle
@@ -8363,7 +8451,7 @@ ALTER TABLE ONLY public.periodos_detalle
 
 
 --
--- Name: fk_persona__nacionalidades; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas fk_persona__nacionalidades; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -8371,7 +8459,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: fk_personas__generos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas fk_personas__generos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas
@@ -8379,7 +8467,7 @@ ALTER TABLE ONLY public.personas
 
 
 --
--- Name: fk_personas_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_conceptos fk_personas_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_conceptos
@@ -8387,7 +8475,7 @@ ALTER TABLE ONLY public.personas_conceptos
 
 
 --
--- Name: fk_personas_conceptos__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_conceptos fk_personas_conceptos__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_conceptos
@@ -8395,7 +8483,7 @@ ALTER TABLE ONLY public.personas_conceptos
 
 
 --
--- Name: fk_personas_jornadas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: personas_jornadas fk_personas_jornadas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.personas_jornadas
@@ -8403,7 +8491,7 @@ ALTER TABLE ONLY public.personas_jornadas
 
 
 --
--- Name: fk_personas_tareas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: persona_tareas fk_personas_tareas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.persona_tareas
@@ -8411,7 +8499,7 @@ ALTER TABLE ONLY public.persona_tareas
 
 
 --
--- Name: fk_provincias_pais; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: provincias fk_provincias_pais; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.provincias
@@ -8419,7 +8507,7 @@ ALTER TABLE ONLY public.provincias
 
 
 --
--- Name: fk_recibos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos fk_recibos__liquidaciones; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -8427,7 +8515,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: fk_recibos__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos fk_recibos__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos
@@ -8435,7 +8523,7 @@ ALTER TABLE ONLY public.recibos
 
 
 --
--- Name: fk_recibos_acumuladores__acumulador; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_acumuladores fk_recibos_acumuladores__acumulador; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_acumuladores
@@ -8443,7 +8531,7 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
--- Name: fk_recibos_acumuladores__recibo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_acumuladores fk_recibos_acumuladores__recibo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_acumuladores
@@ -8451,7 +8539,7 @@ ALTER TABLE ONLY public.recibos_acumuladores
 
 
 --
--- Name: fk_recibos_acumuladoresh__reciboh; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos_acumuladores fk_recibos_acumuladoresh__reciboh; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos_acumuladores
@@ -8459,7 +8547,7 @@ ALTER TABLE ONLY public.historico_recibos_acumuladores
 
 
 --
--- Name: fk_recibos_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos fk_recibos_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -8467,7 +8555,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: fk_recibos_conceptos__recibo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: recibos_conceptos fk_recibos_conceptos__recibo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.recibos_conceptos
@@ -8475,7 +8563,7 @@ ALTER TABLE ONLY public.recibos_conceptos
 
 
 --
--- Name: fk_recibos_conceptos__reciboh; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos_conceptos fk_recibos_conceptos__reciboh; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos_conceptos
@@ -8483,7 +8571,7 @@ ALTER TABLE ONLY public.historico_recibos_conceptos
 
 
 --
--- Name: fk_recibos_historico__liquidacionesh; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: historico_recibos fk_recibos_historico__liquidacionesh; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.historico_recibos
@@ -8491,7 +8579,7 @@ ALTER TABLE ONLY public.historico_recibos
 
 
 --
--- Name: fk_tabla_detalle__tabla; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_detalle fk_tabla_detalle__tabla; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_detalle
@@ -8499,7 +8587,7 @@ ALTER TABLE ONLY public.tabla_detalle
 
 
 --
--- Name: fk_tabla_ganancias_detalle__cabecera; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_ganancias_detalle fk_tabla_ganancias_detalle__cabecera; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_ganancias_detalle
@@ -8507,7 +8595,7 @@ ALTER TABLE ONLY public.tabla_ganancias_detalle
 
 
 --
--- Name: fk_tabla_personas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_personas fk_tabla_personas__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_personas
@@ -8515,7 +8603,7 @@ ALTER TABLE ONLY public.tabla_personas
 
 
 --
--- Name: fk_tabla_personas__tabla; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tabla_personas fk_tabla_personas__tabla; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tabla_personas
@@ -8523,7 +8611,7 @@ ALTER TABLE ONLY public.tabla_personas
 
 
 --
--- Name: fk_tipo_liquidacion_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos fk_tipo_liquidacion_conceptos__conceptos; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -8531,7 +8619,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: fk_tipo_liquidacion_conceptos__tipo; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: tipo_liquidacion_conceptos fk_tipo_liquidacion_conceptos__tipo; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.tipo_liquidacion_conceptos
@@ -8539,7 +8627,7 @@ ALTER TABLE ONLY public.tipo_liquidacion_conceptos
 
 
 --
--- Name: fk_vacaciones__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: vacaciones fk_vacaciones__personas; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.vacaciones
@@ -8547,7 +8635,7 @@ ALTER TABLE ONLY public.vacaciones
 
 
 --
--- Name: fk_reservadas__tipos_datos; Type: FK CONSTRAINT; Schema: sistema; Owner: -
+-- Name: reservadas fk_reservadas__tipos_datos; Type: FK CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas
@@ -8555,7 +8643,7 @@ ALTER TABLE ONLY sistema.reservadas
 
 
 --
--- Name: fk_tipos_reservadas__reservadas; Type: FK CONSTRAINT; Schema: sistema; Owner: -
+-- Name: reservadas fk_tipos_reservadas__reservadas; Type: FK CONSTRAINT; Schema: sistema; Owner: -
 --
 
 ALTER TABLE ONLY sistema.reservadas
