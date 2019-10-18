@@ -200,12 +200,12 @@ INSERT INTO apex_objeto_ei_filtro_col (objeto_ei_filtro_col, objeto_ei_filtro, o
 	'1', --orden
 	NULL, --estado_defecto
 	'0', --opciones_es_multiple
-	'ef_combo_editable', --opciones_ef
+	'ef_combo', --opciones_ef
 	'get_liquidaciones', --carga_metodo
 	NULL, --carga_clase
 	NULL, --carga_include
 	NULL, --carga_dt
-	'14', --carga_consulta_php
+	NULL, --carga_consulta_php
 	NULL, --carga_sql
 	'asociacion', --carga_fuente
 	NULL, --carga_lista

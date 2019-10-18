@@ -48,22 +48,22 @@ INSERT INTO apex_objeto (proyecto, objeto, anterior, identificador, reflexivo, c
 --- INICIO Grupo de desarrollo 18
 INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
 	'asociacion', --proyecto
-	'18001105', --evento_id
+	'18001106', --evento_id
 	'18000857', --objeto
-	'procesar', --identificador
-	'&Guardar', --etiqueta
-	'1', --maneja_datos
+	'cancelar', --identificador
+	'&Cancelar', --etiqueta
+	'0', --maneja_datos
 	NULL, --sobre_fila
 	NULL, --confirmacion
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
-	'guardar.gif', --imagen
+	'deshacer', --imagen
 	'1', --en_botonera
 	NULL, --ayuda
 	'1', --orden
 	NULL, --ci_predep
 	'0', --implicito
-	'1', --defecto
+	'0', --defecto
 	NULL, --display_datos_cargados
 	NULL, --grupo
 	NULL, --accion
@@ -81,22 +81,22 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 );
 INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
 	'asociacion', --proyecto
-	'18001106', --evento_id
+	'18001105', --evento_id
 	'18000857', --objeto
-	'cancelar', --identificador
-	'&Cancelar', --etiqueta
-	'0', --maneja_datos
+	'procesar', --identificador
+	'&Guardar', --etiqueta
+	'1', --maneja_datos
 	NULL, --sobre_fila
-	NULL, --confirmacion
+	'Se agregaran los conceptos a la liquidacion', --confirmacion
 	NULL, --estilo
 	'apex', --imagen_recurso_origen
-	NULL, --imagen
+	'guardar.gif', --imagen
 	'1', --en_botonera
 	NULL, --ayuda
 	'2', --orden
 	NULL, --ci_predep
 	'0', --implicito
-	'0', --defecto
+	'1', --defecto
 	NULL, --display_datos_cargados
 	NULL, --grupo
 	NULL, --accion
@@ -215,6 +215,21 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 	NULL  --orden
 );
 --- FIN Grupo de desarrollo 18
+
+--- INICIO Grupo de desarrollo 0
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
+	'1794', --dep_id
+	'18000857', --objeto_consumidor
+	'2859', --objeto_proveedor
+	'recibos_conceptos', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+--- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
 -- apex_objeto_ci_pantalla

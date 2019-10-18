@@ -13,25 +13,35 @@ class ci_agregar_conceptos extends asociacion_ci
 		//verifico que se seleccionaron recibos
 		if(count($this->s__seleccion)>0){
 			$id_concepto = $this->s__datos_form['id_concepto'];
-			$importe_fijo = (isset($this->s__datos_form['id_concepto'])) ? $this->s__datos_form['id_concepto'] : null;
+			$importe_fijo = (isset($this->s__datos_form['importe_fijo'])) ? $this->s__datos_form['importe_fijo'] : null;
 			$recibos = array_column($this->s__seleccion,'id');
 			$nuevos_conceptos = array();
 
 			foreach ($recibos as $key => $id_recibo) {
 				//verifico que no exista el concepto en el recibo
 				if( !$this->existe_concepto($id_recibo,$id_concepto) ){					
-					$nuevos_conceptos[] = array('id_concepto'=>$id_concepto,'id_recibo'=>$id_recibo,
-												'importe_fijo'=>$importe_fijo,'apex_ei_analisis_fila'=>'A');
+					$nuevos_conceptos[] = array('id_concepto'=>$id_concepto,
+												'id_recibo'=>$id_recibo,
+												'importe_fijo'=>$importe_fijo,
+												'apex_ei_analisis_fila'=>'A');
 				}else{
-					$recibo = toba::consulta_php('liquidacion')->get_recibo("id=$id_recibo");
+					$recibo = toba::consulta_php('liquidacion')->get_recibos("id=$id_recibo");
 					$descripcion_recibo = $recibo[0]['nro_documento'] . ' ' . $recibo[0]['apellido'] . ' ' .$recibo[0]['nombre'];
 					toba::notificacion()->agregar('El concepto ya existe en el recibo de :'.$descripcion_recibo);
 				}
 			}
 			//ei_arbol($nuevos_conceptos);
-			// if(count($nuevos_conceptos)>0){
-			// 	$this->dep('recibos_conceptos')->procesar_filas($nuevos_conceptos);
-			// }	
+			if(count($nuevos_conceptos)>0){
+				try {
+					$this->dep('recibos_conceptos')->procesar_filas($nuevos_conceptos);
+					$this->dep('recibos_conceptos')->sincronizar();	
+					$this->dep('recibos_conceptos')->resetear();
+
+				} catch (toba_error_db $e) {
+					throw new toba_error_usuario("Error al procesar");					
+				}
+				
+			}	
 		}else{
 			throw new toba_error_usuario("Debe seleccionar al menos un recibo");			
 		}
@@ -50,7 +60,12 @@ class ci_agregar_conceptos extends asociacion_ci
 
 	function evt__siguiente()
 	{
-		$this->set_pantalla('pant_generacion');
+		if(count($this->s__seleccion)>0){
+			$this->set_pantalla('pant_generacion');
+			$this->dep('recibos_conceptos')->resetear();
+		}else{
+			toba::notificacion()->error("Debe seleccionar al menos un recibo");
+		}
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -81,9 +96,20 @@ class ci_agregar_conceptos extends asociacion_ci
 
 	function conf_evt__cuadro__seleccionar(toba_evento_usuario $evento, $fila)
 	{
-		if($this->get_id_pantalla()=='pant_generacion')
+		if($this->get_id_pantalla()=='pant_generacion'){
 			$evento->anular();
+		}else{
+			$clave = $this->dep('cuadro')->get_clave_fila_array($fila);                                
+         	
+			#controlo si estaba guardado y lo tildo
+			if(in_array($clave['id'], array_column($this->s__seleccion, 'id'))){
+				$evento->set_check_activo(true);
+			}else{
+				$evento->set_check_activo(false);
+			}
+		}
 	}
+	
 
 
 	//-----------------------------------------------------------------------------------
@@ -99,11 +125,13 @@ class ci_agregar_conceptos extends asociacion_ci
 	function evt__filtro__filtrar($datos)
 	{
 		$this->s__filtro = $datos;
+		unset($this->s__seleccion);
 	}
 
 	function evt__filtro__cancelar()
 	{
 		unset($this->s__filtro);
+		unset($this->s__seleccion);
 	}
 
 	//-----------------------------------------------------------------------------------
@@ -124,6 +152,9 @@ class ci_agregar_conceptos extends asociacion_ci
 	function get_conceptos($id_tipo_concepto){
 		$where = "id_tipo_concepto=$id_tipo_concepto";
 		return toba::consulta_php('parametrizacion')->get_conceptos($where);
+	}
+	function get_liquidaciones(){
+		return toba::consulta_php('liquidacion')->get_liquidaciones("id_estado=1","periodo desc");
 	}
 
 	function extender_objeto_js(){
