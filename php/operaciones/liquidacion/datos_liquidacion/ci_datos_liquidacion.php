@@ -103,7 +103,7 @@ class ci_datos_liquidacion extends asociacion_ci
 				$recibo = $this->tabla('recibos')->get();
 				
 				$liquidador->nuevo_recibo($recibo['id_persona']);								//se cargan las reservadas del empleado
-				Logger::separador('Generando recibo '.$recibo['id'].' persona '.$recibo['id_persona']);
+				Logger::separador('Generando recibo '.$recibo['id'].' persona('.$recibo['id_persona'].') '.$recibo['nro_documento'].' '.$recibo['apellido']);
 
 				$conceptos = $this->tabla('recibos_conceptos')->get_filas(null, true);
 				$conceptos_ordenados = $this->ordenar_conceptos($conceptos);				

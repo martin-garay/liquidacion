@@ -296,7 +296,7 @@ INSERT INTO apex_objeto_ei_formulario_ef (objeto_ei_formulario_fila, objeto_ei_f
 	'2886', --objeto_ei_formulario
 	'asociacion', --objeto_ei_formulario_proyecto
 	'importe_fijo', --identificador
-	'ef_editable_moneda', --elemento_formulario
+	'ef_editable_numero', --elemento_formulario
 	'importe_fijo', --columnas
 	'0', --obligatorio
 	'0', --oculto_relaja_obligatorio
