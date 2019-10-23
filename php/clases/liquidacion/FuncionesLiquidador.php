@@ -8,24 +8,26 @@ class FunctionesLiquidador
 	function get_definicion_funciones($liquidador){
 		$funciones = [
 			/* Logicas */
-			'si' 			=> 	['ref' => 'FunctionesLiquidador::si'				, 'arc' => null],
-			'igual' 		=> 	['ref' => 'FunctionesLiquidador::igual'				, 'arc' => null],
-			'distinto' 		=> 	['ref' => 'FunctionesLiquidador::distinto'			, 'arc' => null],
-			'mayor' 		=> 	['ref' => 'FunctionesLiquidador::mayor'				, 'arc' => null],
-			'menor' 		=> 	['ref' => 'FunctionesLiquidador::menor'				, 'arc' => null],
-			'mayor_igual'	=> 	['ref' => 'FunctionesLiquidador::mayor_igual'		, 'arc' => null],
-			'menor_igual'	=>	['ref' => 'FunctionesLiquidador::menor_igual'		, 'arc' => null],
-			'y'				=>	['ref' => 'FunctionesLiquidador::y'					, 'arc' => null],
-			'o'				=>	['ref' => 'FunctionesLiquidador::o'					, 'arc' => null],
-			'entre'			=>	['ref' => 'FunctionesLiquidador::entre'				, 'arc' => null],
-			'fuera'			=>	['ref' => 'FunctionesLiquidador::fuera'				, 'arc' => null],
-			'max'			=>	['ref' => 'FunctionesLiquidador::max'				, 'arc' => null],		//usa la function max de php
-			'min'			=>	['ref' => 'FunctionesLiquidador::min'				, 'arc' => null],		//usa la function min de php
-			'redondear'		=>	['ref' => 'FunctionesLiquidador::redondear'			, 'arc' => null],
-			'tabla'			=>	['ref' => [$liquidador, 'get_valor_tabla']			, 'arc' => null],		//llama al metodo de la instancia
-			'tope'			=>	['ref' => [$liquidador, 'get_tope_tabla']			, 'arc' => null],		//llama al metodo de la instancia
-			'informado'		=>	['ref' => [$liquidador,'get_deduccion_informada']	, 'arc' => null],		//llama al metodo de la instancia
-			'ganancias'		=>	['ref' => [$liquidador,'ganancias']					, 'arc' => null],		//llama al metodo de la instancia
+			'si' 				=> 	['ref' => 'FunctionesLiquidador::si'				, 'arc' => null],
+			'igual' 			=> 	['ref' => 'FunctionesLiquidador::igual'				, 'arc' => null],
+			'distinto' 			=> 	['ref' => 'FunctionesLiquidador::distinto'			, 'arc' => null],
+			'mayor' 			=> 	['ref' => 'FunctionesLiquidador::mayor'				, 'arc' => null],
+			'menor' 			=> 	['ref' => 'FunctionesLiquidador::menor'				, 'arc' => null],
+			'mayor_igual'		=> 	['ref' => 'FunctionesLiquidador::mayor_igual'		, 'arc' => null],
+			'menor_igual'		=>	['ref' => 'FunctionesLiquidador::menor_igual'		, 'arc' => null],
+			'y'					=>	['ref' => 'FunctionesLiquidador::y'					, 'arc' => null],
+			'o'					=>	['ref' => 'FunctionesLiquidador::o'					, 'arc' => null],
+			'entre'				=>	['ref' => 'FunctionesLiquidador::entre'				, 'arc' => null],
+			'fuera'				=>	['ref' => 'FunctionesLiquidador::fuera'				, 'arc' => null],
+			'max'				=>	['ref' => 'FunctionesLiquidador::max'				, 'arc' => null],		//usa la function max de php
+			'min'				=>	['ref' => 'FunctionesLiquidador::min'				, 'arc' => null],		//usa la function min de php
+			'redondear'			=>	['ref' => 'FunctionesLiquidador::redondear'			, 'arc' => null],			
+			'tabla'				=>	['ref' => [$liquidador, 'get_valor_tabla']			, 'arc' => null],		//llama al metodo de la instancia
+			'tope'				=>	['ref' => [$liquidador, 'get_tope_tabla']			, 'arc' => null],		//llama al metodo de la instancia
+			'informado'			=>	['ref' => [$liquidador,'get_deduccion_informada']	, 'arc' => null],		//llama al metodo de la instancia
+			'ganancias'			=>	['ref' => [$liquidador,'ganancias']					, 'arc' => null],		//llama al metodo de la instancia
+			'existe'			=>	['ref' => [$liquidador,'existe']					, 'arc' => null],		//si existe la variable
+			'sin_proporcional'	=>	['ref' => [$liquidador,'sin_proporcional']			, 'arc' => null],		//inverso del calculo proporcional de vacaciones
 		];
 		return $funciones;
 	}
@@ -65,6 +67,6 @@ class FunctionesLiquidador
 	}
 	function redondear($numero, $decimales=0){
 		return round($numero,$$decimales);
-	}
+	}	
 	
 }

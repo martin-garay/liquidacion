@@ -179,7 +179,13 @@ class ci_datos_liquidacion extends asociacion_ci
 		});
 		return $conceptos; 
 	}
-
+	function deshacer_liquidacion($id_liquidacion){
+		try {
+			toba::db()->consultar("SELECT sp_volver_a_estado_inicial($id_liquidacion)");
+		} catch (toba_error_db $e) {
+			toba::notificacion()->error('Error al intentar deshacer la liquidacion');
+		}
+	}
 
 	function conf(){
 		if( !$this->relacion()->esta_cargada() ){

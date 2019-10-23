@@ -97,6 +97,11 @@ class ci_liquidacion extends asociacion_ci
 		$this->relacion()->cargar($seleccion);
 		$this->ci_hijo()->cerrar();
 	}
+	function evt__cuadro__deshacer_liquidacion($seleccion)
+	{		
+		$this->ci_hijo()->deshacer_liquidacion($seleccion['id']);
+	}
+
 	function conf_evt__cuadro__seleccion(toba_evento_usuario $evento, $fila)
 	{
 		$datos = $this->dep('cuadro')->get_datos();
@@ -126,6 +131,14 @@ class ci_liquidacion extends asociacion_ci
             $evento->anular();
         }
 	}
+	function conf_evt__cuadro__deshacer_liquidacion(toba_evento_usuario $evento, $fila)
+	{
+		$datos = $this->dep('cuadro')->get_datos();
+        if( $datos[$fila]['id_estado']!==2 ){   //si el estado es distinto del estado LIQUIDADA
+            $evento->anular();
+        }
+	}
+
 
 }
 ?>

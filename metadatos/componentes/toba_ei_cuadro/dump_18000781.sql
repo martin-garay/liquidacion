@@ -117,6 +117,39 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 );
 INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
 	'asociacion', --proyecto
+	'1915', --evento_id
+	'18000781', --objeto
+	'deshacer_liquidacion', --identificador
+	NULL, --etiqueta
+	'1', --maneja_datos
+	'1', --sobre_fila
+	'Esta seguro que desea deshacer la liquidacion?', --confirmacion
+	NULL, --estilo
+	'apex', --imagen_recurso_origen
+	'deshacer.png', --imagen
+	'0', --en_botonera
+	'Deshacer Liquidación. Al deshacer la liquidacion se vuelven los importes de los conceptos al estado inicial', --ayuda
+	'3', --orden
+	NULL, --ci_predep
+	NULL, --implicito
+	NULL, --defecto
+	NULL, --display_datos_cargados
+	NULL, --grupo
+	NULL, --accion
+	NULL, --accion_imphtml_debug
+	NULL, --accion_vinculo_carpeta
+	NULL, --accion_vinculo_item
+	NULL, --accion_vinculo_objeto
+	'0', --accion_vinculo_popup
+	NULL, --accion_vinculo_popup_param
+	NULL, --accion_vinculo_target
+	NULL, --accion_vinculo_celda
+	NULL, --accion_vinculo_servicio
+	'0', --es_seleccion_multiple
+	'0'  --es_autovinculo
+);
+INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, etiqueta, maneja_datos, sobre_fila, confirmacion, estilo, imagen_recurso_origen, imagen, en_botonera, ayuda, orden, ci_predep, implicito, defecto, display_datos_cargados, grupo, accion, accion_imphtml_debug, accion_vinculo_carpeta, accion_vinculo_item, accion_vinculo_objeto, accion_vinculo_popup, accion_vinculo_popup_param, accion_vinculo_target, accion_vinculo_celda, accion_vinculo_servicio, es_seleccion_multiple, es_autovinculo) VALUES (
+	'asociacion', --proyecto
 	'1874', --evento_id
 	'18000781', --objeto
 	'borrar', --identificador
@@ -129,7 +162,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'borrar', --imagen
 	'0', --en_botonera
 	NULL, --ayuda
-	'3', --orden
+	'4', --orden
 	NULL, --ci_predep
 	NULL, --implicito
 	NULL, --defecto
@@ -162,7 +195,7 @@ INSERT INTO apex_objeto_eventos (proyecto, evento_id, objeto, identificador, eti
 	'cerrar', --imagen
 	'0', --en_botonera
 	NULL, --ayuda
-	'4', --orden
+	'5', --orden
 	NULL, --ci_predep
 	NULL, --implicito
 	NULL, --defecto

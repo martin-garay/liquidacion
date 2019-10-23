@@ -16,11 +16,14 @@ class LiquidadorNuevo extends Evaluator
 		$this->id_liquidacion = $id_liquidacion;
 		$this->periodo = $this->get_periodo();										//lo cargo para no hacer la consulta varias veces
 		$this->functions = FunctionesLiquidador::get_definicion_funciones($this);	//cargar funciones del liquidador
+		$this->onVariable = [$this, 'doVariable'];									//para devolver cero si no existe la variable
 		$this->crear_variables_liquidacion($id_liquidacion);
 		$this->crear_acumuladores();
 		$this->cargar_tabla_ganancias();											//carga la tabla de ganancias del periodo					
 	}
-
+	public function doVariable($name, &$value) {
+		$value = 0;	//si no existe la variable le clavo un cero para que no tire un exception.(VER SI AFECTA ALGUN CALCULO)
+	}
 
 	//limpia las variables del liquidador
 	function nuevo_recibo($id_persona){
@@ -53,7 +56,7 @@ class LiquidadorNuevo extends Evaluator
 		//$acumuladores_totalizados
 		foreach ($this->acumuladores as $key => $acumulador) {
 			if( ($acumulador['id_tipo_concepto'] == $concepto['id_tipo_concepto']) && $concepto['totaliza'] ){
-				if( !($acumulador['remunerativo'] xor $concepto['remunerativo']) ){	//si tienen el mismo valor
+				if( !($acumulador['remunerativo'] xor $concepto['remunerativo']) ){	//si tienen el mismo valor (No es lo mismo con un igual? GIL)
 					$this->incrementar_variable($acumulador['nombre'], $resultado);
 				}
 			}
@@ -194,5 +197,23 @@ class LiquidadorNuevo extends Evaluator
 	}
 	function get_variables_json(){
 		return json_encode($this->variables);
+	}
+	//NO FUNCIONA POR QUE PRIMERO HACE EL CALCULO DE LA EXPRESION nombre
+	//devuelve 1 si existe la variable en el liquidador
+	function existe($nombre,$valor_si_no_existe=null){
+		if(is_null($valor_si_no_existe)){
+			return (isset($this->variables[$nombre])) ? 1: 0;
+		}else{
+			return (isset($this->variables[$nombre])) ? $this->variables[$nombre]: $valor_si_no_existe;
+		}
+
+	}
+
+	/*Devuelve el valor total haciendo el proceso inverso que se hizo cuando se saco el proporcional*/
+	function sin_proporcional($importe_proporcional){
+		/*el proporcional se calcula haciendo importe_proporcional=importe_total/30*dias_trabajados 
+		despejo el importe_total : importe_total = (importe_proporcional/dias_trabajados)*30*/
+		$dias_trabajados = 30-$this->variables['diasvacac'];
+		return ($dias_trabajados==0) ? 0 : ($importe_proporcional/$dias_trabajados)*30;
 	}
 }
