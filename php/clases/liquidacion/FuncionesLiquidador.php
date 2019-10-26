@@ -28,6 +28,7 @@ class FunctionesLiquidador
 			'ganancias'			=>	['ref' => [$liquidador,'ganancias']					, 'arc' => null],		//llama al metodo de la instancia
 			'existe'			=>	['ref' => [$liquidador,'existe']					, 'arc' => null],		//si existe la variable
 			'sin_proporcional'	=>	['ref' => [$liquidador,'sin_proporcional']			, 'arc' => null],		//inverso del calculo proporcional de vacaciones
+			'historico'			=>	['ref' => [$liquidador,'historico']					, 'arc' => null],		//busca el valor de una de las variables en liquidaciones anteriores
 		];
 		return $funciones;
 	}

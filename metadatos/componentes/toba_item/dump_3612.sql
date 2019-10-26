@@ -1,16 +1,16 @@
 ------------------------------------------------------------
---[18000175]--  Agregar Conceptos a Recibos Mismo Importe 
+--[3612]--  Agregar Conceptos a Recibos 
 ------------------------------------------------------------
 
 ------------------------------------------------------------
 -- apex_item
 ------------------------------------------------------------
 
---- INICIO Grupo de desarrollo 18
+--- INICIO Grupo de desarrollo 0
 INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre, carpeta, nivel_acceso, solicitud_tipo, pagina_tipo_proyecto, pagina_tipo, actividad_buffer_proyecto, actividad_buffer, actividad_patron_proyecto, actividad_patron, nombre, descripcion, punto_montaje, actividad_accion, menu, orden, solicitud_registrar, solicitud_obs_tipo_proyecto, solicitud_obs_tipo, solicitud_observacion, solicitud_registrar_cron, prueba_directorios, zona_proyecto, zona, zona_orden, zona_listar, imagen_recurso_origen, imagen, parametro_a, parametro_b, parametro_c, publico, redirecciona, usuario, exportable, creacion, retrasar_headers) VALUES (
 	NULL, --item_id
 	'asociacion', --proyecto
-	'18000175', --item
+	'3612', --item
 	NULL, --padre_id
 	'asociacion', --padre_proyecto
 	'3613', --padre
@@ -23,11 +23,11 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	NULL, --actividad_buffer
 	NULL, --actividad_patron_proyecto
 	NULL, --actividad_patron
-	'Agregar Conceptos a Recibos Mismo Importe', --nombre
+	'Agregar Conceptos a Recibos', --nombre
 	NULL, --descripcion
 	'16', --punto_montaje
 	NULL, --actividad_accion
-	'0', --menu
+	'1', --menu
 	NULL, --orden
 	'0', --solicitud_registrar
 	NULL, --solicitud_obs_tipo_proyecto
@@ -51,7 +51,7 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 	'2019-10-16 08:20:24', --creacion
 	'0'  --retrasar_headers
 );
---- FIN Grupo de desarrollo 18
+--- FIN Grupo de desarrollo 0
 
 ------------------------------------------------------------
 -- apex_item_objeto
@@ -59,8 +59,8 @@ INSERT INTO apex_item (item_id, proyecto, item, padre_id, padre_proyecto, padre,
 INSERT INTO apex_item_objeto (item_id, proyecto, item, objeto, orden, inicializar) VALUES (
 	NULL, --item_id
 	'asociacion', --proyecto
-	'18000175', --item
-	'18000857', --objeto
+	'3612', --item
+	'2936', --objeto
 	'0', --orden
 	NULL  --inicializar
 );

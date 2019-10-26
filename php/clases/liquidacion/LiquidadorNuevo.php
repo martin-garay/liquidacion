@@ -216,4 +216,14 @@ class LiquidadorNuevo extends Evaluator
 		$dias_trabajados = 30-$this->variables['diasvacac'];
 		return ($dias_trabajados==0) ? 0 : ($importe_proporcional/$dias_trabajados)*30;
 	}
+	//Devuelve un valor de una liquidacion especifica
+	//ver como resulevo en el caso de que tenga varias liquidaciones
+	function historico($nombre, $anio, $mes, $valor_defecto=0){
+		$sql = "SELECT (json_variables::json)->>'$nombre' as valor 
+				FROM recibos r
+				INNER JOIN liquidaciones l ON l.id=r.id_liquidacion
+				WHERE anio=$anio and mes=$mes and id_persona={$this->id_persona}";
+		$datos = toba::db()->consultar($sql);
+		return (isset($datos[0]['valor'])) ? $datos[0]['valor']: $valor_defecto;
+	}
 }

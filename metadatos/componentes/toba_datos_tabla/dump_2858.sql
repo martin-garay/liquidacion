@@ -270,7 +270,7 @@ INSERT INTO apex_objeto_db_registros_col (objeto_proyecto, objeto, col_id, colum
 	'2858', --objeto
 	'1610', --col_id
 	'json_variables', --columna
-	'B', --tipo
+	'X', --tipo
 	'0', --pk
 	'', --secuencia
 	NULL, --largo

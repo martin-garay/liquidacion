@@ -43,6 +43,6 @@ class combo_editable extends comunes
 		$sql = "SELECT descripcion FROM v_liquidaciones WHERE id=$id_liquidacion";
         $datos = toba::db()->consultar($sql);
         return $datos[0]['descripcion'];
-	}
+	}	
 }
 ?>
