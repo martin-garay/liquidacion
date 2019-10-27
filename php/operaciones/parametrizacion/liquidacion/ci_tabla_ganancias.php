@@ -181,11 +181,13 @@ class ci_tabla_ganancias extends asociacion_ci
 			//corrijo campo descripcion de form
 			$('#ef_form_2895_formdescripcion').attr('size','40');
 
+			//pongo el formulario de generacion fijo a la izquierda
 			$('#form_2902_form_generar_filas_notificacion').closest('table').css({
 				'position' : 'fixed',
 				'top' : '90px',
 				'left' : '10px'
-			});					 
+			});
+			
 			";	
 		}
 			
