@@ -25,8 +25,9 @@
 	</style>
 	<parameter name="id_recibo" class="java.lang.Integer"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/home/martin/programas/toba_2.7.6/proyectos/asociacion/php/jasper/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[$P{proyecto_path}+"/php/jasper/"]]></defaultValueExpression>
 	</parameter>
+	<parameter name="proyecto_path" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select r.*,
 	l.descripcion as descripcion_liquidacion,l.periodo_depositado,mes,anio,
@@ -373,6 +374,9 @@ WHERE r.id=$P{id_recibo}]]>
 			</rectangle>
 			<subreport>
 				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="51" height="20" uuid="958da0d1-a0df-4f76-a63b-d12554ba0e3f"/>
+				<subreportParameter name="proyecto_path">
+					<subreportParameterExpression><![CDATA[$P{proyecto_path}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="id_recibo">
 					<subreportParameterExpression><![CDATA[$P{id_recibo}]]></subreportParameterExpression>
 				</subreportParameter>
