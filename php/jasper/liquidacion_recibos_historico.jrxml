@@ -36,7 +36,7 @@ FROM recibos WHERE id_liquidacion=$P{id_liquidacion}]]>
 					<subreportParameterExpression><![CDATA[$F{id_recibo}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{proyecto_path} + "recibo_historico.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "recibo_historico.jasper"]]></subreportExpression>
 			</subreport>
 			<break>
 				<reportElement x="0" y="15" width="100" height="1" uuid="2a85b0bf-e562-467a-b56c-560a5df42ae0">
