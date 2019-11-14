@@ -24,10 +24,10 @@
 		</box>
 	</style>
 	<parameter name="id_recibo" class="java.lang.Integer"/>
+	<parameter name="proyecto_path" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{proyecto_path}+"/php/jasper/"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="proyecto_path" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select r.*,
 	l.descripcion as descripcion_liquidacion,l.periodo_depositado,mes,anio,
