@@ -8,7 +8,7 @@
 	</parameter>
 	<parameter name="proyecto_path" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/home/martin/programas/toba_2.7.6/proyectos/asociacion/php/jasper/"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT id as id_recibo,

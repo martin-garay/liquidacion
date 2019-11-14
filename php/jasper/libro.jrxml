@@ -6,10 +6,10 @@
 	<parameter name="id_liquidacion" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
+	<parameter name="proyecto_path" class="java.lang.String"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{proyecto_path}+"/php/jasper/"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="proyecto_path" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT r.id as id_recibo,
 	(SELECT count(1) FROM historico_recibos WHERE id_liquidacion=$P{id_liquidacion}) as cant_recibos,
