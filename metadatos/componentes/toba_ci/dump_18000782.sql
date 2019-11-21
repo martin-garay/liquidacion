@@ -140,6 +140,18 @@ INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objet
 );
 INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
 	'asociacion', --proyecto
+	'1801', --dep_id
+	'18000782', --objeto_consumidor
+	'2939', --objeto_proveedor
+	'form_suma', --identificador
+	NULL, --parametros_a
+	NULL, --parametros_b
+	NULL, --parametros_c
+	NULL, --inicializar
+	NULL  --orden
+);
+INSERT INTO apex_objeto_dependencias (proyecto, dep_id, objeto_consumidor, objeto_proveedor, identificador, parametros_a, parametros_b, parametros_c, inicializar, orden) VALUES (
+	'asociacion', --proyecto
 	'1718', --dep_id
 	'18000782', --objeto_consumidor
 	'2860', --objeto_proveedor
@@ -195,10 +207,10 @@ INSERT INTO apex_objeto_ci_pantalla (objeto_ci_proyecto, objeto_ci, pantalla, id
 	'<table>
 	<tbody>
 		<tr>
+			<td style="vertical-align: top;">[dep id=cuadro_recibos]</td>
 			<td style="vertical-align: top;">
- 				[dep id=cuadro_recibos]</td>
-			<td style="vertical-align: top;">
-				[dep id=form_ml_conceptos_recibo]</td>
+				[dep id=form_suma]
+[dep id=form_ml_conceptos_recibo]</td>
 		</tr>
 	</tbody>
 </table>', --template
@@ -271,6 +283,13 @@ INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id)
 	'18000782', --objeto_ci
 	'0', --orden
 	'1747'  --dep_id
+);
+INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
+	'asociacion', --proyecto
+	'1366', --pantalla
+	'18000782', --objeto_ci
+	'2', --orden
+	'1801'  --dep_id
 );
 INSERT INTO apex_objetos_pantalla (proyecto, pantalla, objeto_ci, orden, dep_id) VALUES (
 	'asociacion', --proyecto

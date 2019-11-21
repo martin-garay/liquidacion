@@ -92,7 +92,9 @@ class ci_datos_liquidacion extends asociacion_ci
 		if( $this->tabla('liquidacion')->get_columna('id_estado')==1 ){			
 						
 			$id_liquidacion = $this->tabla('liquidacion')->get_columna('id');
-			$liquidador = new LiquidadorNuevo($id_liquidacion);			
+			$liquidador = new LiquidadorNuevo($id_liquidacion);
+
+			$liquidacion = $this->tabla('liquidacion')->get();	//para cambiar el estado y setear los acumuladores de la liquidacion
 
 			Logger::titulo('Liquidacion '.$id_liquidacion);
 			//recorro cada recibo
@@ -112,8 +114,7 @@ class ci_datos_liquidacion extends asociacion_ci
 					$this->tabla('recibos_conceptos')->set_cursor($key2);					
 					$concepto = $this->tabla('recibos_conceptos')->get();
 
-					//si el usuario le puso un valor al concepto le dejo ese, sino lo calcula el liquidador
-					//if( !isset($concepto['importe']) ){
+					//si el usuario le puso un valor al concepto le dejo ese, sino lo calcula el liquidador					
 					if( !isset($concepto['importe_fijo']) ){
 
 						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para que valla acumulando en las variables que corresponda.
@@ -136,16 +137,13 @@ class ci_datos_liquidacion extends asociacion_ci
 				//Guardo los acumuladores totalizados
 				$acumuladores = $liquidador->get_acumuladores_totalizados();
 				$this->tabla('recibos_acumuladores')->procesar_filas($acumuladores);
-				//ei_arbol($acumuladores);
+				
 				//actualizo los totales del recibo (aunque estan tambien en recibos_acumuladores)
 				//si el acumulador hace match con la columna piso el valor
 				$columnas_recibo = array_keys( $this->tabla('recibos')->get_columnas() );
-				foreach ($acumuladores as $key => $acumulador) {
-					//$key = array_search($nombre_columna, array_column($acumuladores, 'nombre'));		//busca la key del array acumuladores
+				foreach ($acumuladores as $key => $acumulador) {					
 					if( in_array($acumulador['nombre'], $columnas_recibo) )
-						$recibo[ $acumulador['nombre'] ] = $acumulador['importe'];
-					//if($key)
-					//	$recibo[$nombre_columna] = $acumuladores[$key]['importe'];
+						$recibo[ $acumulador['nombre'] ] = $acumulador['importe'];					
 				}
 								
 				$recibo['json_variables'] 	= $liquidador->get_variables_json();	 	//Guardo un json con las variables del liquidador
@@ -157,9 +155,18 @@ class ci_datos_liquidacion extends asociacion_ci
 
 				$this->tabla('recibos')->set($recibo);
 
+				$liquidacion['total_remunerativos'] += $recibo['total_remunerativos'];
+				$liquidacion['total_no_remunerativos'] += $recibo['total_no_remunerativos'];
+				$liquidacion['total_deducciones'] += $recibo['total_deducciones'];
+				$liquidacion['total_neto'] += $recibo['total_neto'];
+
 				Logger::separador('Fin recibo persona '.$recibo['id_persona']);
-			}
-			$this->tabla('liquidacion')->set_columna_valor('id_estado',2);	//paso a liquidada
+			}			
+
+			//$this->tabla('liquidacion')->set_columna_valor('id_estado',2);	//paso a liquidada
+			$liquidacion['id_estado'] = 2;
+
+			$this->tabla('liquidacion')->set($liquidacion);
 			//$this->relacion()->dump_contenido();
 			$this->guardar();
 		}else{
@@ -205,7 +212,7 @@ class ci_datos_liquidacion extends asociacion_ci
 			$this->dep('form_ml_conceptos')->desactivar_agregado_filas();
 			$this->dep('form_ml_empleados')->set_solo_lectura();
 			$this->dep('form_ml_empleados')->desactivar_agregado_filas();
-			$this->dep('form_ml_conceptos_recibo')->set_solo_lectura();
+			//$this->dep('form_ml_conceptos_recibo')->set_solo_lectura();	//le dejo modificar por las vacaciones
 			$this->dep('form_ml_conceptos_recibo')->desactivar_agregado_filas();
 		}
 	}
@@ -321,17 +328,25 @@ class ci_datos_liquidacion extends asociacion_ci
 	function extender_objeto_js(){
 		if($this->get_id_pantalla()=='pant_recibos'){
 			$form_ml_conceptos_recibo = $this->dep('form_ml_conceptos_recibo')->get_id_objeto_js();
+			$form_suma = $this->dep('form_suma')->get_id_objeto_js();
+
 			if( !$this->tabla('recibos')->hay_cursor() ){				
-				echo "$form_ml_conceptos_recibo.ocultar();";				
+				echo "$form_ml_conceptos_recibo.ocultar();";
+				echo "$form_suma.ocultar();";
 			}else{
 				echo "$form_ml_conceptos_recibo.mostrar();";
+				
 
 				//si el estado de la liquidacion es INICIAL muestro el campo importe_fijo y oculto importe(que es el dato que calcula el liquidador)
-				if( $this->tabla('liquidacion')->get_columna('id_estado')==1 )
+				if( $this->tabla('liquidacion')->get_columna('id_estado')==1 ){
 					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_reciboimporte\"').hide();";	
-				else //sino muestro importe
-					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_reciboimporte_fijo\"').hide();";
-				
+					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_recibomostrar_en_recibo\"').hide();";	//oculto el check mostrar_en_recibo
+					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_recibosumar\"').hide();";				//oculto el check sumar
+					echo "$form_suma.ocultar();";
+				}else{ //sino muestro importe
+					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_reciboimporte_fijo\"').hide();";					
+				}
+									
 			}			
 		}
 

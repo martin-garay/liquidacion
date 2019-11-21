@@ -24,7 +24,9 @@
 		</box>
 	</style>
 	<parameter name="id_recibo" class="java.lang.Integer"/>
-	<parameter name="proyecto_path" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="proyecto_path" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/martin/programas/toba_2.7.6/proyectos/asociacion"]]></defaultValueExpression>
+	</parameter>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[$P{proyecto_path}+"/php/jasper/"]]></defaultValueExpression>
 	</parameter>
@@ -37,7 +39,7 @@
 	direccion_establecimiento||' '||cp_establecimiento||' - '||localidad_establecimiento as direccion_descripcion_establecimiento,
 	lugar_pago ||', '||to_char(fecha_pago , 'DD/MM/YYYY') as lugar_fechapago,
 	l.banco,
-	numero_a_letras(total_neto) as total_neto_letras
+	numero_a_letras(r.total_neto) as total_neto_letras
 from historico_liquidaciones l
 join historico_recibos r ON r.id_liquidacion=l.id
 WHERE r.id=$P{id_recibo}]]>
@@ -568,7 +570,7 @@ WHERE r.id=$P{id_recibo}]]>
 				<text><![CDATA[Hab. No Rem.:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement mode="Transparent" x="422" y="0" width="62" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="97030d8b-4b35-456e-b885-df9ff05d011a"/>
+				<reportElement mode="Transparent" x="422" y="0" width="116" height="13" forecolor="#000000" backcolor="#FFFFFF" uuid="97030d8b-4b35-456e-b885-df9ff05d011a"/>
 				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
 					<font fontName="SansSerif" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 					<paragraph lineSpacing="Single"/>

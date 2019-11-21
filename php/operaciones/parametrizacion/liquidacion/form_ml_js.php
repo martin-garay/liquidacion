@@ -212,6 +212,19 @@ class form_ml_js extends asociacion_ei_formulario_ml
 						this.ef('excedente').ir_a_fila(fila).set_estado(desde);
 					}
 				}
+
+				{$this->objeto_js}.evt__hasta__validar = function(fila)
+				{							
+					if( this.ef('hasta').ir_a_fila(fila).tiene_estado() && this.ef('desde').ir_a_fila(fila).tiene_estado() ){
+						var desde = this.ef('desde').ir_a_fila(fila).get_estado();
+						var hasta = this.ef('hasta').ir_a_fila(fila).get_estado();
+						if(hasta<desde){
+							this.ef('hasta').ir_a_fila(fila).set_error('El valor de la columna hasta no puede ser menor al de la columna desde');
+							return false;
+						}
+					}
+					return true;
+				}
 			";
 	}
 }

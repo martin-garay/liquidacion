@@ -17,7 +17,7 @@ class ci_liquidacion extends asociacion_ci
 		if( $this->get_id_pantalla()=='pant_edicion'){
 			if( $estado!=1 )
 				$this->evento('liquidar')->anular();			
-			if($estado>1)				
+			if($estado>2)		//antes >1 pero se lo dejo modificar por lo del concepto vacaciones				
 				$this->evento('procesar')->anular();			
 		}		
 	}
