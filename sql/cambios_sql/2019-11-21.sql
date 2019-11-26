@@ -205,7 +205,7 @@ BEGIN
 
         /* Inserto los conceptos de la liquidacion.
         Si el concepto esta parametrizado para ciertas personas solo se cargan para esas personas */
-        FOR c IN SELECT id_concepto, valor_fijo,co.mostrar_en_recibo
+        FOR c IN SELECT lc.id_concepto, lc.valor_fijo,co.mostrar_en_recibo
              FROM liquidaciones_conceptos lc join conceptos co ON lc.id_concepto=co.id WHERE id_liquidacion = new.id_liquidacion 
         LOOP
             --Si el concepto esta parametrizado para ciertas personas, veo si esta esa persona, sino no se inserta el concepto          
@@ -239,8 +239,8 @@ BEGIN
 RETURN NEW;
 END;
 $BODY$
-LANGUAGE plpgsql VOLATILE
-COST 100;
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
 
 CREATE OR REPLACE VIEW public.v_recibos_conceptos AS 
 SELECT rc.id,

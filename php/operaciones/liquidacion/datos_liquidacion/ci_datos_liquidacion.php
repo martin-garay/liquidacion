@@ -2,6 +2,7 @@
 class ci_datos_liquidacion extends asociacion_ci
 {
 	protected $desactivar_edicion = false;
+	protected $s__error = array();
 	
 	function relacion(){
 		return $this->dep('relacion');
@@ -86,6 +87,39 @@ class ci_datos_liquidacion extends asociacion_ci
 		$this->desactivar_edicion = true;
 	}
 
+	function validar_recibos(){
+		/*
+		$sql = "SELECT r.id,r.nro_recibo,
+					id_concepto,c.descripcion as concepto,c.codigo
+				from recibos r
+				inner join recibos_conceptos rc on r.id=rc.id_recibo
+				inner join conceptos c on c.id=rc.id_concepto
+				where rc.importe_fijo is null and c.formula is null and r.id_liquidacion=$id_liquidacion";
+		*/
+		$this->s__error = array();
+		$recibos = $this->tabla('recibos')->get_filas(null, true);
+		foreach( $recibos as $key => $recibo ) {
+			$this->tabla('recibos')->set_cursor( $key );
+			$conceptos = $this->tabla('recibos_conceptos')->get_filas(null, true);			
+
+			foreach ($conceptos as $key2 => $variable) {
+				$this->tabla('recibos_conceptos')->set_cursor($key2);					
+				$concepto = $this->tabla('recibos_conceptos')->get();
+
+				if( !isset($concepto['importe_fijo']) && !isset($concepto['formula']) ){
+					$error['concepto_descripcion'] = $concepto['codigo'] . " " . $concepto['concepto'];
+					$error['recibo_descripcion'] = $concepto['apellido'] . " " .$concepto['nombre'];
+					$error['mensaje'] = "El concepto no tiene importe ni formula";
+					$this->s__error[] = $error;
+				}
+			}
+		}
+		return ( count($this->s__error)==0 );
+	}
+	function mostrar_errores(){
+
+	}
+
 	function liquidar(){		
 
 		//verifico que el estado sea PENDIENTE LIQUIDACION
@@ -119,9 +153,16 @@ class ci_datos_liquidacion extends asociacion_ci
 
 						/*aca tengo que pasarle al liquidador el tipo_cocepto y si totaliza para que valla acumulando en las variables que corresponda.
 						Por ej. para sueldo_bruto si es acumula si el tipo concepto es HABERRES y totaliza */	
-											
-						$concepto['importe'] = $liquidador->calcular_concepto($concepto);
-						$this->tabla('recibos_conceptos')->set($concepto);					
+						if(!isset($concepto['formula'])){
+							$msj = "Error al liquidar. El concepto " . $concepto['codigo'] . " no tiene formula ni valor fijo en el recibo de " .$recibo['apellido'] . "<br>";
+							$msj .= "Sugerencia: Borrar el concepto o ponerle un valor fijo (por ej. 0)";
+							$titulo = 'Error al liquidar';
+							throw new toba_error_usuario($msj,'',$titulo);
+						}else{							
+							$concepto['importe'] = $liquidador->calcular_concepto($concepto);
+							$this->tabla('recibos_conceptos')->set($concepto);					
+						}
+						
 					}else{
 
 						//si existe un importe fijo igual tengo que cargar el concepto como una variable del liquidador para los siguientes calculos
