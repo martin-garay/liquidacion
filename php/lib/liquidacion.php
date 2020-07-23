@@ -87,5 +87,12 @@ class liquidacion extends comunes
 	}
 	function get_historico_recibos($where=null, $order_by=null){
 		return $this->get_generico('historico_recibos',$where,$order_by);	
+	}
+	/*
+		Indica si se cargo la hoja inicial del libro de sueldos
+	*/
+	function tiene_hoja_inicio($id_liquidacion){
+		$datos = self::get_historico_liquidaciones("id=$id_liquidacion AND hoja_inicial is not null");
+		return (count($datos)>0);
 	}	
 }

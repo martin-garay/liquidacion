@@ -68,6 +68,44 @@ class ci_liquidacion extends asociacion_ci
 	{
 	}
 
+	function evt__cuadro__hoja_inicial($seleccion)
+	{
+		$this->dep('dt_historico_liquidacion')->cargar($seleccion);
+		$this->set_pantalla('pant_hoja_inicio');
+	}
+
+
+	function conf_evt__cuadro__imprimir_libro(toba_evento_usuario $evento, $fila)
+	{
+		$datos = $this->dep('cuadro')->get_datos();
+		if(!toba::consulta_php('liquidacion')->tiene_hoja_inicio($datos[$fila]['id'])){
+			$evento->anular();
+		}
+	}
+
+	//-----------------------------------------------------------------------------------
+	//---- form -------------------------------------------------------------------------
+	//-----------------------------------------------------------------------------------
+
+	function conf__form(asociacion_ei_formulario $form)
+	{
+		 return $this->dep('dt_historico_liquidacion')->get();		 
+	}
+
+	function evt__form__guardar($datos)
+	{
+		try {
+			$liquidacion = $this->dep('dt_historico_liquidacion')->get();
+			$liquidacion['hoja_inicial'] = $datos['hoja_inicial'];
+			$this->dep('dt_historico_liquidacion')->set($liquidacion);
+			$this->dep('dt_historico_liquidacion')->sincronizar();
+			$this->set_pantalla('pant_inicial');
+			toba::notificacion()->info("Se guardo la hoja inicial correctamente");
+		} catch (toba_error_db $e) {
+			toba::notificacion()->error("Error al grabar");
+		}
+	}
+
 	//-----------------------------------------------------------------------------------
 	//---- cuadro_recibos ---------------------------------------------------------------
 	//-----------------------------------------------------------------------------------
@@ -197,6 +235,8 @@ class ci_liquidacion extends asociacion_ci
                         		       
     }
 
-}
 
+
+
+}
 ?>

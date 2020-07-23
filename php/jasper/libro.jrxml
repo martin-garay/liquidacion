@@ -15,7 +15,8 @@
 	<queryString>
 		<![CDATA[SELECT r.id as id_recibo,
 	(SELECT count(1) FROM historico_recibos WHERE id_liquidacion=$P{id_liquidacion}) as cant_recibos,		l.establecimiento,cuit,actividad,tipo_liquidacion,direccion_establecimiento,localidad_establecimiento,cp_establecimiento,periodo_depositado,
-	l.tipo_empleador,l.total_remunerativos,l.total_no_remunerativos,l.total_deducciones,l.total_neto
+	l.tipo_empleador,l.total_remunerativos,l.total_no_remunerativos,l.total_deducciones,l.total_neto,
+	l.hoja_inicial
 FROM historico_recibos r
 JOIN historico_liquidaciones l ON l.id=r.id_liquidacion
 WHERE r.id_liquidacion=$P{id_liquidacion}]]>
@@ -35,6 +36,7 @@ WHERE r.id_liquidacion=$P{id_liquidacion}]]>
 	<field name="total_no_remunerativos" class="java.math.BigDecimal"/>
 	<field name="total_deducciones" class="java.math.BigDecimal"/>
 	<field name="total_neto" class="java.math.BigDecimal"/>
+	<field name="hoja_inicial" class="java.lang.Integer"/>
 	<variable name="CURRENT_PAGE" class="java.lang.Integer" resetType="Page">
 		<variableExpression><![CDATA[$V{PAGE_NUMBER}]]></variableExpression>
 		<initialValueExpression><![CDATA[]]></initialValueExpression>
@@ -99,7 +101,7 @@ WHERE r.id_liquidacion=$P{id_liquidacion}]]>
 			</staticText>
 			<textField pattern="">
 				<reportElement x="483" y="15" width="70" height="20" uuid="9b59dfb6-57f4-4077-b810-56de3e18c5a0"/>
-				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{hoja_inicial}+$V{PAGE_NUMBER}-1)]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="97" width="555" height="1" uuid="480964e0-3865-4de9-8d4a-c2b28c63dd20"/>
