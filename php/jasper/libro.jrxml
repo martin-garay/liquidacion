@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="liquidacion_recibos_historico" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="512eafd2-83d0-4bf7-b24e-96496df7c6de">
 	<property name="ireport.zoom" value="1.3286707500000006"/>
-	<property name="ireport.x" value="32"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="id_liquidacion" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -137,63 +137,63 @@ WHERE r.id_liquidacion=$P{id_liquidacion}]]>
 				<text><![CDATA[Total Liquidación:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="23" width="64" height="15" uuid="513e81ac-52f6-4701-9fa8-2711abd6ecce"/>
+				<reportElement x="0" y="23" width="64" height="15" uuid="513e81ac-52f6-4701-9fa8-2711abd6ecce"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Remunerat.:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="131" y="23" width="75" height="15" uuid="d584f9cf-bc66-410a-9b4d-9fc1a5149540"/>
+				<reportElement x="114" y="23" width="75" height="15" uuid="d584f9cf-bc66-410a-9b4d-9fc1a5149540"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[No Remunerat.:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="23" width="62" height="15" uuid="dcf1ee54-b90e-4dbf-926f-591d0cbb0d59"/>
+				<reportElement x="243" y="23" width="62" height="15" uuid="dcf1ee54-b90e-4dbf-926f-591d0cbb0d59"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Descuentos:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="404" y="23" width="69" height="15" uuid="56be870f-eeb1-40a2-8cc3-0e0cfe9b9535"/>
+				<reportElement x="366" y="23" width="59" height="15" uuid="56be870f-eeb1-40a2-8cc3-0e0cfe9b9535"/>
 				<textElement>
 					<font size="7"/>
 				</textElement>
-				<text><![CDATA[Asignac Fam.:0.00]]></text>
+				<text><![CDATA[Asig Fam.:0.00]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="473" y="23" width="27" height="15" uuid="f472cea1-0873-42a1-b065-378317bb4bbc"/>
+				<reportElement x="422" y="23" width="26" height="15" uuid="f472cea1-0873-42a1-b065-378317bb4bbc"/>
 				<textElement>
 					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Neto:]]></text>
 			</staticText>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="68" y="23" width="64" height="15" uuid="b1683d70-a38c-43fb-9de9-5164baea24d2"/>
+				<reportElement x="52" y="23" width="62" height="15" uuid="b1683d70-a38c-43fb-9de9-5164baea24d2"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_remunerativos}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="205" y="23" width="65" height="15" uuid="07e7433e-c14c-43c1-b7a3-7dd610f2d9ee"/>
+				<reportElement x="188" y="23" width="55" height="15" uuid="07e7433e-c14c-43c1-b7a3-7dd610f2d9ee"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_no_remunerativos}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="331" y="23" width="73" height="15" uuid="e064b971-d9ed-4afb-b2af-8efed87f40fb"/>
+				<reportElement x="304" y="23" width="60" height="15" uuid="e064b971-d9ed-4afb-b2af-8efed87f40fb"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_deducciones}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤ #,##0.00">
-				<reportElement x="499" y="23" width="54" height="15" uuid="91bcfe7b-b930-46a3-a58a-6db66166bfee"/>
+				<reportElement x="448" y="23" width="105" height="15" uuid="91bcfe7b-b930-46a3-a58a-6db66166bfee"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>
