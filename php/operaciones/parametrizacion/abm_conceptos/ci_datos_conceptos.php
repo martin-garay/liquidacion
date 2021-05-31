@@ -88,23 +88,24 @@ class ci_datos_conceptos extends asociacion_ci
 
 	//para cargar la lista de funciones definidas en Matex
 	function get_lista_funciones(){
-		$funciones = [		
-			['codigo' => ' si(  ,  ,  ) '			, 'descripcion' => 'si'],
-			['codigo' => ' igual(  ,  ) '			, 'descripcion' => 'igual'],
-			['codigo' => ' distinto(  ,  ) '		, 'descripcion' => 'distinto'],
-			['codigo' => ' mayor(  ,  ) '			, 'descripcion' => 'mayor'],
-			['codigo' => ' menor(  ,  ) '			, 'descripcion' => 'menor'],
-			['codigo' => ' mayor_igual(  ,  ) '		, 'descripcion'	=> 'mayor_igual'],
-			['codigo' => ' menor_igual(  ,  ) '		, 'descripcion'	=> 'menor_igual'],
-			['codigo' => ' y(  ,  ) '				, 'descripcion' => 'y'],
-			['codigo' => ' o(  ,  ) '				, 'descripcion' => 'o'],
-			['codigo' => ' entre(  ,  ,  ,) '		, 'descripcion' => 'entre'],
-			['codigo' => ' fuera(  ,  ,  ,) '		, 'descripcion' => 'fuera'],
-			['codigo' => ' max(  ,  ) '				, 'descripcion' => 'max'],
-			['codigo' => ' min(  ,  ) '				, 'descripcion' => 'min'],
-			['codigo' => ' redondear(  ) '			, 'descripcion' => 'redondear'],
-		];
-		return $funciones;
+		// $funciones = [		
+		// 	['codigo' => ' si(  ,  ,  ) '			, 'descripcion' => 'si'],
+		// 	['codigo' => ' igual(  ,  ) '			, 'descripcion' => 'igual'],
+		// 	['codigo' => ' distinto(  ,  ) '		, 'descripcion' => 'distinto'],
+		// 	['codigo' => ' mayor(  ,  ) '			, 'descripcion' => 'mayor'],
+		// 	['codigo' => ' menor(  ,  ) '			, 'descripcion' => 'menor'],
+		// 	['codigo' => ' mayor_igual(  ,  ) '		, 'descripcion'	=> 'mayor_igual'],
+		// 	['codigo' => ' menor_igual(  ,  ) '		, 'descripcion'	=> 'menor_igual'],
+		// 	['codigo' => ' y(  ,  ) '				, 'descripcion' => 'y'],
+		// 	['codigo' => ' o(  ,  ) '				, 'descripcion' => 'o'],
+		// 	['codigo' => ' entre(  ,  ,  ,) '		, 'descripcion' => 'entre'],
+		// 	['codigo' => ' fuera(  ,  ,  ,) '		, 'descripcion' => 'fuera'],
+		// 	['codigo' => ' max(  ,  ) '				, 'descripcion' => 'max'],
+		// 	['codigo' => ' min(  ,  ) '				, 'descripcion' => 'min'],
+		// 	['codigo' => ' redondear(  ) '			, 'descripcion' => 'redondear'],
+		// ];
+		// return $funciones;
+		return toba::consulta_php('reservadas')->get_funciones_liquidador();
 	}
 
 	/*	para validar la function cargo una instancia de matex con todas las reservadas y los concetos con valor 1 asi 

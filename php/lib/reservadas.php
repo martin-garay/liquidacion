@@ -51,22 +51,23 @@ class reservadas extends comunes
 
 	function get_funciones_liquidador(){
 		$funciones = [		
-			['codigo' => 'si(  ,  ,  )'			, 'descripcion' => 'si'],
-			['codigo' => 'igual(  ,  )'			, 'descripcion' => 'igual'],
-			['codigo' => 'distinto(  ,  )'		, 'descripcion' => 'distinto'],
-			['codigo' => 'mayor(  ,  )'			, 'descripcion' => 'mayor'],
-			['codigo' => 'menor(  ,  )'			, 'descripcion' => 'menor'],
-			['codigo' => 'mayor_igual(  ,  )'	, 'descripcion'	=> 'mayor_igual'],
-			['codigo' => 'menor_igual(  ,  )'	, 'descripcion'	=> 'menor_igual'],
-			['codigo' => 'y(  ,  )'				, 'descripcion' => 'y'],
-			['codigo' => 'o(  ,  )'				, 'descripcion' => 'o'],
-			['codigo' => 'entre(  ,  ,  ,)'		, 'descripcion' => 'entre'],
-			['codigo' => 'fuera(  ,  ,  ,)'		, 'descripcion' => 'fuera'],
-			['codigo' => 'max(  ,  )'			, 'descripcion' => 'max'],
-			['codigo' => 'min(  ,  )'			, 'descripcion' => 'min'],
-			['codigo' => 'redondear(  )'		, 'descripcion' => 'redondear'],						
-			['codigo' => 'sin_proporcional(  )'	, 'descripcion' => 'sin_proporcional'],
+			['codigo' => 'si(  ,  ,  )'						, 'descripcion' => 'si'],
+			['codigo' => 'igual(  ,  )'						, 'descripcion' => 'igual'],
+			['codigo' => 'distinto(  ,  )'					, 'descripcion' => 'distinto'],
+			['codigo' => 'mayor(  ,  )'						, 'descripcion' => 'mayor'],
+			['codigo' => 'menor(  ,  )'						, 'descripcion' => 'menor'],
+			['codigo' => 'mayor_igual(  ,  )'				, 'descripcion'	=> 'mayor_igual'],
+			['codigo' => 'menor_igual(  ,  )'				, 'descripcion'	=> 'menor_igual'],
+			['codigo' => 'y(  ,  )'							, 'descripcion' => 'y'],
+			['codigo' => 'o(  ,  )'							, 'descripcion' => 'o'],
+			['codigo' => 'entre(  ,  ,  ,)'					, 'descripcion' => 'entre'],
+			['codigo' => 'fuera(  ,  ,  ,)'					, 'descripcion' => 'fuera'],
+			['codigo' => 'max(  ,  )'						, 'descripcion' => 'max'],
+			['codigo' => 'min(  ,  )'						, 'descripcion' => 'min'],
+			['codigo' => 'redondear(  )'					, 'descripcion' => 'redondear'],						
+			['codigo' => 'sin_proporcional(  )'				, 'descripcion' => 'sin_proporcional'],
 			['codigo' => 'historico( nombre, anio, mes)'	, 'descripcion' => 'historico'],
+			['codigo' => 'acumular( nombre )'				, 'descripcion' => 'acumular'],
 		];
 		return $funciones;
 	}

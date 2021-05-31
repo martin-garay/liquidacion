@@ -226,4 +226,18 @@ class LiquidadorNuevo extends Evaluator
 		$datos = toba::db()->consultar($sql);
 		return (isset($datos[0]['valor'])) ? $datos[0]['valor']: $valor_defecto;
 	}
+
+	//La función recibe un concepto y devuelve para un empleado en particular lo acumulado en el año para ese concepto.
+	function acumular($nro_concepto)
+	{
+		$sql = "SELECT SUM(importe) AS resultado 
+				FROM v_recibos_conceptos 
+				WHERE id_persona={$this->id_persona} 
+				AND codigo='$nro_concepto'
+				AND id_estado_liquidacion=3 /*CERRADA*/
+				AND anio=(SELECT anio FROM liquidaciones WHERE id={$this->id_liquidacion})
+				AND mes <(SELECT mes  FROM liquidaciones WHERE id={$this->id_liquidacion})";	
+		$datos = toba::db()->consultar($sql);
+		return (isset($datos[0]['resultado']) && $datos[0]['resultado']!=0) ? $datos[0]['valor']: 0;
+	}
 }

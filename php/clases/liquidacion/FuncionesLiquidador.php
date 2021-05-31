@@ -29,6 +29,7 @@ class FunctionesLiquidador
 			'existe'			=>	['ref' => [$liquidador,'existe']					, 'arc' => null],		//si existe la variable
 			'sin_proporcional'	=>	['ref' => [$liquidador,'sin_proporcional']			, 'arc' => null],		//inverso del calculo proporcional de vacaciones
 			'historico'			=>	['ref' => [$liquidador,'historico']					, 'arc' => null],		//busca el valor de una de las variables en liquidaciones anteriores
+			'acumular'			=>	['ref' => [$liquidador,'acumular']					, 'arc' => null],		//acumula el concepto pasado por parametro desde el mes 1 al de la liquidacion
 		];
 		return $funciones;
 	}
