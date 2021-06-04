@@ -238,6 +238,6 @@ class LiquidadorNuevo extends Evaluator
 				AND anio=(SELECT anio FROM liquidaciones WHERE id={$this->id_liquidacion})
 				AND mes <(SELECT mes  FROM liquidaciones WHERE id={$this->id_liquidacion})";	
 		$datos = toba::db()->consultar($sql);
-		return (isset($datos[0]['resultado']) && $datos[0]['resultado']!=0) ? $datos[0]['valor']: 0;
+		return (isset($datos[0]['resultado']) && $datos[0]['resultado']!=0) ? $datos[0]['resultado']: 0;
 	}
 }
