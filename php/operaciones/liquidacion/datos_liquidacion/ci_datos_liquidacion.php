@@ -381,7 +381,7 @@ class ci_datos_liquidacion extends asociacion_ci
 				//si el estado de la liquidacion es INICIAL muestro el campo importe_fijo y oculto importe(que es el dato que calcula el liquidador)
 				if( $this->tabla('liquidacion')->get_columna('id_estado')==1 ){
 					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_reciboimporte\"').hide();";	
-					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_recibomostrar_en_recibo\"').hide();";	//oculto el check mostrar_en_recibo
+					//echo "$('[id$=\"ef_form_2886_form_ml_conceptos_recibomostrar_en_recibo\"').hide();";	//oculto el check mostrar_en_recibo
 					echo "$('[id$=\"ef_form_2886_form_ml_conceptos_recibosumar\"').hide();";				//oculto el check sumar
 					echo "$form_suma.ocultar();";
 				}else{ //sino muestro importe
